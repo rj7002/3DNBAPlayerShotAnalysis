@@ -33,7 +33,7 @@ st.markdown(
     """
     <h1 style="text-align: center; font-size: 72px; color: red;">🏀 NBA Shot Analysis</h1>
     <p style="text-align: center; font-size: 18px; color: #555;">
-        Analyze NBA players' shooting performances and shot tendencies.
+        Analyze NBA players' shooting performances and shot tendencies. Data available from 1996 to present.
     </p>
     """,
     unsafe_allow_html=True
