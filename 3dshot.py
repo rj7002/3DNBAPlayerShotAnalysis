@@ -315,750 +315,750 @@ if Teams:
     df = df[(df['VTM'].isin(teamtype)) | (df['HTM'].isin(teamtype))]
 if CourtLoc:
     df = df[df['SHOT_ZONE_AREA'].isin(courtloc)]
-
-if len(df) > 0:
-    if len(df) > 500:
-        st.warning('There is over 500 shots being plotted so the plot may be slow')
-    st.success('Data Found')
-    # df = df.head(500)
-    x_values = []
-    y_values = []
-    z_values = []
-    # dfmiss = df[df['SHOT_MADE_FLAG'] == 0]
-    # df = df[df['SHOT_MADE_FLAG'] == 1]
-
-    for index, row in df.iterrows():
+if selected_seasons:
+    if len(df) > 0:
+        if len(df) > 500:
+            st.warning('There is over 500 shots being plotted so the plot may be slow')
+        st.success('Data Found')
+        # df = df.head(500)
+        x_values = []
+        y_values = []
+        z_values = []
+        # dfmiss = df[df['SHOT_MADE_FLAG'] == 0]
+        # df = df[df['SHOT_MADE_FLAG'] == 1]
+    
+        for index, row in df.iterrows():
+            
+            
         
+            x_values.append(-row['LOC_X'])
+            # Append the value from column 'x' to the list
+            y_values.append(row['LOC_Y']+45)
+            z_values.append(0)
+    
+    
+    
+        x_values2 = []
+        y_values2 = []
+        z_values2 = []
+        for index, row in df.iterrows():
+            # Append the value from column 'x' to the list
         
     
-        x_values.append(-row['LOC_X'])
-        # Append the value from column 'x' to the list
-        y_values.append(row['LOC_Y']+45)
-        z_values.append(0)
-
-
-
-    x_values2 = []
-    y_values2 = []
-    z_values2 = []
-    for index, row in df.iterrows():
-        # Append the value from column 'x' to the list
+            x_values2.append(court.hoop_loc_x)
     
-
-        x_values2.append(court.hoop_loc_x)
-
-        y_values2.append(court.hoop_loc_y)
-        z_values2.append(100)
-
-    import numpy as np
-    import plotly.graph_objects as go
-    import streamlit as st
-    import math
-    def calculate_distance(x1, y1, x2, y2):
-        """Calculate the distance between two points (x1, y1) and (x2, y2)."""
-        return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-
-    def generate_arc_points(p1, p2, apex, num_points=100):
-        """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
-        t = np.linspace(0, 1, num_points)
-        x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
-        y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
-        z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
-        return x, y, z
-
-    # Example lists of x and y coordinates
-    x_coords = x_values
-    y_coords = y_values
-    z_value = 0  # Fixed z value
-    x_coords2 = x_values2
-    y_coords2 = y_values2
-    z_value2 = 100
-    with col1:
-        if st.checkbox('Animated',help='View animated shots'):
-                # Number of segments for the arc
-            num_segments = 100
-
-            # Create frames
-            frames = []
-
-            for i in range(len(df)):
-                x1 = x_coords[i]
-                y1 = y_coords[i]
-                x2 = x_coords2[i]
-                y2 = y_coords2[i]
-                
-                # Swap the points: now p1 is the original p2 and p2 is the original p1
-                p1 = np.array([x1, y1, z_value])  # Starting point
-                p2 = np.array([x2, y2, z_value2])  # Ending point
-
-                distance = calculate_distance(x1, y1, x2, y2)
-
-                if df['SHOT_MADE_FLAG'].iloc[i] == 1:
-                    s = 'circle-open'
-                    s2 = 'circle'
-                    size = 9
-                    color = 'green'
-                else:
-                    s = 'cross'
-                    s2 = 'cross'
-                    size = 10
-                    color = 'red'
+            y_values2.append(court.hoop_loc_y)
+            z_values2.append(100)
+    
+        import numpy as np
+        import plotly.graph_objects as go
+        import streamlit as st
+        import math
+        def calculate_distance(x1, y1, x2, y2):
+            """Calculate the distance between two points (x1, y1) and (x2, y2)."""
+            return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+    
+        def generate_arc_points(p1, p2, apex, num_points=100):
+            """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
+            t = np.linspace(0, 1, num_points)
+            x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
+            y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
+            z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
+            return x, y, z
+    
+        # Example lists of x and y coordinates
+        x_coords = x_values
+        y_coords = y_values
+        z_value = 0  # Fixed z value
+        x_coords2 = x_values2
+        y_coords2 = y_values2
+        z_value2 = 100
+        with col1:
+            if st.checkbox('Animated',help='View animated shots'):
+                    # Number of segments for the arc
+                num_segments = 100
+    
+                # Create frames
+                frames = []
+    
+                for i in range(len(df)):
+                    x1 = x_coords[i]
+                    y1 = y_coords[i]
+                    x2 = x_coords2[i]
+                    y2 = y_coords2[i]
                     
-                date_str = df['GAME_DATE'].iloc[i]
-                game_date = datetime.strptime(date_str, "%Y%m%d")
-                formatted_date = game_date.strftime("%m/%d/%Y")
-                
-                if int(df['SECONDS_REMAINING'].iloc[i]) < 10:
-                    df['SECONDS_REMAINING'].iloc[i] = '0' + str(df['SECONDS_REMAINING'].iloc[i])
-                    
-                hovertemplate = f"Date: {formatted_date}<br>Game: {df['HTM'].iloc[i]} vs {df['VTM'].iloc[i]}<br>Result: {df['EVENT_TYPE'].iloc[i]}<br>Shot Type: {df['ACTION_TYPE'].iloc[i]}<br>Distance: {df['SHOT_DISTANCE'].iloc[i]} ft {df['SHOT_TYPE'].iloc[i]}<br>Quarter: {df['PERIOD'].iloc[i]}<br>Time: {df['MINUTES_REMAINING'].iloc[i]}:{df['SECONDS_REMAINING'].iloc[i]}"
-
-                if df['SHOT_DISTANCE'].iloc[i] > 3:
-                    if df['SHOT_DISTANCE'].iloc[i] > 50:
-                        h = randint(255, 305)
-                    elif df['SHOT_DISTANCE'].iloc[i] > 30:
-                        h = randint(230, 280)
-                    elif df['SHOT_DISTANCE'].iloc[i] > 25:
-                        h = randint(180, 230)
-                    elif df['SHOT_DISTANCE'].iloc[i] > 15:
-                        h = randint(180, 230)
+                    # Swap the points: now p1 is the original p2 and p2 is the original p1
+                    p1 = np.array([x1, y1, z_value])  # Starting point
+                    p2 = np.array([x2, y2, z_value2])  # Ending point
+    
+                    distance = calculate_distance(x1, y1, x2, y2)
+    
+                    if df['SHOT_MADE_FLAG'].iloc[i] == 1:
+                        s = 'circle-open'
+                        s2 = 'circle'
+                        size = 9
+                        color = 'green'
                     else:
-                        h = randint(130, 160)
-
-                    apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])
-                    
-                    # Generate arc points using swapped p1 and p2
-                    x_arc, y_arc, z_arc = generate_arc_points(p1, p2, apex)
-                    
-                    # Split the arc into segments
-                    for j in range(num_segments):
-                        # Interpolate points along the arc
-                        x_segment = x_arc[:j + 1]
-                        y_segment = y_arc[:j + 1]
-                        z_segment = z_arc[:j + 1]
+                        s = 'cross'
+                        s2 = 'cross'
+                        size = 10
+                        color = 'red'
                         
-                        frames.append(go.Frame(data=[
-                            go.Scatter3d(
-                                x=x_segment, y=y_segment, z=z_segment,
-                                mode='lines',
-                                line=dict(width=8, color=color),
-                                opacity=0.5,
-                                hovertemplate=hovertemplate
-                            ),
-                            go.Scatter3d(
-                                x=[p1[0]], y=[p1[1]], z=[p1[2]],
-                                mode='markers',
-                                marker=dict(size=size, symbol=s, color=color),
-                                hovertemplate=hovertemplate
-                            ),
-                            go.Scatter3d(
-                                x=[p1[0]], y=[p1[1]], z=[p1[2]],
-                                mode='markers',
-                                marker=dict(size=5, symbol=s2, color=color),
-                                hovertemplate=hovertemplate
-                            )
-                        ]))
-
-            # Add frames to the figure
-            fig.frames = frames
-
-            fig.update_layout(
-        updatemenus=[{
-            'buttons': [
-                {
-                    'args': [None, {'frame': {'duration': 0.1, 'redraw': True}, 'fromcurrent': True, 'mode': 'immediate'}],
-                    'label': 'Play',
-                    'method': 'animate'
-                },
-                {
-                    'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'mode': 'immediate'}],
-                    'label': 'Pause',
-                    'method': 'animate'
-                },
-                # Add a restart button
-                # {
-                #         'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'fromcurrent': False,'mode': 'immediate'}],
-                #         'label': 'Restart',
-                #         'method': 'animate'
-                #     }
-            ],
-            'direction': 'left',
-            'pad': {'r': 10, 't': 87},
-            'showactive': False,
-            'type': 'buttons',
-            'x': 0.1,
-            'xanchor': 'right',
-            'y': 0,
-            'yanchor': 'top'
-        }]
-    )
-
-            # # Optionally, ensure that the animation runs in a loop or a specific range, for example:
-            # fig.update_layout(
-            #     sliders=[{
-            #         'currentvalue': {'prefix': 'Frame: '},
-            #         'steps': [
-            #             {
-            #                 'args': [
-            #                     [f'frame{frame}'],
-            #                     {
-            #                         'frame': {'duration': 100, 'redraw': True},
-            #                         'mode': 'immediate',
-            #                         'transition': {'duration': 100}
-            #                     }
-            #                 ],
-            #                 'label': f'Frame {frame}',
-            #                 'method': 'animate'
-            #             }
-            #             for frame in range(1, 100 + 1)  # Ensure you have the correct range of frames
-            #         ]
-            #     }]
-            # )
-        else:
-            for i in range(len(df)):
-                x1 = x_coords[i]
-                y1 = y_coords[i]
-                x2 = x_coords2[i]
-                y2 = y_coords2[i]
-                # Define the start and end points
-                p2 = np.array([x1, y1, z_value])
-                p1 = np.array([x2, y2, z_value2])
-                
-                # Apex will be above the line connecting p1 and p2
-                distance = calculate_distance(x1, y1, x2, y2)
-
-                if df['SHOT_MADE_FLAG'].iloc[i] == 1:
-                    s = 'circle-open'
-                    s2 = 'circle'
-                    size = 9
-                    color = 'green'
-                else:
-                    s = 'cross'
-                    s2 = 'cross'
-                    size = 10
-                    color = 'red'
-                date_str = df['GAME_DATE'].iloc[i]
-                game_date = datetime.strptime(date_str, "%Y%m%d")
-                formatted_date = game_date.strftime("%m/%d/%Y")
-                if int(df['SECONDS_REMAINING'].iloc[i]) < 10:
-                    df['SECONDS_REMAINING'].iloc[i] = '0' + str(df['SECONDS_REMAINING'].iloc[i])
-                hovertemplate= f"Date: {formatted_date}<br>Game: {df['HTM'].iloc[i]} vs {df['VTM'].iloc[i]}<br>Result: {df['EVENT_TYPE'].iloc[i]}<br>Shot Type: {df['ACTION_TYPE'].iloc[i]}<br>Distance: {df['SHOT_DISTANCE'].iloc[i]} ft {df['SHOT_TYPE'].iloc[i]}<br>Quarter: {df['PERIOD'].iloc[i]}<br>Time: {df['MINUTES_REMAINING'].iloc[i]}:{df['SECONDS_REMAINING'].iloc[i]}"
-
-                if df['SHOT_DISTANCE'].iloc[i] > 3:
-                    if df['SHOT_DISTANCE'].iloc[i] > 50:
-                        h = randint(255,305)
-                    elif df['SHOT_DISTANCE'].iloc[i] > 30:
-                        h = randint(230,280)
-                    elif df['SHOT_DISTANCE'].iloc[i] > 25:
-                        h = randint(180,230)
-                    elif df['SHOT_DISTANCE'].iloc[i] > 15:
-                        h = randint(180,230)
-                    else:
-                        h = randint(130,160)
-                
-                    apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])  # Adjust apex height as needed
+                    date_str = df['GAME_DATE'].iloc[i]
+                    game_date = datetime.strptime(date_str, "%Y%m%d")
+                    formatted_date = game_date.strftime("%m/%d/%Y")
                     
-                    # Generate arc points
-                    x, y, z = generate_arc_points(p1, p2, apex)
+                    if int(df['SECONDS_REMAINING'].iloc[i]) < 10:
+                        df['SECONDS_REMAINING'].iloc[i] = '0' + str(df['SECONDS_REMAINING'].iloc[i])
+                        
+                    hovertemplate = f"Date: {formatted_date}<br>Game: {df['HTM'].iloc[i]} vs {df['VTM'].iloc[i]}<br>Result: {df['EVENT_TYPE'].iloc[i]}<br>Shot Type: {df['ACTION_TYPE'].iloc[i]}<br>Distance: {df['SHOT_DISTANCE'].iloc[i]} ft {df['SHOT_TYPE'].iloc[i]}<br>Quarter: {df['PERIOD'].iloc[i]}<br>Time: {df['MINUTES_REMAINING'].iloc[i]}:{df['SECONDS_REMAINING'].iloc[i]}"
+    
+                    if df['SHOT_DISTANCE'].iloc[i] > 3:
+                        if df['SHOT_DISTANCE'].iloc[i] > 50:
+                            h = randint(255, 305)
+                        elif df['SHOT_DISTANCE'].iloc[i] > 30:
+                            h = randint(230, 280)
+                        elif df['SHOT_DISTANCE'].iloc[i] > 25:
+                            h = randint(180, 230)
+                        elif df['SHOT_DISTANCE'].iloc[i] > 15:
+                            h = randint(180, 230)
+                        else:
+                            h = randint(130, 160)
+    
+                        apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])
+                        
+                        # Generate arc points using swapped p1 and p2
+                        x_arc, y_arc, z_arc = generate_arc_points(p1, p2, apex)
+                        
+                        # Split the arc into segments
+                        for j in range(num_segments):
+                            # Interpolate points along the arc
+                            x_segment = x_arc[:j + 1]
+                            y_segment = y_arc[:j + 1]
+                            z_segment = z_arc[:j + 1]
+                            
+                            frames.append(go.Frame(data=[
+                                go.Scatter3d(
+                                    x=x_segment, y=y_segment, z=z_segment,
+                                    mode='lines',
+                                    line=dict(width=8, color=color),
+                                    opacity=0.5,
+                                    hovertemplate=hovertemplate
+                                ),
+                                go.Scatter3d(
+                                    x=[p1[0]], y=[p1[1]], z=[p1[2]],
+                                    mode='markers',
+                                    marker=dict(size=size, symbol=s, color=color),
+                                    hovertemplate=hovertemplate
+                                ),
+                                go.Scatter3d(
+                                    x=[p1[0]], y=[p1[1]], z=[p1[2]],
+                                    mode='markers',
+                                    marker=dict(size=5, symbol=s2, color=color),
+                                    hovertemplate=hovertemplate
+                                )
+                            ]))
+    
+                # Add frames to the figure
+                fig.frames = frames
+    
+                fig.update_layout(
+            updatemenus=[{
+                'buttons': [
+                    {
+                        'args': [None, {'frame': {'duration': 0.1, 'redraw': True}, 'fromcurrent': True, 'mode': 'immediate'}],
+                        'label': 'Play',
+                        'method': 'animate'
+                    },
+                    {
+                        'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'mode': 'immediate'}],
+                        'label': 'Pause',
+                        'method': 'animate'
+                    },
+                    # Add a restart button
+                    # {
+                    #         'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'fromcurrent': False,'mode': 'immediate'}],
+                    #         'label': 'Restart',
+                    #         'method': 'animate'
+                    #     }
+                ],
+                'direction': 'left',
+                'pad': {'r': 10, 't': 87},
+                'showactive': False,
+                'type': 'buttons',
+                'x': 0.1,
+                'xanchor': 'right',
+                'y': 0,
+                'yanchor': 'top'
+            }]
+        )
+    
+                # # Optionally, ensure that the animation runs in a loop or a specific range, for example:
+                # fig.update_layout(
+                #     sliders=[{
+                #         'currentvalue': {'prefix': 'Frame: '},
+                #         'steps': [
+                #             {
+                #                 'args': [
+                #                     [f'frame{frame}'],
+                #                     {
+                #                         'frame': {'duration': 100, 'redraw': True},
+                #                         'mode': 'immediate',
+                #                         'transition': {'duration': 100}
+                #                     }
+                #                 ],
+                #                 'label': f'Frame {frame}',
+                #                 'method': 'animate'
+                #             }
+                #             for frame in range(1, 100 + 1)  # Ensure you have the correct range of frames
+                #         ]
+                #     }]
+                # )
+            else:
+                for i in range(len(df)):
+                    x1 = x_coords[i]
+                    y1 = y_coords[i]
+                    x2 = x_coords2[i]
+                    y2 = y_coords2[i]
+                    # Define the start and end points
+                    p2 = np.array([x1, y1, z_value])
+                    p1 = np.array([x2, y2, z_value2])
+                    
+                    # Apex will be above the line connecting p1 and p2
+                    distance = calculate_distance(x1, y1, x2, y2)
+    
+                    if df['SHOT_MADE_FLAG'].iloc[i] == 1:
+                        s = 'circle-open'
+                        s2 = 'circle'
+                        size = 9
+                        color = 'green'
+                    else:
+                        s = 'cross'
+                        s2 = 'cross'
+                        size = 10
+                        color = 'red'
+                    date_str = df['GAME_DATE'].iloc[i]
+                    game_date = datetime.strptime(date_str, "%Y%m%d")
+                    formatted_date = game_date.strftime("%m/%d/%Y")
+                    if int(df['SECONDS_REMAINING'].iloc[i]) < 10:
+                        df['SECONDS_REMAINING'].iloc[i] = '0' + str(df['SECONDS_REMAINING'].iloc[i])
+                    hovertemplate= f"Date: {formatted_date}<br>Game: {df['HTM'].iloc[i]} vs {df['VTM'].iloc[i]}<br>Result: {df['EVENT_TYPE'].iloc[i]}<br>Shot Type: {df['ACTION_TYPE'].iloc[i]}<br>Distance: {df['SHOT_DISTANCE'].iloc[i]} ft {df['SHOT_TYPE'].iloc[i]}<br>Quarter: {df['PERIOD'].iloc[i]}<br>Time: {df['MINUTES_REMAINING'].iloc[i]}:{df['SECONDS_REMAINING'].iloc[i]}"
+    
+                    if df['SHOT_DISTANCE'].iloc[i] > 3:
+                        if df['SHOT_DISTANCE'].iloc[i] > 50:
+                            h = randint(255,305)
+                        elif df['SHOT_DISTANCE'].iloc[i] > 30:
+                            h = randint(230,280)
+                        elif df['SHOT_DISTANCE'].iloc[i] > 25:
+                            h = randint(180,230)
+                        elif df['SHOT_DISTANCE'].iloc[i] > 15:
+                            h = randint(180,230)
+                        else:
+                            h = randint(130,160)
+                    
+                        apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])  # Adjust apex height as needed
+                        
+                        # Generate arc points
+                        x, y, z = generate_arc_points(p1, p2, apex)
+                        fig.add_trace(go.Scatter3d(
+                                    x=x, y=y, z=z,
+                                    mode='lines',
+                                    line=dict(width=8,color = color),
+                                    opacity =0.5,
+                                    # name=f'Arc {i + 1}',
+                                    # hoverinfo='text',
+                                    hovertemplate=hovertemplate
+                                ))
+                    # Add start and end points
+    
                     fig.add_trace(go.Scatter3d(
-                                x=x, y=y, z=z,
-                                mode='lines',
-                                line=dict(width=8,color = color),
-                                opacity =0.5,
-                                # name=f'Arc {i + 1}',
-                                # hoverinfo='text',
-                                hovertemplate=hovertemplate
-                            ))
-                # Add start and end points
-
-                fig.add_trace(go.Scatter3d(
-                    x=[p2[0], p2[0]],
-                    y=[p2[1], p2[1]],
-                    z=[p2[2], p2[2]],
-                    mode='markers',
-                    marker=dict(size=size, symbol=s,color=color),
-                    # name=f'Endpoints {i + 1}',
-                    # hoverinfo='text',
-                    hovertemplate=hovertemplate
-                ))
-                fig.add_trace(go.Scatter3d(
-                    x=[p2[0], p2[0]],
-                    y=[p2[1], p2[1]],
-                    z=[p2[2], p2[2]],
-                    mode='markers',
-                    marker=dict(size=5, symbol=s2,color = color),
-                    # name=f'Endpoints {i + 1}',
-                    # hoverinfo='text',
-                    hovertemplate=hovertemplate
-
-                ))
-    # s = 'cross'
-    # s2 = 'cross'
-    # size = 10
-    # color = 'red'
-    # for i, row in dfmiss.iterrows():
-    #     hovertemplate= f"Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
-
-    #     fig.add_trace(go.Scatter3d(
-    #         x=[row['LOC_X']],  # Single point, so wrap in a list
-    #         y=[row['LOC_Y']+45],  # Single point, so wrap in a list
-    #         z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
-    #         marker=dict(size=size, symbol=s2, color=color),  # Customize marker size, symbol, and color
-    #         name=f'Endpoint {i + 1}',  # Dynamically create a name for each trace
-    #         hoverinfo='text',
-    #         hovertemplate=hovertemplate
-    #     ))
-    playerparts = selected_player.split(' - ')
-    player = playerparts[0]
-    made = len(df[df['SHOT_MADE_FLAG'] == 1])
-    total = len(df)
-    if selected_season == currentyear:
-        shottype = 'is shooting'
-    else:
-        shottype = 'shot'
-    if CourtLoc:
-        courtloc = f'from the {courtloc}'
-    else:
-        courtloc = 'from the field'
-    sentence_parts = [f"{player} {shottype} {round((made/total)*100,2)}% {courtloc}"]
-
-    # Add filters to sentence based on their selection
-
-    if selected_season:
-        selected_season2 = selected_season+1
-        season2 = str(selected_season2)
-        season2 = season2[2:]
-        sentence_parts.append(f"in {str(selected_season)}-{str(season2)}")
-    if season_type:
-        sentence_parts.append(f"in the {season_type.lower()}")
-    if last_n_games:
-        sentence_parts.append(f"in the last {last_n_games} games")
-    # if month:
-    #     month_name = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][month - 1]
-    #     sentence_parts.append(f"in {month_name}")
-    # if opponent_team_id:
-    #     sentence_parts.append(f"against team {opponent_team_id}")
-    # if period:
-    #     if period == 1:
-    #         periodtype = 'the 1st quarter'
-    #     elif period == 2:
-    #         periodtype = 'the 2nd quarter'
-    #     elif period == 3:
-    #         periodtype = 'the 3rd quarter'
-    #     elif period == 4:
-    #         periodtype = 'the 4th quarter'
-    #     else:
-    #         periodtype = 'overtime'
-        # sentence_parts.append(f"in {periodtype}")
-    if vs_division:
-        sentence_parts.append(f"vs the {vs_division} division")
-    if vs_conference:
-        if vs_conference == 'East':
-            realconf = 'the Eastern'
+                        x=[p2[0], p2[0]],
+                        y=[p2[1], p2[1]],
+                        z=[p2[2], p2[2]],
+                        mode='markers',
+                        marker=dict(size=size, symbol=s,color=color),
+                        # name=f'Endpoints {i + 1}',
+                        # hoverinfo='text',
+                        hovertemplate=hovertemplate
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=[p2[0], p2[0]],
+                        y=[p2[1], p2[1]],
+                        z=[p2[2], p2[2]],
+                        mode='markers',
+                        marker=dict(size=5, symbol=s2,color = color),
+                        # name=f'Endpoints {i + 1}',
+                        # hoverinfo='text',
+                        hovertemplate=hovertemplate
+    
+                    ))
+        # s = 'cross'
+        # s2 = 'cross'
+        # size = 10
+        # color = 'red'
+        # for i, row in dfmiss.iterrows():
+        #     hovertemplate= f"Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
+    
+        #     fig.add_trace(go.Scatter3d(
+        #         x=[row['LOC_X']],  # Single point, so wrap in a list
+        #         y=[row['LOC_Y']+45],  # Single point, so wrap in a list
+        #         z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
+        #         marker=dict(size=size, symbol=s2, color=color),  # Customize marker size, symbol, and color
+        #         name=f'Endpoint {i + 1}',  # Dynamically create a name for each trace
+        #         hoverinfo='text',
+        #         hovertemplate=hovertemplate
+        #     ))
+        playerparts = selected_player.split(' - ')
+        player = playerparts[0]
+        made = len(df[df['SHOT_MADE_FLAG'] == 1])
+        total = len(df)
+        if selected_season == currentyear:
+            shottype = 'is shooting'
         else:
-            realconf = 'the Western'
-        sentence_parts.append(f"vs {realconf} conference")
-    # if start_period:
-    #     sentence_parts.append(f"starting from period {start_period}")
-    if season_segment:
-        sentence_parts.append(f"{season_segment.lower()} break")
-    if point_diff:
-        sentence_parts.append(f"with a point differential of {point_diff}")
-    if outcome:
-        if outcome == 'W':
-            realoutcome = "wins"
+            shottype = 'shot'
+        if CourtLoc:
+            courtloc = f'from the {courtloc}'
         else:
-            realoutcome = 'losses'
-        sentence_parts.append(f"in {realoutcome}")
-    if location:
-        sentence_parts.append(f"at {location.lower()}")
-    if game_segment:
-        sentence_parts.append(f"during the {game_segment.lower()}")
-    if clutch_time:
-        sentence_parts.append(f"in the {clutch_time.lower()} of the game")
-    if ahead_behind:
-        sentence_parts.append(f"when {ahead_behind.lower()}")
-    if ShotDist:
-        sentence_parts.append(f"from {shotdistance_min} to {shotdistance_max} feet")
-    if ShotType:
-        sentence_parts.append(f"on {shottype}s")
-    if Teams:
-        sentence_parts.append(f"vs {teamtype}")
-    # Combine sentence parts into a full sentence
-    sentence = " ".join(sentence_parts) + "."
-    display_player_image(id,400,'')
-    st.subheader(sentence)
-    # st.subheader(f'{player} Shot Chart in {realseason}')
-    coli1, coli2 = st.columns(2)
-    with coli1:
-        st.plotly_chart(fig)
-
+            courtloc = 'from the field'
+        sentence_parts = [f"{player} {shottype} {round((made/total)*100,2)}% {courtloc}"]
     
-    # Assuming df has a 'GAME_DATE' column and a 'SHOT_MADE_FLAG' column
-    c1,c2 = st.columns(2)
-    df['GAME_DATE'] = pd.to_datetime(df['GAME_DATE'], format='%Y%m%d')
+        # Add filters to sentence based on their selection
     
-    # Aggregate shooting data by date
-    shooting_over_time = df.groupby('GAME_DATE').agg({"SHOT_MADE_FLAG": ["sum", "count"]}).reset_index()
-    shooting_over_time.columns = ['Date', 'Made', 'Total']
+        if selected_season:
+            selected_season2 = selected_season+1
+            season2 = str(selected_season2)
+            season2 = season2[2:]
+            sentence_parts.append(f"in {str(selected_season)}-{str(season2)}")
+        if season_type:
+            sentence_parts.append(f"in the {season_type.lower()}")
+        if last_n_games:
+            sentence_parts.append(f"in the last {last_n_games} games")
+        # if month:
+        #     month_name = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][month - 1]
+        #     sentence_parts.append(f"in {month_name}")
+        # if opponent_team_id:
+        #     sentence_parts.append(f"against team {opponent_team_id}")
+        # if period:
+        #     if period == 1:
+        #         periodtype = 'the 1st quarter'
+        #     elif period == 2:
+        #         periodtype = 'the 2nd quarter'
+        #     elif period == 3:
+        #         periodtype = 'the 3rd quarter'
+        #     elif period == 4:
+        #         periodtype = 'the 4th quarter'
+        #     else:
+        #         periodtype = 'overtime'
+            # sentence_parts.append(f"in {periodtype}")
+        if vs_division:
+            sentence_parts.append(f"vs the {vs_division} division")
+        if vs_conference:
+            if vs_conference == 'East':
+                realconf = 'the Eastern'
+            else:
+                realconf = 'the Western'
+            sentence_parts.append(f"vs {realconf} conference")
+        # if start_period:
+        #     sentence_parts.append(f"starting from period {start_period}")
+        if season_segment:
+            sentence_parts.append(f"{season_segment.lower()} break")
+        if point_diff:
+            sentence_parts.append(f"with a point differential of {point_diff}")
+        if outcome:
+            if outcome == 'W':
+                realoutcome = "wins"
+            else:
+                realoutcome = 'losses'
+            sentence_parts.append(f"in {realoutcome}")
+        if location:
+            sentence_parts.append(f"at {location.lower()}")
+        if game_segment:
+            sentence_parts.append(f"during the {game_segment.lower()}")
+        if clutch_time:
+            sentence_parts.append(f"in the {clutch_time.lower()} of the game")
+        if ahead_behind:
+            sentence_parts.append(f"when {ahead_behind.lower()}")
+        if ShotDist:
+            sentence_parts.append(f"from {shotdistance_min} to {shotdistance_max} feet")
+        if ShotType:
+            sentence_parts.append(f"on {shottype}s")
+        if Teams:
+            sentence_parts.append(f"vs {teamtype}")
+        # Combine sentence parts into a full sentence
+        sentence = " ".join(sentence_parts) + "."
+        display_player_image(id,400,'')
+        st.subheader(sentence)
+        # st.subheader(f'{player} Shot Chart in {realseason}')
+        coli1, coli2 = st.columns(2)
+        with coli1:
+            st.plotly_chart(fig)
     
-    # Calculate shooting percentage
-    shooting_over_time['Percentage'] = shooting_over_time['Made'] / shooting_over_time['Total'] * 100
-    
-    # Add a moving average to smooth out trends (optional)
-    shooting_over_time['Moving Average (7 Days)'] = shooting_over_time['Percentage'].rolling(window=7, min_periods=1).mean()
-    
-    # Create the line chart
-    fig2 = px.line(
-        shooting_over_time, 
-        x='Date', 
-        y='Percentage', 
-        title="Shooting Percentage Over Time",
-        labels={'Percentage': 'Shooting Percentage (%)', 'Date': 'Game Date'},  # Axis labels
-        markers=True,  # Show markers for each data point
-        hover_data={'Date': True, 'Percentage': True, 'Made': True, 'Total': True},  # Show extra info on hover
-    )
-    
-    # Add a moving average line (optional)
-    fig2.add_scatter(
-        x=shooting_over_time['Date'], 
-        y=shooting_over_time['Moving Average (7 Days)'], 
-        mode='lines', 
-        name='7-Day Moving Average',
-        line=dict(color='red', dash='dash')
-    )
-    
-    # Customize the layout for better aesthetics
-    fig2.update_layout(
-        title="Shooting Percentage Over Time",
-        title_x=0.5,  # Center the title
-        title_font=dict(size=20, family='Arial', color='black'),
-        xaxis=dict(
-            showgrid=True, 
-            tickangle=45,  # Rotate x-axis labels for better readability
-            tickformat='%b %d, %Y',  # Show date in a readable format
-            title_font=dict(size=14, family='Arial', color='black'),
+        
+        # Assuming df has a 'GAME_DATE' column and a 'SHOT_MADE_FLAG' column
+        c1,c2 = st.columns(2)
+        df['GAME_DATE'] = pd.to_datetime(df['GAME_DATE'], format='%Y%m%d')
+        
+        # Aggregate shooting data by date
+        shooting_over_time = df.groupby('GAME_DATE').agg({"SHOT_MADE_FLAG": ["sum", "count"]}).reset_index()
+        shooting_over_time.columns = ['Date', 'Made', 'Total']
+        
+        # Calculate shooting percentage
+        shooting_over_time['Percentage'] = shooting_over_time['Made'] / shooting_over_time['Total'] * 100
+        
+        # Add a moving average to smooth out trends (optional)
+        shooting_over_time['Moving Average (7 Days)'] = shooting_over_time['Percentage'].rolling(window=7, min_periods=1).mean()
+        
+        # Create the line chart
+        fig2 = px.line(
+            shooting_over_time, 
+            x='Date', 
+            y='Percentage', 
+            title="Shooting Percentage Over Time",
+            labels={'Percentage': 'Shooting Percentage (%)', 'Date': 'Game Date'},  # Axis labels
+            markers=True,  # Show markers for each data point
+            hover_data={'Date': True, 'Percentage': True, 'Made': True, 'Total': True},  # Show extra info on hover
+        )
+        
+        # Add a moving average line (optional)
+        fig2.add_scatter(
+            x=shooting_over_time['Date'], 
+            y=shooting_over_time['Moving Average (7 Days)'], 
+            mode='lines', 
+            name='7-Day Moving Average',
+            line=dict(color='red', dash='dash')
+        )
+        
+        # Customize the layout for better aesthetics
+        fig2.update_layout(
+            title="Shooting Percentage Over Time",
+            title_x=0.5,  # Center the title
+            title_font=dict(size=20, family='Arial', color='black'),
+            xaxis=dict(
+                showgrid=True, 
+                tickangle=45,  # Rotate x-axis labels for better readability
+                tickformat='%b %d, %Y',  # Show date in a readable format
+                title_font=dict(size=14, family='Arial', color='black'),
+            ),
+            yaxis=dict(
+                title="Shooting Percentage (%)",
+                title_font=dict(size=14, family='Arial', color='black'),
+            ),
+            showlegend=True,  # Show the legend for the moving average line
+            margin=dict(l=40, r=40, t=50, b=40),  # Adjust margins for better spacing
+            plot_bgcolor='white',  # Set background color to white for a clean look
+        )
+        with c1:
+            st.plotly_chart(fig2)
+        
+        # Create distance bins
+        distance_bins = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]  # adjusted max distance
+        df['distance_bin'] = pd.cut(df['SHOT_DISTANCE'], bins=distance_bins)
+        
+        # Convert the 'distance_bin' to strings to make it serializable
+        df['distance_bin'] = df['distance_bin'].astype(str)
+        
+        # Calculate shooting percentage by distance bin
+        shooting_by_distance = df.groupby('distance_bin').agg({"SHOT_MADE_FLAG": ["sum", "count"]}).reset_index()
+        
+        # Flatten the MultiIndex columns
+        shooting_by_distance.columns = ['Distance', 'Made', 'Total']
+        
+        # Calculate accuracy
+        shooting_by_distance['Percentage'] = shooting_by_distance['Made'] / shooting_by_distance['Total'] * 100
+        
+        # Plot the figure using Plotly with a new theme
+        fig3 = px.bar(
+            shooting_by_distance, 
+            x='Percentage', 
+            y='Distance', 
+            orientation='h',  # horizontal bars
+            title="Shooting Percentage by Distance",
+            color='Percentage',  # Use color to represent shooting percentage
+            color_continuous_scale='YlOrRd',  # A warm color palette (yellow to red)
+            labels={'Percentage': 'Shooting %', 'Distance': 'Shot Distance (ft)'},
+            text='Percentage',  # Show percentage on the bars
+        )
+        
+        # Customize the layout for better aesthetics
+        fig3.update_layout(
+            title_text="Shooting Percentage by Distance",
+            title_x=0.5,  # Center the title
+            title_font=dict(size=20, family='Arial', color='black'),
+            xaxis_title='Shooting Percentage (%)',
+            yaxis_title='Shot Distance (ft)',
+            yaxis_tickangle=-45,  # Rotate y-axis labels for readability
+            xaxis=dict(showgrid=True, gridcolor='lightgray'),
+            plot_bgcolor='white',  # Set background color to white for clarity
+            margin=dict(l=20, r=20, t=40, b=20),  # Adjust margins to fit content
+            showlegend=False  # Disable legend for this chart
+        )
+        
+        # Add annotations to show the percentage on each bar
+        fig3.update_traces(
+            texttemplate='%{text:.1f}%',  # Format percentage to 1 decimal place
+            textposition='inside',  # Position the percentage text inside the bars
+            insidetextanchor='middle'
+        )
+        
+        # Display the plot in Streamlit
+        with c2:
+            st.plotly_chart(fig3)
+        
+        # Assuming df has a column 'ACTION_TYPE' for shot type and 'SHOT_MADE_FLAG' for success
+        co1, co2 = st.columns(2)
+        shot_accuracy_by_type = df.groupby('ACTION_TYPE').agg({"SHOT_MADE_FLAG": ["sum", "count"]}).reset_index()
+        
+        # Flatten MultiIndex columns
+        shot_accuracy_by_type.columns = ['Shot Type', 'Made', 'Total']
+        
+        # Calculate shooting percentage
+        shot_accuracy_by_type['Percentage'] = shot_accuracy_by_type['Made'] / shot_accuracy_by_type['Total'] * 100
+        
+        # Create a bar plot with enhancements
+        fig = px.bar(
+            shot_accuracy_by_type, 
+            x='Percentage', 
+            y='Shot Type', 
+            orientation='h',  # Horizontal bars for better readability
+            title="Shooting Percentage by Shot Type",
+            color='Percentage',  # Color bars based on shooting percentage
+            color_continuous_scale='Viridis',  # Modern color scale (Viridis)
+            labels={'Percentage': 'Shooting %', 'Shot Type': 'Shot Type'},
+            text='Percentage',  # Show percentage on bars
+        )
+        
+        # Customize the layout to improve aesthetics
+        fig.update_layout(
+            title_text="Shooting Percentage by Shot Type",
+            title_x=0.5,  # Center the title
+            title_font=dict(size=20, family='Arial', color='black'),
+            xaxis_title='Shooting Percentage (%)',
+            yaxis_title='Shot Type',
+            yaxis_tickangle=-45,  # Rotate y-axis labels for better readability
+            xaxis=dict(showgrid=True, gridcolor='lightgray'),
+            plot_bgcolor='white',  # Set background color to white
+            margin=dict(l=20, r=20, t=40, b=40),  # Adjust margins for better fit
+            showlegend=False  # Disable legend for clarity
+        )
+        
+        # Update traces to show percentage inside bars
+        fig.update_traces(
+            texttemplate='%{text:.1f}%',  # Format text to 1 decimal place
+            textposition='inside',  # Position the text inside the bars
+            insidetextanchor='middle'  # Align text in the middle of bars
+        )
+        
+        # Add hover information to show shot type, made count, and total shots
+        fig.update_traces(
+            hovertemplate='Shot Type: %{y}<br>Made: %{customdata[0]}<br>Total: %{customdata[1]}<br>Shooting Percentage: %{x:.1f}%',
+            customdata=shot_accuracy_by_type[['Made', 'Total']].values
+        )
+        with co1:
+            st.plotly_chart(fig)
+        
+        x_bins = np.linspace(-270, 270, 30)  # 30 bins along X axis (basketball court length)
+        y_bins = np.linspace(-10, 450, 20)  # 20 bins along Y axis (basketball court width)
+        
+        # Create 2D histogram to get shot density
+        shot_density, x_edges, y_edges = np.histogram2d(df['LOC_X'], df['LOC_Y'], bins=[x_bins, y_bins])
+        
+        # Calculate the center of each bin for plotting
+        x_centers = (x_edges[:-1] + x_edges[1:]) / 2
+        y_centers = (y_edges[:-1] + y_edges[1:]) / 2
+        
+        # Create a meshgrid of X and Y centers for 3D plotting
+        X, Y = np.meshgrid(x_centers, y_centers)
+        Z = shot_density.T  # Transpose to match the correct orientation for plotting
+        
+        # Plot 3D shot density
+        hovertext = np.array([f'Shots: {z}' for z in Z.flatten()]).reshape(Z.shape)
+        fig = go.Figure(data=go.Surface(
+            z=Z*10,
+            x=-X,
+            y=Y+45,
+            colorscale='hot',  # You can choose different color scales
+            colorbar=dict(title='Shot Density'),
+            showscale=False  # Hide the color bar/legend
+            ,hoverinfo='text',
+            hovertext=hovertext
+        ))
+        court_perimeter_lines = court_lines_df[court_lines_df['line_id'] == 'outside_perimeter']
+        three_point_lines = court_lines_df[court_lines_df['line_id'] == 'three_point_line']
+        backboard = court_lines_df[court_lines_df['line_id'] == 'backboard']
+        freethrow = court_lines_df[court_lines_df['line_id'] == 'free_throw_line']
+        freethrow2 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line2']
+        freethrow3 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line3']
+        freethrow4 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line4']
+        freethrow5 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line5']
+        hoop = court_lines_df[court_lines_df['line_id'] == 'hoop']
+        hoop2 = court_lines_df[court_lines_df['line_id'] == 'hoop2']
+        
+        
+        
+        
+        
+        
+        
+        # Add court lines to the plot (3D scatter)
+        fig.add_trace(go.Scatter3d(
+            x=court_perimeter_lines['x'],
+            y=court_perimeter_lines['y'],
+            z=np.zeros(len(court_perimeter_lines)),  # Place court lines on the floor
+            mode='lines',
+            line=dict(color='white', width=4),
+            name="Court Perimeter",
+            hoverinfo='none'
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=hoop['x'],
+            y=hoop['y'],
+            z=hoop['z'],  # Place 3-point line on the floor
+            mode='lines',
+            line=dict(color='#e47041', width=4),
+            name="Hoop",
+            hoverinfo='none'
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=hoop2['x'],
+            y=hoop2['y'],
+            z=hoop2['z'],  # Place 3-point line on the floor
+            mode='lines',
+            line=dict(color='#D3D3D3', width=4),
+            name="Backboard",
+            hoverinfo='none'
+        ))
+        # Add the 3-point line to the plot
+        fig.add_trace(go.Scatter3d(
+            x=backboard['x'],
+            y=backboard['y'],
+            z=backboard['z'],  # Place 3-point line on the floor
+            mode='lines',
+            line=dict(color='grey', width=4),
+            name="Backboard",
+            hoverinfo='none'
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=three_point_lines['x'],
+            y=three_point_lines['y'],
+            z=np.zeros(len(three_point_lines)),  # Place 3-point line on the floor
+            mode='lines',
+            line=dict(color='white', width=4),
+            name="3-Point Line",
+            hoverinfo='none'
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=freethrow['x'],
+            y=freethrow['y'],
+            z=np.zeros(len(freethrow)),  # Place court lines on the floor
+            mode='lines',
+            line=dict(color='white', width=4),
+            name="Court Perimeter",
+            hoverinfo='none'
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=freethrow2['x'],
+            y=freethrow2['y'],
+            z=np.zeros(len(freethrow2)),  # Place court lines on the floor
+            mode='lines',
+            line=dict(color='white', width=4),
+            name="Court Perimeter",
+            hoverinfo='none'
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=freethrow3['x'],
+            y=freethrow3['y'],
+            z=np.zeros(len(freethrow3)),  # Place court lines on the floor
+            mode='lines',
+            line=dict(color='white', width=4),
+            name="Court Perimeter",
+            hoverinfo='none'
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=freethrow4['x'],
+            y=freethrow4['y'],
+            z=np.zeros(len(freethrow4)),  # Place court lines on the floor
+            mode='lines',
+            line=dict(color='white', width=4),
+            name="Court Perimeter",
+            hoverinfo='none'
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=freethrow5['x'],
+            y=freethrow5['y'],
+            z=np.zeros(len(freethrow5)),  # Place court lines on the floor
+            mode='lines',
+            line=dict(color='white', width=4),
+            name="Court Perimeter",
+            hoverinfo='none'
+        ))
+        # Update layout for better visuals
+        fig.update_layout(
+            margin=dict(l=20, r=20, t=20, b=20),
+            scene_aspectmode="data",
+            height=600,
+            scene_camera=dict(
+                eye=dict(x=1.3, y=0, z=0.7)
+            ),
+            title="",
+            scene=dict(
+                 xaxis=dict(title='', showticklabels=False, showgrid=False),
+                    yaxis=dict(title='', showticklabels=False, showgrid=False),
+                    zaxis=dict(title='',  showticklabels=False, showgrid=False,showbackground=True,backgroundcolor='black'),
+           
         ),
-        yaxis=dict(
-            title="Shooting Percentage (%)",
-            title_font=dict(size=14, family='Arial', color='black'),
-        ),
-        showlegend=True,  # Show the legend for the moving average line
-        margin=dict(l=40, r=40, t=50, b=40),  # Adjust margins for better spacing
-        plot_bgcolor='white',  # Set background color to white for a clean look
-    )
-    with c1:
-        st.plotly_chart(fig2)
-    
-    # Create distance bins
-    distance_bins = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]  # adjusted max distance
-    df['distance_bin'] = pd.cut(df['SHOT_DISTANCE'], bins=distance_bins)
-    
-    # Convert the 'distance_bin' to strings to make it serializable
-    df['distance_bin'] = df['distance_bin'].astype(str)
-    
-    # Calculate shooting percentage by distance bin
-    shooting_by_distance = df.groupby('distance_bin').agg({"SHOT_MADE_FLAG": ["sum", "count"]}).reset_index()
-    
-    # Flatten the MultiIndex columns
-    shooting_by_distance.columns = ['Distance', 'Made', 'Total']
-    
-    # Calculate accuracy
-    shooting_by_distance['Percentage'] = shooting_by_distance['Made'] / shooting_by_distance['Total'] * 100
-    
-    # Plot the figure using Plotly with a new theme
-    fig3 = px.bar(
-        shooting_by_distance, 
-        x='Percentage', 
-        y='Distance', 
-        orientation='h',  # horizontal bars
-        title="Shooting Percentage by Distance",
-        color='Percentage',  # Use color to represent shooting percentage
-        color_continuous_scale='YlOrRd',  # A warm color palette (yellow to red)
-        labels={'Percentage': 'Shooting %', 'Distance': 'Shot Distance (ft)'},
-        text='Percentage',  # Show percentage on the bars
-    )
-    
-    # Customize the layout for better aesthetics
-    fig3.update_layout(
-        title_text="Shooting Percentage by Distance",
-        title_x=0.5,  # Center the title
-        title_font=dict(size=20, family='Arial', color='black'),
-        xaxis_title='Shooting Percentage (%)',
-        yaxis_title='Shot Distance (ft)',
-        yaxis_tickangle=-45,  # Rotate y-axis labels for readability
-        xaxis=dict(showgrid=True, gridcolor='lightgray'),
-        plot_bgcolor='white',  # Set background color to white for clarity
-        margin=dict(l=20, r=20, t=40, b=20),  # Adjust margins to fit content
-        showlegend=False  # Disable legend for this chart
-    )
-    
-    # Add annotations to show the percentage on each bar
-    fig3.update_traces(
-        texttemplate='%{text:.1f}%',  # Format percentage to 1 decimal place
-        textposition='inside',  # Position the percentage text inside the bars
-        insidetextanchor='middle'
-    )
-    
-    # Display the plot in Streamlit
-    with c2:
-        st.plotly_chart(fig3)
-    
-    # Assuming df has a column 'ACTION_TYPE' for shot type and 'SHOT_MADE_FLAG' for success
-    co1, co2 = st.columns(2)
-    shot_accuracy_by_type = df.groupby('ACTION_TYPE').agg({"SHOT_MADE_FLAG": ["sum", "count"]}).reset_index()
-    
-    # Flatten MultiIndex columns
-    shot_accuracy_by_type.columns = ['Shot Type', 'Made', 'Total']
-    
-    # Calculate shooting percentage
-    shot_accuracy_by_type['Percentage'] = shot_accuracy_by_type['Made'] / shot_accuracy_by_type['Total'] * 100
-    
-    # Create a bar plot with enhancements
-    fig = px.bar(
-        shot_accuracy_by_type, 
-        x='Percentage', 
-        y='Shot Type', 
-        orientation='h',  # Horizontal bars for better readability
-        title="Shooting Percentage by Shot Type",
-        color='Percentage',  # Color bars based on shooting percentage
-        color_continuous_scale='Viridis',  # Modern color scale (Viridis)
-        labels={'Percentage': 'Shooting %', 'Shot Type': 'Shot Type'},
-        text='Percentage',  # Show percentage on bars
-    )
-    
-    # Customize the layout to improve aesthetics
-    fig.update_layout(
-        title_text="Shooting Percentage by Shot Type",
-        title_x=0.5,  # Center the title
-        title_font=dict(size=20, family='Arial', color='black'),
-        xaxis_title='Shooting Percentage (%)',
-        yaxis_title='Shot Type',
-        yaxis_tickangle=-45,  # Rotate y-axis labels for better readability
-        xaxis=dict(showgrid=True, gridcolor='lightgray'),
-        plot_bgcolor='white',  # Set background color to white
-        margin=dict(l=20, r=20, t=40, b=40),  # Adjust margins for better fit
-        showlegend=False  # Disable legend for clarity
-    )
-    
-    # Update traces to show percentage inside bars
-    fig.update_traces(
-        texttemplate='%{text:.1f}%',  # Format text to 1 decimal place
-        textposition='inside',  # Position the text inside the bars
-        insidetextanchor='middle'  # Align text in the middle of bars
-    )
-    
-    # Add hover information to show shot type, made count, and total shots
-    fig.update_traces(
-        hovertemplate='Shot Type: %{y}<br>Made: %{customdata[0]}<br>Total: %{customdata[1]}<br>Shooting Percentage: %{x:.1f}%',
-        customdata=shot_accuracy_by_type[['Made', 'Total']].values
-    )
-    with co1:
-        st.plotly_chart(fig)
-    
-    x_bins = np.linspace(-270, 270, 30)  # 30 bins along X axis (basketball court length)
-    y_bins = np.linspace(-10, 450, 20)  # 20 bins along Y axis (basketball court width)
-    
-    # Create 2D histogram to get shot density
-    shot_density, x_edges, y_edges = np.histogram2d(df['LOC_X'], df['LOC_Y'], bins=[x_bins, y_bins])
-    
-    # Calculate the center of each bin for plotting
-    x_centers = (x_edges[:-1] + x_edges[1:]) / 2
-    y_centers = (y_edges[:-1] + y_edges[1:]) / 2
-    
-    # Create a meshgrid of X and Y centers for 3D plotting
-    X, Y = np.meshgrid(x_centers, y_centers)
-    Z = shot_density.T  # Transpose to match the correct orientation for plotting
-    
-    # Plot 3D shot density
-    hovertext = np.array([f'Shots: {z}' for z in Z.flatten()]).reshape(Z.shape)
-    fig = go.Figure(data=go.Surface(
-        z=Z*10,
-        x=-X,
-        y=Y+45,
-        colorscale='hot',  # You can choose different color scales
-        colorbar=dict(title='Shot Density'),
-        showscale=False  # Hide the color bar/legend
-        ,hoverinfo='text',
-        hovertext=hovertext
-    ))
-    court_perimeter_lines = court_lines_df[court_lines_df['line_id'] == 'outside_perimeter']
-    three_point_lines = court_lines_df[court_lines_df['line_id'] == 'three_point_line']
-    backboard = court_lines_df[court_lines_df['line_id'] == 'backboard']
-    freethrow = court_lines_df[court_lines_df['line_id'] == 'free_throw_line']
-    freethrow2 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line2']
-    freethrow3 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line3']
-    freethrow4 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line4']
-    freethrow5 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line5']
-    hoop = court_lines_df[court_lines_df['line_id'] == 'hoop']
-    hoop2 = court_lines_df[court_lines_df['line_id'] == 'hoop2']
-    
-    
-    
-    
-    
-    
-    
-    # Add court lines to the plot (3D scatter)
-    fig.add_trace(go.Scatter3d(
-        x=court_perimeter_lines['x'],
-        y=court_perimeter_lines['y'],
-        z=np.zeros(len(court_perimeter_lines)),  # Place court lines on the floor
-        mode='lines',
-        line=dict(color='white', width=4),
-        name="Court Perimeter",
-        hoverinfo='none'
-    ))
-    fig.add_trace(go.Scatter3d(
-        x=hoop['x'],
-        y=hoop['y'],
-        z=hoop['z'],  # Place 3-point line on the floor
-        mode='lines',
-        line=dict(color='#e47041', width=4),
-        name="Hoop",
-        hoverinfo='none'
-    ))
-    fig.add_trace(go.Scatter3d(
-        x=hoop2['x'],
-        y=hoop2['y'],
-        z=hoop2['z'],  # Place 3-point line on the floor
-        mode='lines',
-        line=dict(color='#D3D3D3', width=4),
-        name="Backboard",
-        hoverinfo='none'
-    ))
-    # Add the 3-point line to the plot
-    fig.add_trace(go.Scatter3d(
-        x=backboard['x'],
-        y=backboard['y'],
-        z=backboard['z'],  # Place 3-point line on the floor
-        mode='lines',
-        line=dict(color='grey', width=4),
-        name="Backboard",
-        hoverinfo='none'
-    ))
-    fig.add_trace(go.Scatter3d(
-        x=three_point_lines['x'],
-        y=three_point_lines['y'],
-        z=np.zeros(len(three_point_lines)),  # Place 3-point line on the floor
-        mode='lines',
-        line=dict(color='white', width=4),
-        name="3-Point Line",
-        hoverinfo='none'
-    ))
-    fig.add_trace(go.Scatter3d(
-        x=freethrow['x'],
-        y=freethrow['y'],
-        z=np.zeros(len(freethrow)),  # Place court lines on the floor
-        mode='lines',
-        line=dict(color='white', width=4),
-        name="Court Perimeter",
-        hoverinfo='none'
-    ))
-    fig.add_trace(go.Scatter3d(
-        x=freethrow2['x'],
-        y=freethrow2['y'],
-        z=np.zeros(len(freethrow2)),  # Place court lines on the floor
-        mode='lines',
-        line=dict(color='white', width=4),
-        name="Court Perimeter",
-        hoverinfo='none'
-    ))
-    fig.add_trace(go.Scatter3d(
-        x=freethrow3['x'],
-        y=freethrow3['y'],
-        z=np.zeros(len(freethrow3)),  # Place court lines on the floor
-        mode='lines',
-        line=dict(color='white', width=4),
-        name="Court Perimeter",
-        hoverinfo='none'
-    ))
-    fig.add_trace(go.Scatter3d(
-        x=freethrow4['x'],
-        y=freethrow4['y'],
-        z=np.zeros(len(freethrow4)),  # Place court lines on the floor
-        mode='lines',
-        line=dict(color='white', width=4),
-        name="Court Perimeter",
-        hoverinfo='none'
-    ))
-    fig.add_trace(go.Scatter3d(
-        x=freethrow5['x'],
-        y=freethrow5['y'],
-        z=np.zeros(len(freethrow5)),  # Place court lines on the floor
-        mode='lines',
-        line=dict(color='white', width=4),
-        name="Court Perimeter",
-        hoverinfo='none'
-    ))
-    # Update layout for better visuals
-    fig.update_layout(
-        margin=dict(l=20, r=20, t=20, b=20),
-        scene_aspectmode="data",
-        height=600,
-        scene_camera=dict(
-            eye=dict(x=1.3, y=0, z=0.7)
-        ),
-        title="",
-        scene=dict(
-             xaxis=dict(title='', showticklabels=False, showgrid=False),
-                yaxis=dict(title='', showticklabels=False, showgrid=False),
-                zaxis=dict(title='',  showticklabels=False, showgrid=False,showbackground=True,backgroundcolor='black'),
-       
-    ),
-     showlegend=False
-    )
-    
-    # Show the plot in Streamlit
-    with coli2:
-        st.plotly_chart(fig,use_container_width=True)
-    
-    shot_type_distribution = df['ACTION_TYPE'].value_counts().reset_index()
-    shot_type_distribution.columns = ['Shot Type', 'Count']
-    
-    # Create a pie chart with enhancements
-    fig = px.pie(
-        shot_type_distribution, 
-        names='Shot Type', 
-        values='Count', 
-        # title="Shot Type Distribution", 
-        color='Shot Type',  # Color by shot type for better distinction
-        color_discrete_sequence=px.colors.sequential.Plasma,  # Modern color scale
-        hole=0.3,  # Create a donut chart (optional)
-        # hover_data={'Shot Type': False, 'Count': True},  # Hover will show only 'Count', not 'Shot Type'
-    )
-    
-    # Customize layout for better visual appeal
-    fig.update_layout(
-        title="Shot Type Distribution",
-        title_x=0.5,  # Center the title
-        title_y=1,
-        title_font=dict(size=20, family='Arial', color='black'),
-        showlegend=True,  # Show the legend
-        legend_title='Shot Type',
-        legend=dict(
-            orientation="h",  # Horizontal legend
-            yanchor="bottom", 
-            y=1.02, 
-            xanchor="center", 
-            x=0.5
-        ),
-        margin=dict(l=20, r=20, t=40, b=20),  # Adjust margins
-        plot_bgcolor='white',  # Set background color to white for a clean look
-    )
-    
-    # Enhance hover info and show percentages on slices
-    fig.update_traces(
-        textinfo='percent+label',  # Display percentage and shot type
-        pull=[0.1 if i == shot_type_distribution['Count'].idxmax() else 0 for i in range(len(shot_type_distribution))],  # Explode the max slice
-        hovertemplate='Shot Type: %{label}<br>Count: %{value}'  # Detailed hover info
-    )
-    
-    with co2:
-        st.plotly_chart(fig)
-else:
-    st.error('No data found')
-    
-    
-    
-     
+         showlegend=False
+        )
+        
+        # Show the plot in Streamlit
+        with coli2:
+            st.plotly_chart(fig,use_container_width=True)
+        
+        shot_type_distribution = df['ACTION_TYPE'].value_counts().reset_index()
+        shot_type_distribution.columns = ['Shot Type', 'Count']
+        
+        # Create a pie chart with enhancements
+        fig = px.pie(
+            shot_type_distribution, 
+            names='Shot Type', 
+            values='Count', 
+            # title="Shot Type Distribution", 
+            color='Shot Type',  # Color by shot type for better distinction
+            color_discrete_sequence=px.colors.sequential.Plasma,  # Modern color scale
+            hole=0.3,  # Create a donut chart (optional)
+            # hover_data={'Shot Type': False, 'Count': True},  # Hover will show only 'Count', not 'Shot Type'
+        )
+        
+        # Customize layout for better visual appeal
+        fig.update_layout(
+            title="Shot Type Distribution",
+            title_x=0.5,  # Center the title
+            title_y=1,
+            title_font=dict(size=20, family='Arial', color='black'),
+            showlegend=True,  # Show the legend
+            legend_title='Shot Type',
+            legend=dict(
+                orientation="h",  # Horizontal legend
+                yanchor="bottom", 
+                y=1.02, 
+                xanchor="center", 
+                x=0.5
+            ),
+            margin=dict(l=20, r=20, t=40, b=20),  # Adjust margins
+            plot_bgcolor='white',  # Set background color to white for a clean look
+        )
+        
+        # Enhance hover info and show percentages on slices
+        fig.update_traces(
+            textinfo='percent+label',  # Display percentage and shot type
+            pull=[0.1 if i == shot_type_distribution['Count'].idxmax() else 0 for i in range(len(shot_type_distribution))],  # Explode the max slice
+            hovertemplate='Shot Type: %{label}<br>Count: %{value}'  # Detailed hover info
+        )
+        
+        with co2:
+            st.plotly_chart(fig)
+    else:
+        st.error('No data found')
+        
+        
+        
+         
