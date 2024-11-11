@@ -164,8 +164,8 @@ if selected_seasons:
     col1, col2,col3 = st.columns(3)
     with col1:
         context_measures = [
-            "PTS", "FGM", "FGA", "FG_PCT", "FG3M", "FG3A", "FG3_PCT", "PF", 
-            "EFG_PCT", "TS_PCT", "PTS_FB", "PTS_OFF_TOV", "PTS_2ND_CHANCE"
+            "PTS", "FGA", "FG3M", "FG3A", 
+             "PTS_FB", "PTS_OFF_TOV", "PTS_2ND_CHANCE"
         ]
         context_measure = st.sidebar.selectbox("Select Context Measure", context_measures, index=context_measures.index('FGA'))
     
