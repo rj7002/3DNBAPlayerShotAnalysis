@@ -106,6 +106,7 @@ last_season = int(last_season)
 # st.write(last_season)
 selected_seasons = st.multiselect('Select a season', range(first_season,last_season+1))
 # st.write(realseason)
+realseason = selected_seasons[0]
 court = CourtCoordinates(realseason)
 court_lines_df = court.get_coordinates()
 # st.write(court_lines_df)
