@@ -4,6 +4,5 @@ streamlit
 plotly
 nba_api
 pandas
-random
 numpy
 math
