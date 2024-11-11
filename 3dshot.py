@@ -107,7 +107,9 @@ last_season = int(last_season)
 selected_seasons = st.multiselect('Select a season', range(first_season,last_season+1))
 if selected_seasons:
     realseason = selected_seasons[0]
-    court = CourtCoordinates(realseason)
+    realseasonandone = realseason+1
+    fullrealseason = f'{str(realseason)}-{realseasonandone[2:]}'
+    court = CourtCoordinates(fullrealseason)
     court_lines_df = court.get_coordinates()
     # st.write(court_lines_df)
     fig = px.line_3d(
