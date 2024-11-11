@@ -677,7 +677,7 @@ if selected_seasons:
         if game_segment:
             sentence_parts.append(f"during the {game_segment.lower()}")
         if clutch_time:
-            sentence_parts.append(f"in the {clutch_time.lower()} of the game")
+            sentence_parts.append(f"in the {clutch_time.lower()} of games")
         if ahead_behind:
             sentence_parts.append(f"when {ahead_behind.lower()}")
         if ShotDist:
