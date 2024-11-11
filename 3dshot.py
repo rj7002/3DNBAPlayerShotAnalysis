@@ -24,6 +24,7 @@ from nba_api.stats.endpoints import shotchartdetail
 from nba_api.stats.endpoints import ShotChartDetail
 from nba_api.stats.endpoints import playercareerstats
 from nba_api.stats.endpoints import commonplayerinfo
+import numpy as np
 # --- Streamlit Page Config ---
 st.set_page_config(layout='wide', page_title="NBA Shot Analysis", page_icon="🏀")
 
