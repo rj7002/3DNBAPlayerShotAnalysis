@@ -5,4 +5,4 @@ plotly
 nba_api
 pandas
 numpy
-math
+
