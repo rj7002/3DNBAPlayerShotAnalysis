@@ -105,178 +105,178 @@ last_season = int(last_season)
 # st.write(first_season)
 # st.write(last_season)
 selected_seasons = st.multiselect('Select a season', range(first_season,last_season+1))
-# st.write(realseason)
-realseason = selected_seasons[0]
-court = CourtCoordinates(realseason)
-court_lines_df = court.get_coordinates()
-# st.write(court_lines_df)
-fig = px.line_3d(
-    data_frame=court_lines_df,
-    x='x',
-    y='y',
-    z='z',
-    line_group='line_group_id',
-    color='line_group_id',
-    color_discrete_map={
-        'court': 'black',
-        'hoop': '#e47041',
-        'net': '#D3D3D3',
-        'backboard': 'gray',
-        'free_throw_line': 'black',
-        'hoop2':'#D3D3D3',
-        'free_throw_line2': 'black',
-        'free_throw_line3': 'black',
-        'free_throw_line4': 'black',
-        'free_throw_line5': 'black',
-    }
-)
-fig.update_traces(hovertemplate=None, hoverinfo='skip', showlegend=False)
-fig.update_traces(line=dict(width=6))
-fig.update_layout(    
-    margin=dict(l=20, r=20, t=20, b=20),
-    scene_aspectmode="data",
-    height=600,
-    scene_camera=dict(
-        eye=dict(x=1.3, y=0, z=0.7)
-    ),
-    scene=dict(
-        xaxis=dict(title='', showticklabels=False, showgrid=False),
-        yaxis=dict(title='', showticklabels=False, showgrid=False),
-        zaxis=dict(title='',  showticklabels=False, showgrid=False, showbackground=True, backgroundcolor='#d2a679'),
-    ),
-    showlegend=False,
-    legend=dict(
-        yanchor='top',
-        y=0.05,
-        x=0.2,
-        xanchor='left',
-        orientation='h',
-        font=dict(size=15, color='gray'),
-        bgcolor='rgba(0, 0, 0, 0)',
-        title='',
-        itemsizing='constant'
+if selected_seasons:
+    realseason = selected_seasons[0]
+    court = CourtCoordinates(realseason)
+    court_lines_df = court.get_coordinates()
+    # st.write(court_lines_df)
+    fig = px.line_3d(
+        data_frame=court_lines_df,
+        x='x',
+        y='y',
+        z='z',
+        line_group='line_group_id',
+        color='line_group_id',
+        color_discrete_map={
+            'court': 'black',
+            'hoop': '#e47041',
+            'net': '#D3D3D3',
+            'backboard': 'gray',
+            'free_throw_line': 'black',
+            'hoop2':'#D3D3D3',
+            'free_throw_line2': 'black',
+            'free_throw_line3': 'black',
+            'free_throw_line4': 'black',
+            'free_throw_line5': 'black',
+        }
     )
-)
-# df2 = shotchart(selected_player,realseason)
-# Section for Context Measure
-col1, col2,col3 = st.columns(3)
-with col1:
-    context_measures = [
-        "PTS", "FGM", "FGA", "FG_PCT", "FG3M", "FG3A", "FG3_PCT", "PF", 
-        "EFG_PCT", "TS_PCT", "PTS_FB", "PTS_OFF_TOV", "PTS_2ND_CHANCE"
-    ]
-    context_measure = st.sidebar.selectbox("Select Context Measure", context_measures, index=context_measures.index('FGA'))
-
-    # Section for Last N Games
-    last_n_games = st.sidebar.number_input("Last N Games", min_value=0, max_value=82, value=10, step=1)
-
-    # Section for Month
-    # month = st.selectbox("Select Month", list(range(1, 13)), index=None)
-
-    # Section for Period
-    # period = st.selectbox("Select Period", list(range(1, 5)), index=None)
-
-    # Section for Season Type
-    season_types = ["Regular Season", "Pre Season", "Playoffs", "All Star"]
-    season_type = st.sidebar.selectbox("Select Season Type", season_types, index=None)
-
-    # Section for Team ID
-    # Section for Vs Division (optional)
-    vs_division_options = [
-        "Atlantic", "Central", "Northwest", "Pacific", "Southeast", "Southwest", "East", "West"
-    ]
-    vs_division = st.sidebar.selectbox("Vs Division (optional)", vs_division_options, index=None, key="vs_division")
-
-    # Section for Vs Conference (optional)
-with col2:    
-    vs_conference_options = ["East", "West"]
-    vs_conference = st.sidebar.selectbox("Vs Conference (optional)", vs_conference_options, index=None, key="vs_conference")
-
-    # Section for Start Period (optional)
-    # start_period = st.number_input("Start Period (optional)", min_value=1, value=None, step=1)
-
-    # Section for Season Segment (Pre/Post All-Star)
-    season_segment_options = ["Post All-Star", "Pre All-Star"]
-    season_segment = st.sidebar.selectbox("Season Segment (optional)", season_segment_options, index=None)
-
-    # Section for Point Differential (optional)
-    point_diff = st.sidebar.number_input("Point Differential (optional)", min_value=-50, max_value=50, value=None, step=1)
-
-    # Section for Outcome (Win or Loss)
-    outcome = st.sidebar.selectbox("Outcome (optional)", ["W", "L"], index=None)
-
-    # Section for Location (Home or Road)
-    location = st.sidebar.selectbox("Location (optional)", ["Home", "Road"], index=None)
-
-
-
-with col3:
-    # Section for Game Segment (First Half, Overtime, Second Half)
-
-    # Section for Game ID (optional)
-    # game_id = st.text_input("Game ID (optional)", value=None, max_chars=10)
-
-    game_segment = st.sidebar.selectbox("Game Segment (optional)", ["First Half", "Overtime", "Second Half"], index=None)
-
-
-    # Section for End Period (optional)
-    # end_period = st.number_input("End Period (optional)", min_value=1, value=None, step=1)
-
-    # Section for Date From (optional)
-    date_from = st.sidebar.date_input("Date From (optional)", None)
-
-    # Section for Date To (optional)
-    date_to = st.sidebar.date_input("Date To (optional)", None)
-
-    # Section for Context Filter (optional)
-    # context_filter = st.text_input("Context Filter (optional)", value=None)
-
-    # Section for Clutch Time (Last 5, 4, 3, etc.)
-    clutch_time_options = [
-        "Last 5 Minutes", "Last 4 Minutes", "Last 3 Minutes", "Last 2 Minutes",
-        "Last 1 Minute", "Last 30 Seconds", "Last 10 Seconds"
-    ]
-    clutch_time = st.sidebar.selectbox("Clutch Time (optional)", clutch_time_options, index=None)
-
-    # Section for Ahead/Behind (optional)
-    ahead_behind_options = [
-        "Ahead or Behind", "Ahead or Tied", "Behind or Tied"
-    ]
-    ahead_behind = st.sidebar.selectbox("Ahead/Behind (optional)", ahead_behind_options, index=None)
-df = pd.DataFrame()
-for selected_season in selected_seasons:
-    nextseason = selected_season+1
-    nextstr = str(nextseason)[2:]
-    realseason = str(selected_season) + "-" + nextstr
-    params = {
-        "player_id": id,
-        "season_nullable": realseason,
-        "team_id": 0,
-        "context_measure_simple": context_measure,
-        "last_n_games": last_n_games,
-        "season_type_all_star": season_type,
-        "vs_division_nullable": vs_division,
-        "vs_conference_nullable": vs_conference,
-        "season_segment_nullable": season_segment,
-        "point_diff_nullable": point_diff,
-        "outcome_nullable": outcome,
-        "location_nullable": location,
-        "game_segment_nullable": game_segment,
-        "date_from_nullable": date_from,
-        "date_to_nullable": date_to,
-        "clutch_time_nullable": clutch_time,
-        "ahead_behind_nullable": ahead_behind
-    }
-
-    # Remove all parameters that are None
-    params = {key: value for key, value in params.items() if value is not None}
+    fig.update_traces(hovertemplate=None, hoverinfo='skip', showlegend=False)
+    fig.update_traces(line=dict(width=6))
+    fig.update_layout(    
+        margin=dict(l=20, r=20, t=20, b=20),
+        scene_aspectmode="data",
+        height=600,
+        scene_camera=dict(
+            eye=dict(x=1.3, y=0, z=0.7)
+        ),
+        scene=dict(
+            xaxis=dict(title='', showticklabels=False, showgrid=False),
+            yaxis=dict(title='', showticklabels=False, showgrid=False),
+            zaxis=dict(title='',  showticklabels=False, showgrid=False, showbackground=True, backgroundcolor='#d2a679'),
+        ),
+        showlegend=False,
+        legend=dict(
+            yanchor='top',
+            y=0.05,
+            x=0.2,
+            xanchor='left',
+            orientation='h',
+            font=dict(size=15, color='gray'),
+            bgcolor='rgba(0, 0, 0, 0)',
+            title='',
+            itemsizing='constant'
+        )
+    )
+    # df2 = shotchart(selected_player,realseason)
+    # Section for Context Measure
+    col1, col2,col3 = st.columns(3)
+    with col1:
+        context_measures = [
+            "PTS", "FGM", "FGA", "FG_PCT", "FG3M", "FG3A", "FG3_PCT", "PF", 
+            "EFG_PCT", "TS_PCT", "PTS_FB", "PTS_OFF_TOV", "PTS_2ND_CHANCE"
+        ]
+        context_measure = st.sidebar.selectbox("Select Context Measure", context_measures, index=context_measures.index('FGA'))
     
-    # Create ShotChartDetail instance with filtered parameters
-    # if st.button('Submit'):
-    shotchartdata = shotchartdetail.ShotChartDetail(**params)
-    all_shot_data = shotchartdata.get_data_frames()[0]
-    df = pd.concat([df, all_shot_data], ignore_index=True)
-# st.write(df.columns)
+        # Section for Last N Games
+        last_n_games = st.sidebar.number_input("Last N Games", min_value=0, max_value=82, value=10, step=1)
+    
+        # Section for Month
+        # month = st.selectbox("Select Month", list(range(1, 13)), index=None)
+    
+        # Section for Period
+        # period = st.selectbox("Select Period", list(range(1, 5)), index=None)
+    
+        # Section for Season Type
+        season_types = ["Regular Season", "Pre Season", "Playoffs", "All Star"]
+        season_type = st.sidebar.selectbox("Select Season Type", season_types, index=None)
+    
+        # Section for Team ID
+        # Section for Vs Division (optional)
+        vs_division_options = [
+            "Atlantic", "Central", "Northwest", "Pacific", "Southeast", "Southwest", "East", "West"
+        ]
+        vs_division = st.sidebar.selectbox("Vs Division (optional)", vs_division_options, index=None, key="vs_division")
+    
+        # Section for Vs Conference (optional)
+    with col2:    
+        vs_conference_options = ["East", "West"]
+        vs_conference = st.sidebar.selectbox("Vs Conference (optional)", vs_conference_options, index=None, key="vs_conference")
+    
+        # Section for Start Period (optional)
+        # start_period = st.number_input("Start Period (optional)", min_value=1, value=None, step=1)
+    
+        # Section for Season Segment (Pre/Post All-Star)
+        season_segment_options = ["Post All-Star", "Pre All-Star"]
+        season_segment = st.sidebar.selectbox("Season Segment (optional)", season_segment_options, index=None)
+    
+        # Section for Point Differential (optional)
+        point_diff = st.sidebar.number_input("Point Differential (optional)", min_value=-50, max_value=50, value=None, step=1)
+    
+        # Section for Outcome (Win or Loss)
+        outcome = st.sidebar.selectbox("Outcome (optional)", ["W", "L"], index=None)
+    
+        # Section for Location (Home or Road)
+        location = st.sidebar.selectbox("Location (optional)", ["Home", "Road"], index=None)
+    
+    
+    
+    with col3:
+        # Section for Game Segment (First Half, Overtime, Second Half)
+    
+        # Section for Game ID (optional)
+        # game_id = st.text_input("Game ID (optional)", value=None, max_chars=10)
+    
+        game_segment = st.sidebar.selectbox("Game Segment (optional)", ["First Half", "Overtime", "Second Half"], index=None)
+    
+    
+        # Section for End Period (optional)
+        # end_period = st.number_input("End Period (optional)", min_value=1, value=None, step=1)
+    
+        # Section for Date From (optional)
+        date_from = st.sidebar.date_input("Date From (optional)", None)
+    
+        # Section for Date To (optional)
+        date_to = st.sidebar.date_input("Date To (optional)", None)
+    
+        # Section for Context Filter (optional)
+        # context_filter = st.text_input("Context Filter (optional)", value=None)
+    
+        # Section for Clutch Time (Last 5, 4, 3, etc.)
+        clutch_time_options = [
+            "Last 5 Minutes", "Last 4 Minutes", "Last 3 Minutes", "Last 2 Minutes",
+            "Last 1 Minute", "Last 30 Seconds", "Last 10 Seconds"
+        ]
+        clutch_time = st.sidebar.selectbox("Clutch Time (optional)", clutch_time_options, index=None)
+    
+        # Section for Ahead/Behind (optional)
+        ahead_behind_options = [
+            "Ahead or Behind", "Ahead or Tied", "Behind or Tied"
+        ]
+        ahead_behind = st.sidebar.selectbox("Ahead/Behind (optional)", ahead_behind_options, index=None)
+    df = pd.DataFrame()
+    for selected_season in selected_seasons:
+        nextseason = selected_season+1
+        nextstr = str(nextseason)[2:]
+        realseason = str(selected_season) + "-" + nextstr
+        params = {
+            "player_id": id,
+            "season_nullable": realseason,
+            "team_id": 0,
+            "context_measure_simple": context_measure,
+            "last_n_games": last_n_games,
+            "season_type_all_star": season_type,
+            "vs_division_nullable": vs_division,
+            "vs_conference_nullable": vs_conference,
+            "season_segment_nullable": season_segment,
+            "point_diff_nullable": point_diff,
+            "outcome_nullable": outcome,
+            "location_nullable": location,
+            "game_segment_nullable": game_segment,
+            "date_from_nullable": date_from,
+            "date_to_nullable": date_to,
+            "clutch_time_nullable": clutch_time,
+            "ahead_behind_nullable": ahead_behind
+        }
+    
+        # Remove all parameters that are None
+        params = {key: value for key, value in params.items() if value is not None}
+        
+        # Create ShotChartDetail instance with filtered parameters
+        # if st.button('Submit'):
+        shotchartdata = shotchartdetail.ShotChartDetail(**params)
+        all_shot_data = shotchartdata.get_data_frames()[0]
+        df = pd.concat([df, all_shot_data], ignore_index=True)
+    # st.write(df.columns)
 ShotDist = st.sidebar.toggle('Shot Distance')
 if ShotDist == 1:
     shotdistbool = True
