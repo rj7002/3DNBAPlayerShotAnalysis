@@ -108,7 +108,7 @@ selected_seasons = st.multiselect('Select a season', range(first_season,last_sea
 if selected_seasons:
     realseason = selected_seasons[0]
     realseasonandone = realseason+1
-    fullrealseason = f'{str(realseason)}-{realseasonandone[2:]}'
+    fullrealseason = f'{str(realseason)}-{str(realseasonandone)[2:]}'
     court = CourtCoordinates(fullrealseason)
     court_lines_df = court.get_coordinates()
     # st.write(court_lines_df)
