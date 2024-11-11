@@ -4,10 +4,10 @@ import requests
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-from utils.courtCoordinates import CourtCoordinates
-from utils.basketballShot import BasketballShot
-from utils.courtCoordinates2 import CourtCoordinates2
-from utils.basketballShot2 import BasketballShot2
+from courtCoordinates import CourtCoordinates
+from basketballShot import BasketballShot
+from courtCoordinates2 import CourtCoordinates2
+from basketballShot2 import BasketballShot2
 import pandas as pd
 # from sportsdataverse.nba.nba_pbp import espn_nba_pbp
 # from sportsdataverse.wnba.wnba_pbp import espn_wnba_pbp
@@ -15,7 +15,7 @@ import plotly.graph_objects as go  # Import Plotly graph objects separately
 # import time
 # import re
 # import sportsdataverse
-from streamlit_plotly_events import plotly_events
+# from streamlit_plotly_events import plotly_events
 from datetime import datetime, timedelta
 from random import randint
 
