@@ -5,9 +5,9 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 from courtCoordinates import CourtCoordinates
-from basketballShot import BasketballShot
-from courtCoordinates2 import CourtCoordinates2
-from basketballShot2 import BasketballShot2
+# from basketballShot import BasketballShot
+# from courtCoordinates2 import CourtCoordinates2
+# from basketballShot2 import BasketballShot2
 import pandas as pd
 # from sportsdataverse.nba.nba_pbp import espn_nba_pbp
 # from sportsdataverse.wnba.wnba_pbp import espn_wnba_pbp
