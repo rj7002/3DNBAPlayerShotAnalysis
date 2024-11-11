@@ -871,11 +871,15 @@ if selected_seasons:
             # Create a meshgrid of X and Y centers for 3D plotting
             X, Y = np.meshgrid(x_centers, y_centers)
             Z = shot_density.T  # Transpose to match the correct orientation for plotting
-            
+            Z2 = Z*10
+            z_max = 100  # Replace with the desired limit
+
+            # Apply the limit to Z values
+            Z2 = np.minimum(Z2, z_max)
             # Plot 3D shot density
             hovertext = np.array([f'Shots: {z}' for z in Z.flatten()]).reshape(Z.shape)
             fig = go.Figure(data=go.Surface(
-                z=Z*10,
+                z=Z2,
                 x=-X,
                 y=Y+45,
                 colorscale='hot',  # You can choose different color scales
