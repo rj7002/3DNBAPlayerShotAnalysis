@@ -104,10 +104,7 @@ first_season = int(first_season)
 last_season = int(last_season)
 # st.write(first_season)
 # st.write(last_season)
-selected_season = st.selectbox('Select a season', range(first_season,last_season+1))
-nextseason = selected_season+1
-nextstr = str(nextseason)[2:]
-realseason = str(selected_season) + "-" + nextstr
+selected_seasons = st.multiselect('Select a season', range(first_season,last_season+1))
 # st.write(realseason)
 court = CourtCoordinates(realseason)
 court_lines_df = court.get_coordinates()
@@ -245,33 +242,39 @@ with col3:
         "Ahead or Behind", "Ahead or Tied", "Behind or Tied"
     ]
     ahead_behind = st.sidebar.selectbox("Ahead/Behind (optional)", ahead_behind_options, index=None)
-params = {
-    "player_id": id,
-    "season_nullable": realseason,
-    "team_id": 0,
-    "context_measure_simple": context_measure,
-    "last_n_games": last_n_games,
-    "season_type_all_star": season_type,
-    "vs_division_nullable": vs_division,
-    "vs_conference_nullable": vs_conference,
-    "season_segment_nullable": season_segment,
-    "point_diff_nullable": point_diff,
-    "outcome_nullable": outcome,
-    "location_nullable": location,
-    "game_segment_nullable": game_segment,
-    "date_from_nullable": date_from,
-    "date_to_nullable": date_to,
-    "clutch_time_nullable": clutch_time,
-    "ahead_behind_nullable": ahead_behind
-}
+df = pd.DataFrame()
+for selected_season in selected_seasons:
+    nextseason = selected_season+1
+    nextstr = str(nextseason)[2:]
+    realseason = str(selected_season) + "-" + nextstr
+    params = {
+        "player_id": id,
+        "season_nullable": realseason,
+        "team_id": 0,
+        "context_measure_simple": context_measure,
+        "last_n_games": last_n_games,
+        "season_type_all_star": season_type,
+        "vs_division_nullable": vs_division,
+        "vs_conference_nullable": vs_conference,
+        "season_segment_nullable": season_segment,
+        "point_diff_nullable": point_diff,
+        "outcome_nullable": outcome,
+        "location_nullable": location,
+        "game_segment_nullable": game_segment,
+        "date_from_nullable": date_from,
+        "date_to_nullable": date_to,
+        "clutch_time_nullable": clutch_time,
+        "ahead_behind_nullable": ahead_behind
+    }
 
-# Remove all parameters that are None
-params = {key: value for key, value in params.items() if value is not None}
-
-# Create ShotChartDetail instance with filtered parameters
-# if st.button('Submit'):
-shotchartdata = shotchartdetail.ShotChartDetail(**params)
-df = shotchartdata.get_data_frames()[0]
+    # Remove all parameters that are None
+    params = {key: value for key, value in params.items() if value is not None}
+    
+    # Create ShotChartDetail instance with filtered parameters
+    # if st.button('Submit'):
+    shotchartdata = shotchartdetail.ShotChartDetail(**params)
+    all_shot_data = shotchartdata.get_data_frames()[0]
+    df = pd.concat([df, all_shot_data], ignore_index=True)
 # st.write(df.columns)
 ShotDist = st.sidebar.toggle('Shot Distance')
 if ShotDist == 1:
