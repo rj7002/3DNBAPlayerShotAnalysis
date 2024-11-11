@@ -626,11 +626,11 @@ if selected_seasons:
     
         # Add filters to sentence based on their selection
     
-        if selected_season:
+        if selected_seasons:
             selected_season2 = selected_season+1
             season2 = str(selected_season2)
             season2 = season2[2:]
-            sentence_parts.append(f"in {str(selected_season)}-{str(season2)}")
+            sentence_parts.append(f"in {selected_seasons}")
         if season_type:
             sentence_parts.append(f"in the {season_type.lower()}")
         if last_n_games:
