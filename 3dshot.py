@@ -913,7 +913,7 @@ if selected_seasons:
             
             # Create the 3D plot
             fig = go.Figure(data=go.Surface(
-                z=shot_attempts.T,  # Shot density (number of shots) as the Z-axis
+                z=shot_attempts.T*10,  # Shot density (number of shots) as the Z-axis
                 x=X,  # X values are the bin centers
                 y=Y,  # Y values are the bin centers
                 colorscale='Viridis',  # Color scale based on FG% (brighter for higher FG%)
