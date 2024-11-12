@@ -898,30 +898,31 @@ if selected_seasons:
             # Calculate the FG% for each bin
             fg_percentage = np.divide(made_shots, shot_attempts, where=shot_attempts != 0) * 100  # Avoid division by zero
             
-            # Calculate the center of each bin for plotting
+            # Calculate the center of each bin for plotting (bin centers)
             x_centers = (x_edges[:-1] + x_edges[1:]) / 2
             y_centers = (y_edges[:-1] + y_edges[1:]) / 2
             
             # Create a meshgrid of X and Y centers for 3D plotting
             X, Y = np.meshgrid(x_centers, y_centers)
             
-            # Normalize the FG% values to use them in a color scale (0 to 100%)
+            # Normalize FG% for color mapping
             fg_percentage_normalized = np.clip(fg_percentage, 0, 100)  # Ensure FG% is within 0-100 range
             
             # Plot 3D shot density with FG% coloring
             hovertext = np.array([f'FG%: {fg:.1f}%' for fg in fg_percentage.flatten()]).reshape(fg_percentage.shape)
             
+            # Create the 3D plot
             fig = go.Figure(data=go.Surface(
-                z=shot_attempts.T,  # Use shot density (number of shots) as the Z values
-                x=-X,  # Invert the X-axis if needed
-                y=Y + 45,  # Adjust Y-axis if needed
-                colorscale='hot',  # Use a color scale for FG% (brighter for higher FG%)
+                z=shot_attempts.T,  # Shot density (number of shots) as the Z-axis
+                x=X,  # X values are the bin centers
+                y=Y,  # Y values are the bin centers
+                colorscale='Viridis',  # Color scale based on FG% (brighter for higher FG%)
                 cmin=0, cmax=100,  # Set the range for FG% (0 to 100)
-                colorbar=dict(title='FG%', tickvals=[0, 20, 40, 60, 80, 100]),  # Show FG% on the color bar
-                showscale=True,  # Show the color scale/legend
-                hoverinfo='text',
-                hovertext=hovertext
+                colorbar=dict(title='FG%', tickvals=[0, 20, 40, 60, 80, 100]),  # Show FG% on color bar
+                hoverinfo='text',  # Show custom hovertext
+                hovertext=hovertext  # FG% for each bin
             ))
+
             court_perimeter_lines = court_lines_df[court_lines_df['line_id'] == 'outside_perimeter']
             three_point_lines = court_lines_df[court_lines_df['line_id'] == 'three_point_line']
             backboard = court_lines_df[court_lines_df['line_id'] == 'backboard']
