@@ -280,6 +280,10 @@ if selected_seasons:
         all_shot_data = shotchartdata.get_data_frames()[0]
         df = pd.concat([df, all_shot_data], ignore_index=True)
     # st.write(df.columns)
+    unique_periods = df['period.displayValue'].unique()
+    Quarter = st.sidebar.toggle('Quarter')
+    if Quarter == 1:
+        quart = st.sidebar.multiselect('',unique_periods)
     ShotDist = st.sidebar.toggle('Shot Distance')
     if ShotDist == 1:
         shotdistbool = True
@@ -323,6 +327,9 @@ if selected_seasons:
         df = df[df['SHOT_ZONE_AREA'].isin(courtloc)]
     if Time:
         df = df[(df['clock.minutes'] >= timemin) & (df['clock.minutes'] <= timemax)]
+    if Quarter:
+        df = df[df['period.displayValue'].isin(quart)]
+
 
     if selected_seasons:
         if len(df) > 0:
@@ -693,6 +700,10 @@ if selected_seasons:
                 sentence_parts.append(f"on {shottype}s")
             if Teams:
                 sentence_parts.append(f"vs {teamtype}")
+            if Quarter:
+                sentence_parts.append(f"in {quart} quarters")
+            if Time:
+                sentence_parts.append(f"between {timemin} and {timemax} minutes")
             # Combine sentence parts into a full sentence
             sentence = " ".join(sentence_parts) + "."
             display_player_image(id,400,'')
