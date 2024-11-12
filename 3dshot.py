@@ -898,8 +898,8 @@ if selected_seasons:
                     cmax=100,  # Maximum FG% for color scale
                     colorbar=dict(title='Field Goal %'),  # Color bar label
                     showscale=False,  # Show the color scale/legend
-                    hoverinfo='text',  # Show text on hover
-                    hovertext=hovertext  # Attach the hovertext showing FG%
+                    hoverinfo='none',  # Show text on hover
+                    # hovertext=hovertext  # Attach the hovertext showing FG%
                 ))
             else:
                 x_bins = np.linspace(-270, 270, 30)  # 30 bins along X axis (basketball court length)
