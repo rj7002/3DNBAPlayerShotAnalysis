@@ -279,7 +279,7 @@ if selected_seasons:
         shotchartdata = shotchartdetail.ShotChartDetail(**params)
         all_shot_data = shotchartdata.get_data_frames()[0]
         df = pd.concat([df, all_shot_data], ignore_index=True)
-    # st.write(df.columns)
+    st.write(df.columns)
     unique_periods = df['period.displayValue'].unique()
     Quarter = st.sidebar.toggle('Quarter')
     if Quarter == 1:
