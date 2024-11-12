@@ -914,8 +914,8 @@ if selected_seasons:
             # Plotting the 3D surface plot
             fig = go.Figure(data=go.Surface(
                 z=fg_percentage.T,  # Field Goal Percentage as the Z-axis
-                x=X,  # X values (bin centers)
-                y=Y,  # Y values (bin centers)
+                x=-X,  # X values (bin centers)
+                y=Y+45,  # Y values (bin centers)
                 colorscale='Viridis',  # Color scale based on shot density
                 cmin=0, cmax=shot_attempts.max(),  # Color scale for shot density (number of shots)
                 colorbar=dict(title='Shot Density'),
