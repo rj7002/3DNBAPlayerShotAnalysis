@@ -893,7 +893,7 @@ if selected_seasons:
             
             # Create 2D histograms: one for shot attempts (total shots) and one for made shots
             shot_attempts, x_edges, y_edges = np.histogram2d(df['LOC_X'], df['LOC_Y'], bins=[x_bins, y_bins])
-            made_shots, _, _ = np.histogram2d(df['LOC_X'][df['SHOT_MADE'] == 1], df['LOC_Y'][df['SHOT_MADE'] == 1], bins=[x_bins, y_bins])
+            made_shots, _, _ = np.histogram2d(df['LOC_X'][df['SHOT_MADE_FLAG'] == 1], df['LOC_Y'][df['SHOT_MADE_FLAG'] == 1], bins=[x_bins, y_bins])
             
             # Calculate the Field Goal Percentage (FG%) for each bin
             fg_percentage = np.divide(made_shots, shot_attempts, where=shot_attempts != 0) * 100  # Avoid division by zero
