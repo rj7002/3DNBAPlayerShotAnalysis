@@ -906,9 +906,9 @@ if selected_seasons:
 
                 
                 # Create the 3D surface plot
-                z_max = 150  # Replace with the desired limit
+                z_max = 100  # Replace with the desired limit
                 Z = shot_attempts.T
-                Z2 = Z *10
+                Z2 = Z *5
                 Z2 = np.minimum(Z2, z_max)
                 fig = go.Figure(data=go.Surface(
                     z=Z2,  # Shot density (number of shots) as the Z-axis
@@ -940,8 +940,8 @@ if selected_seasons:
                 # Create a meshgrid of X and Y centers for 3D plotting
                 X, Y = np.meshgrid(x_centers, y_centers)
                 Z = shot_density.T  # Transpose to match the correct orientation for plotting
-                Z2 = Z*10
-                z_max = 150  # Replace with the desired limit
+                Z2 = Z*5
+                z_max = 100  # Replace with the desired limit
     
                 # Apply the limit to Z values
                 Z2 = np.minimum(Z2, z_max)
