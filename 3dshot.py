@@ -899,7 +899,7 @@ if selected_seasons:
             fg_percentage = np.divide(made_shots, shot_attempts, where=shot_attempts != 0) * 100  # Avoid division by zero
             
             # Normalize FG% for color mapping (to make sure it stays between 0 and 100)
-            fg_percentage_normalized = np.clip(fg_percentage, 0, 100)  # Clamp FG% between 0 and 100
+            # fg_percentage_normalized = np.clip(fg_percentage, 0, 100)  # Clamp FG% between 0 and 100
             
             # Calculate the center of each bin for plotting (bin centers)
             x_centers = (x_edges[:-1] + x_edges[1:]) / 2
@@ -917,7 +917,7 @@ if selected_seasons:
                 x=-X,  # X values (bin centers)
                 y=Y+45,  # Y values (bin centers)
                 colorscale='Viridis',  # Color scale based on shot density
-                cmin=0, cmax=shot_attempts.max(),  # Color scale for shot density (number of shots)
+                cmin=0, cmax=50,  # Color scale for shot density (number of shots)
                 colorbar=dict(title='Shot Density'),
                 hoverinfo='text',
                 hovertext=hovertext  # FG% as hover text
