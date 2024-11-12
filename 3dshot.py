@@ -872,7 +872,7 @@ if selected_seasons:
             X, Y = np.meshgrid(x_centers, y_centers)
             Z = shot_density.T  # Transpose to match the correct orientation for plotting
             Z2 = Z*10
-            z_max = 100  # Replace with the desired limit
+            z_max = 150  # Replace with the desired limit
 
             # Apply the limit to Z values
             Z2 = np.minimum(Z2, z_max)
