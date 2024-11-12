@@ -190,7 +190,8 @@ if selected_seasons:
         vs_division = st.sidebar.selectbox("Vs Division (optional)", vs_division_options, index=None, key="vs_division")
     
         # Section for Vs Conference (optional)
-    with col2:    
+    with col2:
+        fgperc = st.checkbox('FG%')
         vs_conference_options = ["East", "West"]
         vs_conference = st.sidebar.selectbox("Vs Conference (optional)", vs_conference_options, index=None, key="vs_conference")
     
@@ -857,7 +858,6 @@ if selected_seasons:
             )
             with co1:
                 st.plotly_chart(fig)
-            fgperc = st.checkbox('FG%')
             if fgperc:
          
                 x_bins = np.linspace(-270, 270, 30)  # 30 bins along X axis (basketball court length)
@@ -881,7 +881,8 @@ if selected_seasons:
                 X, Y = np.meshgrid(x_centers, y_centers)
                 
                 # Create hovertext to show FG% for each region
-                hovertext = np.array([f'FG%: {fg:.1f}%' for fg in fg_percentage.flatten()]).reshape(fg_percentage.shape)
+                hovertext = np.array([f'FG%: {fg}%' for fg in fg_percentage.flatten()]).reshape(fg_percentage.shape)
+
                 
                 # Create the 3D surface plot
                 fig = go.Figure(data=go.Surface(
@@ -896,8 +897,7 @@ if selected_seasons:
                     cmin=0,  # Minimum FG% for color scale
                     cmax=100,  # Maximum FG% for color scale
                     colorbar=dict(title='Field Goal %'),  # Color bar label
-                    showscale=True,  # Show the color scale/legend
-                    
+                    showscale=False,  # Show the color scale/legend
                     hoverinfo='text',  # Show text on hover
                     hovertext=hovertext  # Attach the hovertext showing FG%
                 ))
