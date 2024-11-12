@@ -898,7 +898,7 @@ if selected_seasons:
                     surfacecolor=fg_percentage.T,  # Use FG% as the surface color
                     
                     colorscale='hot',  # Color scale based on FG% (you can change this to any scale)
-                    cmin=-50,  # Minimum FG% for color scale
+                    cmin=0,  # Minimum FG% for color scale
                     cmax=100,  # Maximum FG% for color scale
                     colorbar=dict(title='Field Goal %'),  # Color bar label
                     showscale=False,  # Show the color scale/legend
