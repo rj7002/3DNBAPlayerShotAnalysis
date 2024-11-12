@@ -857,7 +857,7 @@ if selected_seasons:
             )
             with co1:
                 st.plotly_chart(fig)
-            fgperc = st.checkbox('FG%)
+            fgperc = st.checkbox('FG%')
             if fgperc:
          
                 x_bins = np.linspace(-270, 270, 30)  # 30 bins along X axis (basketball court length)
