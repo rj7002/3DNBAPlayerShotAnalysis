@@ -309,6 +309,9 @@ if selected_seasons:
     if CourtLoc == 1:
         courtloctypes = df['SHOT_ZONE_AREA'].unique()
         courtloc = st.sidebar.multiselect('',courtloctypes)
+    Time = st.sidebar.toggle('Time')
+    if Time == 1:
+        timemin, timemax = st.sidebar.slider("Time Remaining (Minutes)", 0, 15, (0, 15))
     if ShotType:  # Check if ShotType checkbox is selected
         df = df[df['ACTION_TYPE'].isin(shottype)]
         # Plot makes in green
@@ -318,6 +321,9 @@ if selected_seasons:
         df = df[(df['VTM'].isin(teamtype)) | (df['HTM'].isin(teamtype))]
     if CourtLoc:
         df = df[df['SHOT_ZONE_AREA'].isin(courtloc)]
+    if Time:
+        df = df[(df['clock.minutes'] >= timemin) & (df['clock.minutes'] <= timemax)]
+
     if selected_seasons:
         if len(df) > 0:
             if len(df) > 500:
