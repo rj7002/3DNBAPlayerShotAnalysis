@@ -191,7 +191,7 @@ if selected_seasons:
     
         # Section for Vs Conference (optional)
     with col2:
-        fgperc = st.checkbox('FG%')
+        fgperc = st.checkbox('FG%',help='View hot zones')
         vs_conference_options = ["East", "West"]
         vs_conference = st.sidebar.selectbox("Vs Conference (optional)", vs_conference_options, index=None, key="vs_conference")
     
