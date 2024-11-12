@@ -913,14 +913,14 @@ if selected_seasons:
             
             # Create the 3D surface plot
             fig = go.Figure(data=go.Surface(
-                z=shot_attempts.T,  # Shot density (number of shots) as the Z-axis
-                x=X,  # X values (bin centers)
-                y=Y,  # Y values (bin centers)
+                z=shot_attempts.T*10,  # Shot density (number of shots) as the Z-axis
+                x=-X,  # X values (bin centers)
+                y=Y+45,  # Y values (bin centers)
                 
                 # Surface color based on Field Goal Percentage (FG%)
                 surfacecolor=fg_percentage.T,  # Use FG% as the surface color
                 
-                colorscale='Viridis',  # Color scale based on FG% (you can change this to any scale)
+                colorscale='hot',  # Color scale based on FG% (you can change this to any scale)
                 cmin=0,  # Minimum FG% for color scale
                 cmax=100,  # Maximum FG% for color scale
                 colorbar=dict(title='Field Goal %'),  # Color bar label
