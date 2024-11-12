@@ -279,8 +279,8 @@ if selected_seasons:
         shotchartdata = shotchartdetail.ShotChartDetail(**params)
         all_shot_data = shotchartdata.get_data_frames()[0]
         df = pd.concat([df, all_shot_data], ignore_index=True)
-    st.write(df.columns)
-    unique_periods = df['period.displayValue'].unique()
+    # st.write(df.columns)
+    unique_periods = df['PERIOD'].unique()
     Quarter = st.sidebar.toggle('Quarter')
     if Quarter == 1:
         quart = st.sidebar.multiselect('',unique_periods)
@@ -326,9 +326,9 @@ if selected_seasons:
     if CourtLoc:
         df = df[df['SHOT_ZONE_AREA'].isin(courtloc)]
     if Time:
-        df = df[(df['clock.minutes'] >= timemin) & (df['clock.minutes'] <= timemax)]
+        df = df[(df['MINUTES_REMAINING'] >= timemin) & (df['MINUTES_REMAINING'] <= timemax)]
     if Quarter:
-        df = df[df['period.displayValue'].isin(quart)]
+        df = df[df['PERIOD'].isin(quart)]
 
 
     if selected_seasons:
