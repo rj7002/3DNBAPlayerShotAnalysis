@@ -858,45 +858,11 @@ if selected_seasons:
             with co1:
                 st.plotly_chart(fig)
             
-            x_bins = np.linspace(-270, 270, 30)  # 30 bins along X axis (basketball court length)
-            y_bins = np.linspace(-10, 450, 20)  # 20 bins along Y axis (basketball court width)
-            
-            # Create 2D histogram to get shot density
-            shot_density, x_edges, y_edges = np.histogram2d(df['LOC_X'], df['LOC_Y'], bins=[x_bins, y_bins])
-            
-            # Calculate the center of each bin for plotting
-            x_centers = (x_edges[:-1] + x_edges[1:]) / 2
-            y_centers = (y_edges[:-1] + y_edges[1:]) / 2
-            
-            # Create a meshgrid of X and Y centers for 3D plotting
-            X, Y = np.meshgrid(x_centers, y_centers)
-            Z = shot_density.T  # Transpose to match the correct orientation for plotting
-            Z2 = Z*10
-            z_max = 150  # Replace with the desired limit
-
-            # Apply the limit to Z values
-            Z2 = np.minimum(Z2, z_max)
-            # Plot 3D shot density
-            hovertext = np.array([f'Shots: {z}' for z in Z.flatten()]).reshape(Z.shape)
-            fig = go.Figure(data=go.Surface(
-                z=Z2,
-                x=-X,
-                y=Y+45,
-                colorscale='hot',  # You can choose different color scales
-                colorbar=dict(title='Shot Density'),
-                showscale=False  # Hide the color bar/legend
-                ,hoverinfo='text',
-                hovertext=hovertext
-            ))
             # x_bins = np.linspace(-270, 270, 30)  # 30 bins along X axis (basketball court length)
             # y_bins = np.linspace(-10, 450, 20)  # 20 bins along Y axis (basketball court width)
             
-            # # Create 2D histograms: one for shot attempts and one for made shots
-            # shot_attempts, x_edges, y_edges = np.histogram2d(df['LOC_X'], df['LOC_Y'], bins=[x_bins, y_bins])
-            # made_shots, _, _ = np.histogram2d(df['LOC_X'][df['SHOT_MADE_FLAG'] == 1], df['LOC_Y'][df['SHOT_MADE_FLAG'] == 1], bins=[x_bins, y_bins])
-            
-            # # Calculate the FG% for each bin
-            # fg_percentage = np.divide(made_shots, shot_attempts, where=shot_attempts != 0) * 100  # Avoid division by zero
+            # # Create 2D histogram to get shot density
+            # shot_density, x_edges, y_edges = np.histogram2d(df['LOC_X'], df['LOC_Y'], bins=[x_bins, y_bins])
             
             # # Calculate the center of each bin for plotting
             # x_centers = (x_edges[:-1] + x_edges[1:]) / 2
@@ -904,23 +870,65 @@ if selected_seasons:
             
             # # Create a meshgrid of X and Y centers for 3D plotting
             # X, Y = np.meshgrid(x_centers, y_centers)
-            
-            # # Normalize the FG% values to use them in a color scale (0 to 100%)
-            # fg_percentage_normalized = np.clip(fg_percentage, 0, 100)  # Ensure FG% is within 0-100 range
-            
-            # # Plot 3D FG% as a surface, with color based on FG%
-            # hovertext = np.array([f'FG%: {fg:.1f}%' for fg in fg_percentage.flatten()]).reshape(fg_percentage.shape)
+            # Z = shot_density.T  # Transpose to match the correct orientation for plotting
+            # Z2 = Z*10
+            # z_max = 150  # Replace with the desired limit
+
+            # # Apply the limit to Z values
+            # Z2 = np.minimum(Z2, z_max)
+            # # Plot 3D shot density
+            # hovertext = np.array([f'Shots: {z}' for z in Z.flatten()]).reshape(Z.shape)
             # fig = go.Figure(data=go.Surface(
-            #     z=fg_percentage_normalized.T,  # Use FG% as Z values
-            #     x=-X,  # Invert the X-axis if needed
-            #     y=Y + 45,  # Adjust Y-axis if needed
-            #     cmin=-50, cmax=100,  # Set the range for FG% (0 to 100)
-            #     colorscale='Viridis',  # A color scale that works well for percentages (you can choose another like 'hot')
-            #     colorbar=dict(title='FG%'),
-            #     showscale=True,  # Show the color scale/legend
-            #     hoverinfo='text',
+            #     z=Z2,
+            #     x=-X,
+            #     y=Y+45,
+            #     colorscale='hot',  # You can choose different color scales
+            #     colorbar=dict(title='Shot Density'),
+            #     showscale=False  # Hide the color bar/legend
+            #     ,hoverinfo='text',
             #     hovertext=hovertext
             # ))
+            x_bins = np.linspace(-270, 270, 30)  # 30 bins along X axis (basketball court length)
+            y_bins = np.linspace(-10, 450, 20)   # 20 bins along Y axis (basketball court width)
+            
+            # Create 2D histograms: one for shot attempts (total shots) and one for made shots
+            shot_attempts, x_edges, y_edges = np.histogram2d(df['LOC_X'], df['LOC_Y'], bins=[x_bins, y_bins])
+            made_shots, _, _ = np.histogram2d(df['LOC_X'][df['SHOT_MADE'] == 1], df['LOC_Y'][df['SHOT_MADE'] == 1], bins=[x_bins, y_bins])
+            
+            # Calculate the Field Goal Percentage (FG%) for each bin
+            fg_percentage = np.divide(made_shots, shot_attempts, where=shot_attempts != 0) * 100  # Avoid division by zero
+            
+            # Normalize FG% for color mapping (to make sure it stays between 0 and 100)
+            fg_percentage_normalized = np.clip(fg_percentage, 0, 100)  # Clamp FG% between 0 and 100
+            
+            # Calculate the center of each bin for plotting (bin centers)
+            x_centers = (x_edges[:-1] + x_edges[1:]) / 2
+            y_centers = (y_edges[:-1] + y_edges[1:]) / 2
+            
+            # Create a meshgrid of X and Y centers for 3D plotting
+            X, Y = np.meshgrid(x_centers, y_centers)
+            
+            # Create hovertext to show FG% for each region
+            hovertext = np.array([f'FG%: {fg:.1f}%' for fg in fg_percentage.flatten()]).reshape(fg_percentage.shape)
+            
+            # Create the 3D surface plot
+            fig = go.Figure(data=go.Surface(
+                z=shot_attempts.T,  # Shot density (number of shots) as the Z-axis
+                x=X,  # X values (bin centers)
+                y=Y,  # Y values (bin centers)
+                
+                # Surface color based on Field Goal Percentage (FG%)
+                surfacecolor=fg_percentage.T,  # Use FG% as the surface color
+                
+                colorscale='Viridis',  # Color scale based on FG% (you can change this to any scale)
+                cmin=0,  # Minimum FG% for color scale
+                cmax=100,  # Maximum FG% for color scale
+                colorbar=dict(title='Field Goal %'),  # Color bar label
+                showscale=True,  # Show the color scale/legend
+                
+                hoverinfo='text',  # Show text on hover
+                hovertext=hovertext  # Attach the hovertext showing FG%
+            ))
             court_perimeter_lines = court_lines_df[court_lines_df['line_id'] == 'outside_perimeter']
             three_point_lines = court_lines_df[court_lines_df['line_id'] == 'three_point_line']
             backboard = court_lines_df[court_lines_df['line_id'] == 'backboard']
