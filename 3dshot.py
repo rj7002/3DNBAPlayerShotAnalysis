@@ -701,7 +701,11 @@ if selected_seasons:
             if Teams:
                 sentence_parts.append(f"vs {teamtype}")
             if Quarter:
-                sentence_parts.append(f"in {quart} quarters")
+                if len(quart) > 1:
+                    qpart = 'quarters'
+                else:
+                    qpart = 'quarter'
+                sentence_parts.append(f"in {qpart} {quart}")
             if Time:
                 sentence_parts.append(f"between {timemin} and {timemax} minutes")
             # Combine sentence parts into a full sentence
