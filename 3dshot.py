@@ -914,6 +914,7 @@ if selected_seasons:
                 z=fg_percentage_normalized.T,  # Use FG% as Z values
                 x=-X,  # Invert the X-axis if needed
                 y=Y + 45,  # Adjust Y-axis if needed
+                cmin=-50, cmax=100,  # Set the range for FG% (0 to 100)
                 colorscale='Viridis',  # A color scale that works well for percentages (you can choose another like 'hot')
                 colorbar=dict(title='FG%'),
                 showscale=True,  # Show the color scale/legend
