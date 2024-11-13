@@ -659,51 +659,6 @@ if selected_seasons:
                                 hoverinfo='text',
                                 hovertemplate=hovertemplate
                             ))
-                    
-                    import requests
-                    
-                    selected_points = plotly_events(fig, hover_event=False, click_event=True)
-                    # st.write(selected_points)
-                    if selected_points:
-                        x = selected_points[0]['x']
-                        y = selected_points[0]['y']-45
-                        # st.write(x)
-                        # st.write(y)
-                        sd = df[(-df['LOC_X'] == x) & (df['LOC_Y'] == y)]
-                        # st.write(sd)
-                    
-                        headers = {
-                            'Host': 'stats.nba.com',
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0',
-                            'Accept': 'application/json, text/plain, */*',
-                            'Accept-Language': 'en-US,en;q=0.5',
-                            'Accept-Encoding': 'gzip, deflate, br',
-                            'x-nba-stats-origin': 'stats',
-                            'x-nba-stats-token': 'true',
-                            'Connection': 'keep-alive',
-                            'Referer': 'https://stats.nba.com/',
-                            'Pragma': 'no-cache',
-                            'Cache-Control': 'no-cache'
-                        }
-                        event_id = sd['GAME_EVENT_ID'].iloc[0]
-                        game_id = sd['GAME_ID'].iloc[0]
-                        event = sd['EVENT_TYPE'].iloc[0]
-                        action = sd['ACTION_TYPE'].iloc[0]
-                        sub = f'{event} {action}'
-                    
-                        url = 'https://stats.nba.com/stats/videoeventsasset?GameEventID={}&GameID={}'.format(
-                                    event_id, game_id)
-                        r = requests.get(url, headers=headers)
-                        if r.status_code == 200:
-                            json = r.json()
-                            video_urls = json['resultSets']['Meta']['videoUrls']
-                            playlist = json['resultSets']['playlist']
-                            video_event = {'video': video_urls[0]['lurl'], 'desc': playlist[0]['dsc']}
-                            video = video_urls[0]['lurl']
-                        col1,col2,col3 = st.columns(3)
-                        with col2:
-                            st.video(video,autoplay=True)
-
                 else:
                     if Make:
                         for i in range(len(dfmake)):
@@ -962,7 +917,53 @@ if selected_seasons:
             # st.subheader(f'{player} Shot Chart in {realseason}')
             coli1, coli2 = st.columns(2)
             with coli1:
-                st.plotly_chart(fig)
+                if vids == 1:
+                    import requests
+                    
+                    selected_points = plotly_events(fig, hover_event=False, click_event=True)
+                    # st.write(selected_points)
+                    if selected_points:
+                        x = selected_points[0]['x']
+                        y = selected_points[0]['y']-45
+                        # st.write(x)
+                        # st.write(y)
+                        sd = df[(-df['LOC_X'] == x) & (df['LOC_Y'] == y)]
+                        # st.write(sd)
+                    
+                        headers = {
+                            'Host': 'stats.nba.com',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0',
+                            'Accept': 'application/json, text/plain, */*',
+                            'Accept-Language': 'en-US,en;q=0.5',
+                            'Accept-Encoding': 'gzip, deflate, br',
+                            'x-nba-stats-origin': 'stats',
+                            'x-nba-stats-token': 'true',
+                            'Connection': 'keep-alive',
+                            'Referer': 'https://stats.nba.com/',
+                            'Pragma': 'no-cache',
+                            'Cache-Control': 'no-cache'
+                        }
+                        event_id = sd['GAME_EVENT_ID'].iloc[0]
+                        game_id = sd['GAME_ID'].iloc[0]
+                        event = sd['EVENT_TYPE'].iloc[0]
+                        action = sd['ACTION_TYPE'].iloc[0]
+                        sub = f'{event} {action}'
+                    
+                        url = 'https://stats.nba.com/stats/videoeventsasset?GameEventID={}&GameID={}'.format(
+                                    event_id, game_id)
+                        r = requests.get(url, headers=headers)
+                        if r.status_code == 200:
+                            json = r.json()
+                            video_urls = json['resultSets']['Meta']['videoUrls']
+                            playlist = json['resultSets']['playlist']
+                            video_event = {'video': video_urls[0]['lurl'], 'desc': playlist[0]['dsc']}
+                            video = video_urls[0]['lurl']
+                        # col1,col2,col3 = st.columns(3)
+                        # with col2:
+                        st.video(video,autoplay=True)
+    
+                else:    
+                    st.plotly_chart(fig)
         
             
             # Assuming df has a 'GAME_DATE' column and a 'SHOT_MADE_FLAG' column
