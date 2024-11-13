@@ -493,7 +493,7 @@ if selected_seasons:
                     y_coords2 = y_values2
                     z_value2 = 100
                         # Number of segments for the arc
-                    num_segments = 100
+                    num_segments = 200
         
                     # Create frames
                     frames = []
