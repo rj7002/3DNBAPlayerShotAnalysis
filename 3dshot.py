@@ -623,7 +623,7 @@ if selected_seasons:
                     )
                     fig.update_traces(line=dict(width=6))
                     fig.update_layout(    
-                       margin=dict(l=20, r=20, t=20, b=20),
+                       # margin=dict(l=20, r=20, t=20, b=20),
                         scene_aspectmode="data",
                         scene=dict(
                             xaxis=dict(title='', showticklabels=False, showgrid=False),
