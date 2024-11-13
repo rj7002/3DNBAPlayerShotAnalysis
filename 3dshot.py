@@ -716,7 +716,7 @@ if selected_seasons:
                         # ))
         
             for i, row in df.iterrows():
-                if row['SHOT_MADE_FLAG'].iloc[i] == 1:
+                if row['SHOT_MADE_FLAG'] == 1:
                     s = 'circle-open'
                     s2 = 'circle'
                     size = 9
