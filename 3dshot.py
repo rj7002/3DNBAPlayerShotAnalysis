@@ -350,105 +350,106 @@ if selected_seasons:
                 st.warning('There is over 500 shots being plotted so the plot may be slow')
             st.success('Data Found')
             # df = df.head(500)
-            x_values = []
-            y_values = []
-            z_values = []
-            dfmiss = df[df['SHOT_MADE_FLAG'] == 0]
-            dfmake = df[df['SHOT_MADE_FLAG'] == 1]
-            if Make:
-                for index, row in dfmake.iterrows():
+            if vids != 1:
+                x_values = []
+                y_values = []
+                z_values = []
+                dfmiss = df[df['SHOT_MADE_FLAG'] == 0]
+                dfmake = df[df['SHOT_MADE_FLAG'] == 1]
+                if Make:
+                    for index, row in dfmake.iterrows():
+                        
+                        
                     
-                    
+                        x_values.append(-row['LOC_X'])
+                        # Append the value from column 'x' to the list
+                        y_values.append(row['LOC_Y']+45)
+                        z_values.append(0)
                 
-                    x_values.append(-row['LOC_X'])
-                    # Append the value from column 'x' to the list
-                    y_values.append(row['LOC_Y']+45)
-                    z_values.append(0)
-            
-            
-            
-                x_values2 = []
-                y_values2 = []
-                z_values2 = []
-                for index, row in dfmake.iterrows():
-                    # Append the value from column 'x' to the list
                 
-            
-                    x_values2.append(court.hoop_loc_x)
-            
-                    y_values2.append(court.hoop_loc_y)
-                    z_values2.append(100)
-            
-                import numpy as np
-                import plotly.graph_objects as go
-                import streamlit as st
-                import math
-                def calculate_distance(x1, y1, x2, y2):
-                    """Calculate the distance between two points (x1, y1) and (x2, y2)."""
-                    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-            
-                def generate_arc_points(p1, p2, apex, num_points=100):
-                    """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
-                    t = np.linspace(0, 1, num_points)
-                    x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
-                    y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
-                    z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
-                    return x, y, z
-            
-                # Example lists of x and y coordinates
-                x_coords = x_values
-                y_coords = y_values
-                z_value = 0  # Fixed z value
-                x_coords2 = x_values2
-                y_coords2 = y_values2
-                z_value2 = 100
-            if Miss:
-                for index, row in dfmiss.iterrows():
-                    
+                
+                    x_values2 = []
+                    y_values2 = []
+                    z_values2 = []
+                    for index, row in dfmake.iterrows():
+                        # Append the value from column 'x' to the list
                     
                 
-                    x_values.append(-row['LOC_X'])
-                    # Append the value from column 'x' to the list
-                    y_values.append(row['LOC_Y']+45)
-                    z_values.append(0)
-            
-            
-            
-                x_values2 = []
-                y_values2 = []
-                z_values2 = []
-                for index, row in dfmiss.iterrows():
-                    # Append the value from column 'x' to the list
+                        x_values2.append(court.hoop_loc_x)
                 
-            
-                    x_values2.append(court.hoop_loc_x)
-            
-                    y_values2.append(court.hoop_loc_y)
-                    z_values2.append(100)
-            
-                import numpy as np
-                import plotly.graph_objects as go
-                import streamlit as st
-                import math
-                def calculate_distance(x1, y1, x2, y2):
-                    """Calculate the distance between two points (x1, y1) and (x2, y2)."""
-                    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-            
-                def generate_arc_points(p1, p2, apex, num_points=100):
-                    """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
-                    t = np.linspace(0, 1, num_points)
-                    x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
-                    y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
-                    z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
-                    return x, y, z
-            
-                # Example lists of x and y coordinates
-                x_coords = x_values
-                y_coords = y_values
-                z_value = 0  # Fixed z value
-                x_coords2 = x_values2
-                y_coords2 = y_values2
-                z_value2 = 100
+                        y_values2.append(court.hoop_loc_y)
+                        z_values2.append(100)
+                
+                    import numpy as np
+                    import plotly.graph_objects as go
+                    import streamlit as st
+                    import math
+                    def calculate_distance(x1, y1, x2, y2):
+                        """Calculate the distance between two points (x1, y1) and (x2, y2)."""
+                        return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+                
+                    def generate_arc_points(p1, p2, apex, num_points=100):
+                        """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
+                        t = np.linspace(0, 1, num_points)
+                        x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
+                        y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
+                        z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
+                        return x, y, z
+                
+                    # Example lists of x and y coordinates
+                    x_coords = x_values
+                    y_coords = y_values
+                    z_value = 0  # Fixed z value
+                    x_coords2 = x_values2
+                    y_coords2 = y_values2
+                    z_value2 = 100
+                if Miss:
+                    for index, row in dfmiss.iterrows():
+                        
+                        
+                    
+                        x_values.append(-row['LOC_X'])
+                        # Append the value from column 'x' to the list
+                        y_values.append(row['LOC_Y']+45)
+                        z_values.append(0)
+                
+                
+                
+                    x_values2 = []
+                    y_values2 = []
+                    z_values2 = []
+                    for index, row in dfmiss.iterrows():
+                        # Append the value from column 'x' to the list
+                    
+                
+                        x_values2.append(court.hoop_loc_x)
+                
+                        y_values2.append(court.hoop_loc_y)
+                        z_values2.append(100)
+                
+                    import numpy as np
+                    import plotly.graph_objects as go
+                    import streamlit as st
+                    import math
+                    def calculate_distance(x1, y1, x2, y2):
+                        """Calculate the distance between two points (x1, y1) and (x2, y2)."""
+                        return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+                
+                    def generate_arc_points(p1, p2, apex, num_points=100):
+                        """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
+                        t = np.linspace(0, 1, num_points)
+                        x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
+                        y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
+                        z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
+                        return x, y, z
+                
+                    # Example lists of x and y coordinates
+                    x_coords = x_values
+                    y_coords = y_values
+                    z_value = 0  # Fixed z value
+                    x_coords2 = x_values2
+                    y_coords2 = y_values2
+                    z_value2 = 100
             with col1:
                 if st.checkbox('Animated',help='View animated shots'):
                         # Number of segments for the arc
