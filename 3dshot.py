@@ -329,6 +329,8 @@ if selected_seasons:
         df = df[(df['MINUTES_REMAINING'] >= timemin) & (df['MINUTES_REMAINING'] <= timemax)]
     if Quarter:
         df = df[df['PERIOD'].isin(quart)]
+    Make = st.sidebar.checkbox('Make shot paths')
+    Miss = st.sidebar.checkbox('Miss shot paths')
 
 
     if selected_seasons:
@@ -340,55 +342,102 @@ if selected_seasons:
             x_values = []
             y_values = []
             z_values = []
-            # dfmiss = df[df['SHOT_MADE_FLAG'] == 0]
-            # df = df[df['SHOT_MADE_FLAG'] == 1]
-        
-            for index, row in df.iterrows():
+            dfmiss = df[df['SHOT_MADE_FLAG'] == 0]
+            dfmake = df[df['SHOT_MADE_FLAG'] == 1]
+            if Make:
+                for index, row in dfmake.iterrows():
+                    
+                    
                 
+                    x_values.append(-row['LOC_X'])
+                    # Append the value from column 'x' to the list
+                    y_values.append(row['LOC_Y']+45)
+                    z_values.append(0)
+            
+            
+            
+                x_values2 = []
+                y_values2 = []
+                z_values2 = []
+                for index, row in dfmake.iterrows():
+                    # Append the value from column 'x' to the list
                 
             
-                x_values.append(-row['LOC_X'])
-                # Append the value from column 'x' to the list
-                y_values.append(row['LOC_Y']+45)
-                z_values.append(0)
-        
-        
-        
-            x_values2 = []
-            y_values2 = []
-            z_values2 = []
-            for index, row in df.iterrows():
-                # Append the value from column 'x' to the list
+                    x_values2.append(court.hoop_loc_x)
             
-        
-                x_values2.append(court.hoop_loc_x)
-        
-                y_values2.append(court.hoop_loc_y)
-                z_values2.append(100)
-        
-            import numpy as np
-            import plotly.graph_objects as go
-            import streamlit as st
-            import math
-            def calculate_distance(x1, y1, x2, y2):
-                """Calculate the distance between two points (x1, y1) and (x2, y2)."""
-                return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-        
-            def generate_arc_points(p1, p2, apex, num_points=100):
-                """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
-                t = np.linspace(0, 1, num_points)
-                x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
-                y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
-                z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
-                return x, y, z
-        
-            # Example lists of x and y coordinates
-            x_coords = x_values
-            y_coords = y_values
-            z_value = 0  # Fixed z value
-            x_coords2 = x_values2
-            y_coords2 = y_values2
-            z_value2 = 100
+                    y_values2.append(court.hoop_loc_y)
+                    z_values2.append(100)
+            
+                import numpy as np
+                import plotly.graph_objects as go
+                import streamlit as st
+                import math
+                def calculate_distance(x1, y1, x2, y2):
+                    """Calculate the distance between two points (x1, y1) and (x2, y2)."""
+                    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+            
+                def generate_arc_points(p1, p2, apex, num_points=100):
+                    """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
+                    t = np.linspace(0, 1, num_points)
+                    x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
+                    y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
+                    z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
+                    return x, y, z
+            
+                # Example lists of x and y coordinates
+                x_coords = x_values
+                y_coords = y_values
+                z_value = 0  # Fixed z value
+                x_coords2 = x_values2
+                y_coords2 = y_values2
+                z_value2 = 100
+            if Miss:
+                for index, row in dfmiss.iterrows():
+                    
+                    
+                
+                    x_values.append(-row['LOC_X'])
+                    # Append the value from column 'x' to the list
+                    y_values.append(row['LOC_Y']+45)
+                    z_values.append(0)
+            
+            
+            
+                x_values2 = []
+                y_values2 = []
+                z_values2 = []
+                for index, row in dfmiss.iterrows():
+                    # Append the value from column 'x' to the list
+                
+            
+                    x_values2.append(court.hoop_loc_x)
+            
+                    y_values2.append(court.hoop_loc_y)
+                    z_values2.append(100)
+            
+                import numpy as np
+                import plotly.graph_objects as go
+                import streamlit as st
+                import math
+                def calculate_distance(x1, y1, x2, y2):
+                    """Calculate the distance between two points (x1, y1) and (x2, y2)."""
+                    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+            
+                def generate_arc_points(p1, p2, apex, num_points=100):
+                    """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
+                    t = np.linspace(0, 1, num_points)
+                    x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
+                    y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
+                    z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
+                    return x, y, z
+            
+                # Example lists of x and y coordinates
+                x_coords = x_values
+                y_coords = y_values
+                z_value = 0  # Fixed z value
+                x_coords2 = x_values2
+                y_coords2 = y_values2
+                z_value2 = 100
             with col1:
                 if st.checkbox('Animated',help='View animated shots'):
                         # Number of segments for the arc
@@ -531,99 +580,163 @@ if selected_seasons:
                     #     }]
                     # )
                 else:
-                    for i in range(len(df)):
-                        x1 = x_coords[i]
-                        y1 = y_coords[i]
-                        x2 = x_coords2[i]
-                        y2 = y_coords2[i]
-                        # Define the start and end points
-                        p2 = np.array([x1, y1, z_value])
-                        p1 = np.array([x2, y2, z_value2])
-                        
-                        # Apex will be above the line connecting p1 and p2
-                        distance = calculate_distance(x1, y1, x2, y2)
-        
-                        if df['SHOT_MADE_FLAG'].iloc[i] == 1:
-                            s = 'circle-open'
-                            s2 = 'circle'
-                            size = 9
-                            color = 'green'
-                        else:
-                            s = 'cross'
-                            s2 = 'cross'
-                            size = 10
-                            color = 'red'
-                        date_str = df['GAME_DATE'].iloc[i]
-                        game_date = datetime.strptime(date_str, "%Y%m%d")
-                        formatted_date = game_date.strftime("%m/%d/%Y")
-                        if int(df['SECONDS_REMAINING'].iloc[i]) < 10:
-                            df['SECONDS_REMAINING'].iloc[i] = '0' + str(df['SECONDS_REMAINING'].iloc[i])
-                        hovertemplate= f"Date: {formatted_date}<br>Game: {df['HTM'].iloc[i]} vs {df['VTM'].iloc[i]}<br>Result: {df['EVENT_TYPE'].iloc[i]}<br>Shot Type: {df['ACTION_TYPE'].iloc[i]}<br>Distance: {df['SHOT_DISTANCE'].iloc[i]} ft {df['SHOT_TYPE'].iloc[i]}<br>Quarter: {df['PERIOD'].iloc[i]}<br>Time: {df['MINUTES_REMAINING'].iloc[i]}:{df['SECONDS_REMAINING'].iloc[i]}"
-        
-                        if df['SHOT_DISTANCE'].iloc[i] > 3:
-                            if df['SHOT_DISTANCE'].iloc[i] > 50:
-                                h = randint(255,305)
-                            elif df['SHOT_DISTANCE'].iloc[i] > 30:
-                                h = randint(230,280)
-                            elif df['SHOT_DISTANCE'].iloc[i] > 25:
-                                h = randint(180,230)
-                            elif df['SHOT_DISTANCE'].iloc[i] > 15:
-                                h = randint(180,230)
-                            else:
-                                h = randint(130,160)
-                        
-                            apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])  # Adjust apex height as needed
+                    if Make:
+                        for i in range(len(dfmake)):
+                            x1 = x_coords[i]
+                            y1 = y_coords[i]
+                            x2 = x_coords2[i]
+                            y2 = y_coords2[i]
+                            # Define the start and end points
+                            p2 = np.array([x1, y1, z_value])
+                            p1 = np.array([x2, y2, z_value2])
                             
-                            # Generate arc points
-                            x, y, z = generate_arc_points(p1, p2, apex)
-                            fig.add_trace(go.Scatter3d(
-                                        x=x, y=y, z=z,
-                                        mode='lines',
-                                        line=dict(width=8,color = color),
-                                        opacity =0.5,
-                                        # name=f'Arc {i + 1}',
-                                        # hoverinfo='text',
-                                        hovertemplate=hovertemplate
-                                    ))
+                            # Apex will be above the line connecting p1 and p2
+                            distance = calculate_distance(x1, y1, x2, y2)
+            
+                            if dfmake['SHOT_MADE_FLAG'].iloc[i] == 1:
+                                s = 'circle-open'
+                                s2 = 'circle'
+                                size = 9
+                                color = 'green'
+                            else:
+                                s = 'cross'
+                                s2 = 'cross'
+                                size = 10
+                                color = 'red'
+                            date_str = dfmake['GAME_DATE'].iloc[i]
+                            game_date = datetime.strptime(date_str, "%Y%m%d")
+                            formatted_date = game_date.strftime("%m/%d/%Y")
+                            if int(df['SECONDS_REMAINING'].iloc[i]) < 10:
+                                dfmake['SECONDS_REMAINING'].iloc[i] = '0' + str(df['SECONDS_REMAINING'].iloc[i])
+                            hovertemplate= f"Date: {formatted_date}<br>Game: {dfmake['HTM'].iloc[i]} vs {dfmake['VTM'].iloc[i]}<br>Result: {dfmake['EVENT_TYPE'].iloc[i]}<br>Shot Type: {dfmake['ACTION_TYPE'].iloc[i]}<br>Distance: {dfmake['SHOT_DISTANCE'].iloc[i]} ft {dfmake['SHOT_TYPE'].iloc[i]}<br>Quarter: {dfmake['PERIOD'].iloc[i]}<br>Time: {dfmake['MINUTES_REMAINING'].iloc[i]}:{dfmake['SECONDS_REMAINING'].iloc[i]}"
+            
+                            if dfmake['SHOT_DISTANCE'].iloc[i] > 3:
+                                if dfmake['SHOT_DISTANCE'].iloc[i] > 50:
+                                    h = randint(255,305)
+                                elif dfmake['SHOT_DISTANCE'].iloc[i] > 30:
+                                    h = randint(230,280)
+                                elif dfmake['SHOT_DISTANCE'].iloc[i] > 25:
+                                    h = randint(180,230)
+                                elif dfmake['SHOT_DISTANCE'].iloc[i] > 15:
+                                    h = randint(180,230)
+                                else:
+                                    h = randint(130,160)
+                            
+                                apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])  # Adjust apex height as needed
+                                
+                                # Generate arc points
+                                x, y, z = generate_arc_points(p1, p2, apex)
+                                fig.add_trace(go.Scatter3d(
+                                            x=x, y=y, z=z,
+                                            mode='lines',
+                                            line=dict(width=8,color = color),
+                                            opacity =0.5,
+                                            # name=f'Arc {i + 1}',
+                                            # hoverinfo='text',
+                                            hovertemplate=hovertemplate
+                                        ))
+
+                    if Miss:
+                        for i in range(len(dfmiss)):
+                            x1 = x_coords[i]
+                            y1 = y_coords[i]
+                            x2 = x_coords2[i]
+                            y2 = y_coords2[i]
+                            # Define the start and end points
+                            p2 = np.array([x1, y1, z_value])
+                            p1 = np.array([x2, y2, z_value2])
+                            
+                            # Apex will be above the line connecting p1 and p2
+                            distance = calculate_distance(x1, y1, x2, y2)
+            
+                            if dfmiss['SHOT_MADE_FLAG'].iloc[i] == 1:
+                                s = 'circle-open'
+                                s2 = 'circle'
+                                size = 9
+                                color = 'green'
+                            else:
+                                s = 'cross'
+                                s2 = 'cross'
+                                size = 10
+                                color = 'red'
+                            date_str = dfmiss['GAME_DATE'].iloc[i]
+                            game_date = datetime.strptime(date_str, "%Y%m%d")
+                            formatted_date = game_date.strftime("%m/%d/%Y")
+                            if int(dfmiss['SECONDS_REMAINING'].iloc[i]) < 10:
+                                dfmiss['SECONDS_REMAINING'].iloc[i] = '0' + str(dfmiss['SECONDS_REMAINING'].iloc[i])
+                            hovertemplate= f"Date: {formatted_date}<br>Game: {dfmiss['HTM'].iloc[i]} vs {dfmiss['VTM'].iloc[i]}<br>Result: {dfmiss['EVENT_TYPE'].iloc[i]}<br>Shot Type: {dfmiss['ACTION_TYPE'].iloc[i]}<br>Distance: {dfmiss['SHOT_DISTANCE'].iloc[i]} ft {dfmiss['SHOT_TYPE'].iloc[i]}<br>Quarter: {dfmiss['PERIOD'].iloc[i]}<br>Time: {dfmiss['MINUTES_REMAINING'].iloc[i]}:{dfmiss['SECONDS_REMAINING'].iloc[i]}"
+            
+                            if dfmiss['SHOT_DISTANCE'].iloc[i] > 3:
+                                if dfmiss['SHOT_DISTANCE'].iloc[i] > 50:
+                                    h = randint(255,305)
+                                elif dfmiss['SHOT_DISTANCE'].iloc[i] > 30:
+                                    h = randint(230,280)
+                                elif dfmiss['SHOT_DISTANCE'].iloc[i] > 25:
+                                    h = randint(180,230)
+                                elif dfmiss['SHOT_DISTANCE'].iloc[i] > 15:
+                                    h = randint(180,230)
+                                else:
+                                    h = randint(130,160)
+                            
+                                apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])  # Adjust apex height as needed
+                                
+                                # Generate arc points
+                                x, y, z = generate_arc_points(p1, p2, apex)
+                                fig.add_trace(go.Scatter3d(
+                                            x=x, y=y, z=z,
+                                            mode='lines',
+                                            line=dict(width=8,color = color),
+                                            opacity =0.5,
+                                            # name=f'Arc {i + 1}',
+                                            # hoverinfo='text',
+                                            hovertemplate=hovertemplate
+                                        ))
                         # Add start and end points
         
-                        fig.add_trace(go.Scatter3d(
-                            x=[p2[0], p2[0]],
-                            y=[p2[1], p2[1]],
-                            z=[p2[2], p2[2]],
-                            mode='markers',
-                            marker=dict(size=size, symbol=s,color=color),
-                            # name=f'Endpoints {i + 1}',
-                            # hoverinfo='text',
-                            hovertemplate=hovertemplate
-                        ))
-                        fig.add_trace(go.Scatter3d(
-                            x=[p2[0], p2[0]],
-                            y=[p2[1], p2[1]],
-                            z=[p2[2], p2[2]],
-                            mode='markers',
-                            marker=dict(size=5, symbol=s2,color = color),
-                            # name=f'Endpoints {i + 1}',
-                            # hoverinfo='text',
-                            hovertemplate=hovertemplate
+                        # fig.add_trace(go.Scatter3d(
+                        #     x=[p2[0], p2[0]],
+                        #     y=[p2[1], p2[1]],
+                        #     z=[p2[2], p2[2]],
+                        #     mode='markers',
+                        #     marker=dict(size=size, symbol=s,color=color),
+                        #     # name=f'Endpoints {i + 1}',
+                        #     # hoverinfo='text',
+                        #     hovertemplate=hovertemplate
+                        # ))
+                        # fig.add_trace(go.Scatter3d(
+                        #     x=[p2[0], p2[0]],
+                        #     y=[p2[1], p2[1]],
+                        #     z=[p2[2], p2[2]],
+                        #     mode='markers',
+                        #     marker=dict(size=5, symbol=s2,color = color),
+                        #     # name=f'Endpoints {i + 1}',
+                        #     # hoverinfo='text',
+                        #     hovertemplate=hovertemplate
         
-                        ))
-            # s = 'cross'
-            # s2 = 'cross'
-            # size = 10
-            # color = 'red'
-            # for i, row in dfmiss.iterrows():
-            #     hovertemplate= f"Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
+                        # ))
         
-            #     fig.add_trace(go.Scatter3d(
-            #         x=[row['LOC_X']],  # Single point, so wrap in a list
-            #         y=[row['LOC_Y']+45],  # Single point, so wrap in a list
-            #         z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
-            #         marker=dict(size=size, symbol=s2, color=color),  # Customize marker size, symbol, and color
-            #         name=f'Endpoint {i + 1}',  # Dynamically create a name for each trace
-            #         hoverinfo='text',
-            #         hovertemplate=hovertemplate
-            #     ))
+            for i, row in df.iterrows():
+                if row['SHOT_MADE_FLAG'].iloc[i] == 1:
+                    s = 'circle-open'
+                    s2 = 'circle'
+                    size = 9
+                    color = 'green'
+                else:
+                    s = 'cross'
+                    s2 = 'cross'
+                    size = 10
+                    color = 'red'
+                hovertemplate= f"Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
+        
+                fig.add_trace(go.Scatter3d(
+                    x=[row['LOC_X']],  # Single point, so wrap in a list
+                    y=[row['LOC_Y']+45],  # Single point, so wrap in a list
+                    z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
+                    marker=dict(size=size, symbol=s2, color=color),  # Customize marker size, symbol, and color
+                    name=f'Endpoint {i + 1}',  # Dynamically create a name for each trace
+                    hoverinfo='text',
+                    hovertemplate=hovertemplate
+                ))
             playerparts = selected_player.split(' - ')
             player = playerparts[0]
             made = len(df[df['SHOT_MADE_FLAG'] == 1])
