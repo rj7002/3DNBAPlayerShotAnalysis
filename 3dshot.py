@@ -1006,10 +1006,17 @@ if selected_seasons:
                 textposition='inside',  # Position the text inside the bars
                 insidetextanchor='middle'  # Align text in the middle of bars
             )
+            fig.update_layout(
+                yaxis=dict(
+                    showticklabels=False,  # Hide the tick labels
+                    zeroline=False,        # Optionally, remove the zero line if you want a cleaner look
+                    showline=False         # Optionally, remove the axis line
+                )
+            )
             
             # Add hover information to show shot type, made count, and total shots
             fig.update_traces(
-                hovertemplate='Shot Type: %{y}<br>Made: %{customdata[0]}<br>Total: %{customdata[1]}<br>Shooting Percentage: %{x:.1f}%',
+                hovertemplate='%{y}<br>%{customdata[0]}/%{customdata[1]}<br>%{x:.1f}%',
                 customdata=shot_accuracy_by_type[['Made', 'Total']].values
             )
             with co1:
