@@ -31,10 +31,16 @@ st.set_page_config(layout='wide', page_title="NBA Shot Analysis", page_icon="�
 # --- Page Header ---
 st.markdown(
     """
-    <h1 style="text-align: center; font-size: 72px; color: red;">🏀 NBA Shot Analysis</h1>
+    <h1 style="text-align: center; font-size: 72px; color: red;">🏀 NBA Shot Analysis 🏀</h1>
     <p style="text-align: center; font-size: 18px; color: #555;">
         Analyze NBA players' shooting performances and shot tendencies. Data available from 1996 to present.
     </p>
+    """,
+    unsafe_allow_html=True
+)
+st.sidebar.markdown(
+    """
+    <h1 style="text-align: center; font-size: 30px; color: red;">🏀 NBA Shot Analysis 🏀</h1>
     """,
     unsafe_allow_html=True
 )
