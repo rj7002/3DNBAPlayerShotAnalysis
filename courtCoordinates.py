@@ -61,7 +61,7 @@ class CourtCoordinates:
         self.three_point_line_coordinates = line_coordinates
 
     def calculate_backboard_coordinates(self):
-        backboard_coordinates = [[30, 40, 90], [30, 40, 130], [-30, 40, 130], [-30, 40, 90], [30, 40, 90]]
+        backboard_coordinates = [[30, 40, 95], [30, 40, 130], [-30, 40, 130], [-30, 40, 95], [30, 40, 95]]
 
         self.backboard_coordinates = backboard_coordinates
     
