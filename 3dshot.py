@@ -615,12 +615,12 @@ if selected_seasons:
                     )
                     
                     # Update hovertemplate to show detailed information when hovering
-                    fig.update_traces(
-                        hovertemplate="<b>Player:</b> %{customdata[0]}<br>" +  # Player name
-                                      "<b>Team:</b> %{customdata[1]}<br>" +    # Team
-                                      "<b>Assist Type:</b> %{customdata[2]}<br>" +  # Assist type
-                                      "<b>Pass Distance:</b> %{customdata[3]} ft<br>",  # Pass distance
-                    )
+                    # fig.update_traces(
+                    #     hovertemplate="<b>Player:</b> %{customdata[0]}<br>" +  # Player name
+                    #                   "<b>Team:</b> %{customdata[1]}<br>" +    # Team
+                    #                   "<b>Assist Type:</b> %{customdata[2]}<br>" +  # Assist type
+                    #                   "<b>Pass Distance:</b> %{customdata[3]} ft<br>",  # Pass distance
+                    # )
                     fig.update_traces(line=dict(width=6))
                     fig.update_layout(    
                        margin=dict(l=0, r=0, t=0, b=0),
