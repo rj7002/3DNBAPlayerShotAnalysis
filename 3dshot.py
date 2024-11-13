@@ -920,11 +920,11 @@ if selected_seasons:
                 orientation='h',  # horizontal bars
                 title="Shooting Percentage by Distance",
                 color='Percentage',  # Use color to represent shooting percentage
-                showbar=False,
                 color_continuous_scale='YlOrRd',  # A warm color palette (yellow to red)
                 labels={'Percentage': 'Shooting %', 'Distance': 'Shot Distance (ft)'},
                 text='Percentage',  # Show percentage on the bars
             )
+            fig3.update_coloraxes(showscale=False) 
             
             # Customize the layout for better aesthetics
             fig3.update_layout(
@@ -969,11 +969,12 @@ if selected_seasons:
                 orientation='h',  # Horizontal bars for better readability
                 title="Shooting Percentage by Shot Type",
                 color='Percentage',  # Color bars based on shooting percentage
-                showbar=False,
                 color_continuous_scale='Viridis',  # Modern color scale (Viridis)
                 labels={'Percentage': 'Shooting %', 'Shot Type': 'Shot Type'},
                 text='Percentage',  # Show percentage on bars
             )
+            fig.update_coloraxes(showscale=False) 
+
 
             
             # Customize the layout to improve aesthetics
