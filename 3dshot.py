@@ -921,10 +921,10 @@ if selected_seasons:
                 title="Shooting Percentage by Distance",
                 color='Percentage',  # Use color to represent shooting percentage
                 color_continuous_scale='YlOrRd',  # A warm color palette (yellow to red)
-                showscale=False,  # Show the color scale/legend
                 labels={'Percentage': 'Shooting %', 'Distance': 'Shot Distance (ft)'},
                 text='Percentage',  # Show percentage on the bars
             )
+            fig3.update_traces(marker=dict(showscale=False))
             
             # Customize the layout for better aesthetics
             fig3.update_layout(
@@ -970,10 +970,11 @@ if selected_seasons:
                 title="Shooting Percentage by Shot Type",
                 color='Percentage',  # Color bars based on shooting percentage
                 color_continuous_scale='Viridis',  # Modern color scale (Viridis)
-                showscale=False,  # Show the color scale/legend
                 labels={'Percentage': 'Shooting %', 'Shot Type': 'Shot Type'},
                 text='Percentage',  # Show percentage on bars
             )
+            fig.update_traces(marker=dict(showscale=False))
+
             
             # Customize the layout to improve aesthetics
             fig.update_layout(
