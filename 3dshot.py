@@ -461,7 +461,7 @@ if selected_seasons:
                     x_values2 = []
                     y_values2 = []
                     z_values2 = []
-                    for index, row in dfmiss.iterrows():
+                    for index, row in df.iterrows():
                         # Append the value from column 'x' to the list
  
                         x_values2.append(court.hoop_loc_x)
