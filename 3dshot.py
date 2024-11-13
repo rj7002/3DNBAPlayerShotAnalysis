@@ -729,7 +729,16 @@ if selected_seasons:
                 hovertemplate= f"Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
         
                 fig.add_trace(go.Scatter3d(
-                    x=[row['LOC_X']],  # Single point, so wrap in a list
+                    x=[-row['LOC_X']],  # Single point, so wrap in a list
+                    y=[row['LOC_Y']+45],  # Single point, so wrap in a list
+                    z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
+                    marker=dict(size=size, symbol=s, color=color),  # Customize marker size, symbol, and color
+                    name=f'Endpoint {i + 1}',  # Dynamically create a name for each trace
+                    hoverinfo='text',
+                    hovertemplate=hovertemplate
+                ))
+                fig.add_trace(go.Scatter3d(
+                    x=[-row['LOC_X']],  # Single point, so wrap in a list
                     y=[row['LOC_Y']+45],  # Single point, so wrap in a list
                     z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
                     marker=dict(size=size, symbol=s2, color=color),  # Customize marker size, symbol, and color
