@@ -877,7 +877,7 @@ if selected_seasons:
             # Customize the layout for better aesthetics
             fig2.update_layout(
                 title="Shooting Percentage Over Time",
-                title_x=0.5,  # Center the title
+                title_x=0,  # Center the title
                 title_font=dict(size=20, family='Arial', color='black'),
                 xaxis=dict(
                     showgrid=True, 
@@ -929,7 +929,7 @@ if selected_seasons:
             # Customize the layout for better aesthetics
             fig3.update_layout(
                 title_text="Shooting Percentage by Distance",
-                title_x=0.5,  # Center the title
+                title_x=0,  # Center the title
                 title_font=dict(size=20, family='Arial', color='black'),
                 xaxis_title='Shooting Percentage (%)',
                 yaxis_title='Shot Distance (ft)',
@@ -980,7 +980,7 @@ if selected_seasons:
             # Customize the layout to improve aesthetics
             fig.update_layout(
                 title_text="Shooting Percentage by Shot Type",
-                title_x=0.5,  # Center the title
+                title_x=0,  # Center the title
                 title_font=dict(size=20, family='Arial', color='black'),
                 xaxis_title='Shooting Percentage (%)',
                 yaxis_title='Shot Type',
@@ -1232,7 +1232,7 @@ if selected_seasons:
             # Customize layout for better visual appeal
             fig.update_layout(
                 title="Shot Type Distribution",
-                title_x=0.5,  # Center the title
+                title_x=0,  # Center the title
                 title_y=1,
                 title_font=dict(size=20, family='Arial', color='black'),
                 showlegend=False,  # Show the legend
