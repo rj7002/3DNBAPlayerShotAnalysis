@@ -852,7 +852,7 @@ if selected_seasons:
             shooting_over_time['Percentage'] = round(shooting_over_time['Made'] / shooting_over_time['Total'] * 100,2)
             
             # Add a moving average to smooth out trends (optional)
-            shooting_over_time['Moving Average (7 Days)'] = shooting_over_time['Percentage'].rolling(window=7, min_periods=1).mean()
+            shooting_over_time['Moving Average (7 Days)'] = round(shooting_over_time['Percentage'].rolling(window=7, min_periods=1).mean(),2)
             
             # Create the line chart
             fig2 = px.line(
