@@ -198,6 +198,8 @@ if selected_seasons:
     
         # Section for Vs Conference (optional)
     with col2:
+        if selected_season >= 2015:
+            vids = st.checkbox('Highlights',help='Click on a shot to view the highlight')
         fgperc = st.checkbox('FG%',help='View hot zones')
         vs_conference_options = ["East", "West"]
         vs_conference = st.sidebar.selectbox("Vs Conference (optional)", vs_conference_options, index=None, key="vs_conference")
@@ -586,6 +588,123 @@ if selected_seasons:
                     #         ]
                     #     }]
                     # )
+                elif selected_season >= 2015:
+                    if vids:
+                        court = CourtCoordinates(selected_season)
+                        court_lines_df = court.get_coordinates()
+                        fig = px.line_3d(
+                            data_frame=court_lines_df,
+                            x='x',
+                            y='y',
+                            z='z',
+                            line_group='line_group_id',
+                            color='line_group_id',
+                            color_discrete_map={
+                                'court': 'black',
+                                'hoop': '#e47041',
+                                'net': '#D3D3D3',
+                                'backboard': 'gray',
+                                'backboard2': 'gray',
+                                'free_throw_line': 'black',
+                                'hoop2':'#D3D3D3',
+                                'free_throw_line2': 'black',
+                                'free_throw_line3': 'black',
+                                'free_throw_line4': 'black',
+                                'free_throw_line5': 'black',
+                            }
+                        )
+                        
+                        # Update hovertemplate to show detailed information when hovering
+                        fig.update_traces(
+                            hovertemplate="<b>Player:</b> %{customdata[0]}<br>" +  # Player name
+                                          "<b>Team:</b> %{customdata[1]}<br>" +    # Team
+                                          "<b>Assist Type:</b> %{customdata[2]}<br>" +  # Assist type
+                                          "<b>Pass Distance:</b> %{customdata[3]} ft<br>",  # Pass distance
+                        )
+                        fig.update_traces(line=dict(width=6))
+                        fig.update_layout(    
+                           margin=dict(l=20, r=20, t=20, b=20),
+                            scene_aspectmode="data",
+                            scene=dict(
+                                xaxis=dict(title='', showticklabels=False, showgrid=False),
+                                yaxis=dict(title='', showticklabels=False, showgrid=False),
+                                zaxis=dict(title='',  showticklabels=False, showgrid=False, showbackground=True, backgroundcolor='#d2a679'),
+                            ),
+                            showlegend=False,
+                        
+                        )
+                        fig.update_traces(hovertemplate=None, hoverinfo='skip', showlegend=False)
+                        
+                        st.write(df)
+                        for i, row in df.iterrows():
+                                if df['SHOT_MADE_FLAG'].iloc[i] == 1:
+                                        s = 'circle-open'
+                                        s2 = 'circle'
+                                        size = 9
+                                        color = 'green'
+                                else:
+                                    s = 'cross'
+                                    s2 = 'cross'
+                                    size = 10
+                                    color = 'red'
+                                            
+                                hovertemplate= f"Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
+                        
+                                fig.add_trace(go.Scatter3d(
+                                    x=[-row['LOC_X']],  # Single point, so wrap in a list
+                                    y=[row['LOC_Y']+45],  # Single point, so wrap in a list
+                                    z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
+                                    marker=dict(size=size, symbol=s2, color=color),  # Customize marker size, symbol, and color
+                                    name=f'Endpoint {i + 1}',  # Dynamically create a name for each trace
+                                    hoverinfo='text',
+                                    hovertemplate=hovertemplate
+                                ))
+                        
+                        import requests
+                        
+                        selected_points = plotly_events(fig, hover_event=False, click_event=True)
+                        # st.write(selected_points)
+                        if selected_points:
+                            x = selected_points[0]['x']
+                            y = selected_points[0]['y']-45
+                            # st.write(x)
+                            # st.write(y)
+                            sd = df[(-df['LOC_X'] == x) & (df['LOC_Y'] == y)]
+                            # st.write(sd)
+                        
+                            headers = {
+                                'Host': 'stats.nba.com',
+                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0',
+                                'Accept': 'application/json, text/plain, */*',
+                                'Accept-Language': 'en-US,en;q=0.5',
+                                'Accept-Encoding': 'gzip, deflate, br',
+                                'x-nba-stats-origin': 'stats',
+                                'x-nba-stats-token': 'true',
+                                'Connection': 'keep-alive',
+                                'Referer': 'https://stats.nba.com/',
+                                'Pragma': 'no-cache',
+                                'Cache-Control': 'no-cache'
+                            }
+                            event_id = sd['GAME_EVENT_ID'].iloc[0]
+                            game_id = sd['GAME_ID'].iloc[0]
+                            event = sd['EVENT_TYPE'].iloc[0]
+                            action = sd['ACTION_TYPE'].iloc[0]
+                            sub = f'{event} {action}'
+                        
+                            url = 'https://stats.nba.com/stats/videoeventsasset?GameEventID={}&GameID={}'.format(
+                                        event_id, game_id)
+                            if selected_season >= 2015:
+                                r = requests.get(url, headers=headers)
+                                if r.status_code == 200:
+                                    json = r.json()
+                                    video_urls = json['resultSets']['Meta']['videoUrls']
+                                    playlist = json['resultSets']['playlist']
+                                    video_event = {'video': video_urls[0]['lurl'], 'desc': playlist[0]['dsc']}
+                                    video = video_urls[0]['lurl']
+                            col1,col2,col3 = st.columns(3)
+                            with col2:
+                                st.video(video,autoplay=True)
+
                 else:
                     if Make:
                         for i in range(len(dfmake)):
