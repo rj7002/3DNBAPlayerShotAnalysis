@@ -849,7 +849,7 @@ if selected_seasons:
             shooting_over_time.columns = ['Date', 'Made', 'Total']
             
             # Calculate shooting percentage
-            shooting_over_time['Percentage'] = shooting_over_time['Made'] / shooting_over_time['Total'] * 100
+            shooting_over_time['Percentage'] = round(shooting_over_time['Made'] / shooting_over_time['Total'] * 100,2)
             
             # Add a moving average to smooth out trends (optional)
             shooting_over_time['Moving Average (7 Days)'] = shooting_over_time['Percentage'].rolling(window=7, min_periods=1).mean()
@@ -889,7 +889,7 @@ if selected_seasons:
                     title="Shooting Percentage (%)",
                     title_font=dict(size=14, family='Arial', color='black'),
                 ),
-                showlegend=True,  # Show the legend for the moving average line
+                showlegend=False,  # Show the legend for the moving average line
                 margin=dict(l=40, r=40, t=50, b=40),  # Adjust margins for better spacing
                 plot_bgcolor='white',  # Set background color to white for a clean look
             )
