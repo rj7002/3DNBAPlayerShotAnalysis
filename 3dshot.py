@@ -1341,7 +1341,7 @@ if selected_seasons:
             ))
             # Update layout for better visuals
             if vids:
-                h = 460
+                h = 470
             else:
                 h = 600
             fig.update_layout(
