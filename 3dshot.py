@@ -905,13 +905,15 @@ if selected_seasons:
             
             # Create distance bins
             distance_bins = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]  # adjusted max distance
-            df['distance_bin'] = pd.cut(df['SHOT_DISTANCE'], bins=distance_bins)
+            df_filtered = df[df['SHOT_DISTANCE'].notna()]
+
+            df_filtered['distance_bin'] = pd.cut(df_filtered['SHOT_DISTANCE'], bins=distance_bins)
             
             # Convert the 'distance_bin' to strings to make it serializable
-            df['distance_bin'] = df['distance_bin'].astype(str)
+            df_filtered['distance_bin'] = df_filtered['distance_bin'].astype(str)
             
             # Calculate shooting percentage by distance bin
-            shooting_by_distance = df.groupby('distance_bin').agg({"SHOT_MADE_FLAG": ["sum", "count"]}).reset_index()
+            shooting_by_distance = df_filtered.groupby('distance_bin').agg({"SHOT_MADE_FLAG": ["sum", "count"]}).reset_index()
             
             # Flatten the MultiIndex columns
             shooting_by_distance.columns = ['Distance', 'Made', 'Total']
