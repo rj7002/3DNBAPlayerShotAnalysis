@@ -451,187 +451,187 @@ if selected_seasons:
                     y_coords2 = y_values2
                     z_value2 = 100
             with col1:
-                if st.checkbox('Animated',help='View animated shots'):
-                    for index, row in df.iterrows():
-                        x_values.append(-row['LOC_X'])
-                        # Append the value from column 'x' to the list
-                        y_values.append(row['LOC_Y']+45)
-                        z_values.append(0)
+            #     if st.checkbox('Animated',help='View animated shots'):
+            #         for index, row in df.iterrows():
+            #             x_values.append(-row['LOC_X'])
+            #             # Append the value from column 'x' to the list
+            #             y_values.append(row['LOC_Y']+45)
+            #             z_values.append(0)
   
-                    x_values2 = []
-                    y_values2 = []
-                    z_values2 = []
-                    for index, row in df.iterrows():
-                        # Append the value from column 'x' to the list
+            #         x_values2 = []
+            #         y_values2 = []
+            #         z_values2 = []
+            #         for index, row in df.iterrows():
+            #             # Append the value from column 'x' to the list
  
-                        x_values2.append(court.hoop_loc_x)
+            #             x_values2.append(court.hoop_loc_x)
                 
-                        y_values2.append(court.hoop_loc_y)
-                        z_values2.append(100)
+            #             y_values2.append(court.hoop_loc_y)
+            #             z_values2.append(100)
                 
-                    import numpy as np
-                    import plotly.graph_objects as go
-                    import streamlit as st
-                    import math
-                    def calculate_distance(x1, y1, x2, y2):
-                        """Calculate the distance between two points (x1, y1) and (x2, y2)."""
-                        return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+            #         import numpy as np
+            #         import plotly.graph_objects as go
+            #         import streamlit as st
+            #         import math
+            #         def calculate_distance(x1, y1, x2, y2):
+            #             """Calculate the distance between two points (x1, y1) and (x2, y2)."""
+            #             return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
                 
-                    def generate_arc_points(p1, p2, apex, num_points=100):
-                        """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
-                        t = np.linspace(0, 1, num_points)
-                        x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
-                        y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
-                        z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
-                        return x, y, z
+            #         def generate_arc_points(p1, p2, apex, num_points=100):
+            #             """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
+            #             t = np.linspace(0, 1, num_points)
+            #             x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
+            #             y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
+            #             z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
+            #             return x, y, z
                 
-                    # Example lists of x and y coordinates
-                    x_coords = x_values
-                    y_coords = y_values
-                    z_value = 0  # Fixed z value
-                    x_coords2 = x_values2
-                    y_coords2 = y_values2
-                    z_value2 = 100
-                        # Number of segments for the arc
-                    num_segments = 500
+            #         # Example lists of x and y coordinates
+            #         x_coords = x_values
+            #         y_coords = y_values
+            #         z_value = 0  # Fixed z value
+            #         x_coords2 = x_values2
+            #         y_coords2 = y_values2
+            #         z_value2 = 100
+            #             # Number of segments for the arc
+            #         num_segments = 500
         
-                    # Create frames
-                    frames = []
+            #         # Create frames
+            #         frames = []
         
-                    for i in range(len(df)):
-                        x1 = x_coords[i]
-                        y1 = y_coords[i]
-                        x2 = x_coords2[i]
-                        y2 = y_coords2[i]
+            #         for i in range(len(df)):
+            #             x1 = x_coords[i]
+            #             y1 = y_coords[i]
+            #             x2 = x_coords2[i]
+            #             y2 = y_coords2[i]
                         
-                        # Swap the points: now p1 is the original p2 and p2 is the original p1
-                        p1 = np.array([x1, y1, z_value])  # Starting point
-                        p2 = np.array([x2, y2, z_value2])  # Ending point
+            #             # Swap the points: now p1 is the original p2 and p2 is the original p1
+            #             p1 = np.array([x1, y1, z_value])  # Starting point
+            #             p2 = np.array([x2, y2, z_value2])  # Ending point
         
-                        distance = calculate_distance(x1, y1, x2, y2)
+            #             distance = calculate_distance(x1, y1, x2, y2)
         
-                        if df['SHOT_MADE_FLAG'].iloc[i] == 1:
-                            s = 'circle-open'
-                            s2 = 'circle'
-                            size = 9
-                            color = 'green'
-                        else:
-                            s = 'cross'
-                            s2 = 'cross'
-                            size = 10
-                            color = 'red'
+            #             if df['SHOT_MADE_FLAG'].iloc[i] == 1:
+            #                 s = 'circle-open'
+            #                 s2 = 'circle'
+            #                 size = 9
+            #                 color = 'green'
+            #             else:
+            #                 s = 'cross'
+            #                 s2 = 'cross'
+            #                 size = 10
+            #                 color = 'red'
                             
-                        date_str = df['GAME_DATE'].iloc[i]
-                        game_date = datetime.strptime(date_str, "%Y%m%d")
-                        formatted_date = game_date.strftime("%m/%d/%Y")
+            #             date_str = df['GAME_DATE'].iloc[i]
+            #             game_date = datetime.strptime(date_str, "%Y%m%d")
+            #             formatted_date = game_date.strftime("%m/%d/%Y")
                         
-                        if int(df['SECONDS_REMAINING'].iloc[i]) < 10:
-                            df['SECONDS_REMAINING'].iloc[i] = '0' + str(df['SECONDS_REMAINING'].iloc[i])
+            #             if int(df['SECONDS_REMAINING'].iloc[i]) < 10:
+            #                 df['SECONDS_REMAINING'].iloc[i] = '0' + str(df['SECONDS_REMAINING'].iloc[i])
                             
-                        hovertemplate = f"Date: {formatted_date}<br>Game: {df['HTM'].iloc[i]} vs {df['VTM'].iloc[i]}<br>Result: {df['EVENT_TYPE'].iloc[i]}<br>Shot Type: {df['ACTION_TYPE'].iloc[i]}<br>Distance: {df['SHOT_DISTANCE'].iloc[i]} ft {df['SHOT_TYPE'].iloc[i]}<br>Quarter: {df['PERIOD'].iloc[i]}<br>Time: {df['MINUTES_REMAINING'].iloc[i]}:{df['SECONDS_REMAINING'].iloc[i]}"
+            #             hovertemplate = f"Date: {formatted_date}<br>Game: {df['HTM'].iloc[i]} vs {df['VTM'].iloc[i]}<br>Result: {df['EVENT_TYPE'].iloc[i]}<br>Shot Type: {df['ACTION_TYPE'].iloc[i]}<br>Distance: {df['SHOT_DISTANCE'].iloc[i]} ft {df['SHOT_TYPE'].iloc[i]}<br>Quarter: {df['PERIOD'].iloc[i]}<br>Time: {df['MINUTES_REMAINING'].iloc[i]}:{df['SECONDS_REMAINING'].iloc[i]}"
         
-                        if df['SHOT_DISTANCE'].iloc[i] > 3:
-                            if df['SHOT_DISTANCE'].iloc[i] > 50:
-                                h = randint(255, 305)
-                            elif df['SHOT_DISTANCE'].iloc[i] > 30:
-                                h = randint(230, 280)
-                            elif df['SHOT_DISTANCE'].iloc[i] > 25:
-                                h = randint(180, 230)
-                            elif df['SHOT_DISTANCE'].iloc[i] > 15:
-                                h = randint(180, 230)
-                            else:
-                                h = randint(130, 160)
+            #             if df['SHOT_DISTANCE'].iloc[i] > 3:
+            #                 if df['SHOT_DISTANCE'].iloc[i] > 50:
+            #                     h = randint(255, 305)
+            #                 elif df['SHOT_DISTANCE'].iloc[i] > 30:
+            #                     h = randint(230, 280)
+            #                 elif df['SHOT_DISTANCE'].iloc[i] > 25:
+            #                     h = randint(180, 230)
+            #                 elif df['SHOT_DISTANCE'].iloc[i] > 15:
+            #                     h = randint(180, 230)
+            #                 else:
+            #                     h = randint(130, 160)
         
-                            apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])
+            #                 apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])
                             
-                            # Generate arc points using swapped p1 and p2
-                            x_arc, y_arc, z_arc = generate_arc_points(p1, p2, apex)
+            #                 # Generate arc points using swapped p1 and p2
+            #                 x_arc, y_arc, z_arc = generate_arc_points(p1, p2, apex)
                             
-                            # Split the arc into segments
-                            for j in range(num_segments):
-                                # Interpolate points along the arc
-                                x_segment = x_arc[:j + 1]
-                                y_segment = y_arc[:j + 1]
-                                z_segment = z_arc[:j + 1]
+            #                 # Split the arc into segments
+            #                 for j in range(num_segments):
+            #                     # Interpolate points along the arc
+            #                     x_segment = x_arc[:j + 1]
+            #                     y_segment = y_arc[:j + 1]
+            #                     z_segment = z_arc[:j + 1]
                                 
-                                frames.append(go.Frame(data=[
-                                    go.Scatter3d(
-                                        x=x_segment, y=y_segment, z=z_segment,
-                                        mode='lines',
-                                        line=dict(width=8, color=color),
-                                        opacity=0.5,
-                                        hovertemplate=hovertemplate
-                                    ),
-                                    go.Scatter3d(
-                                        x=[p1[0]], y=[p1[1]], z=[p1[2]],
-                                        mode='markers',
-                                        marker=dict(size=size, symbol=s, color=color),
-                                        hovertemplate=hovertemplate
-                                    ),
-                                    go.Scatter3d(
-                                        x=[p1[0]], y=[p1[1]], z=[p1[2]],
-                                        mode='markers',
-                                        marker=dict(size=5, symbol=s2, color=color),
-                                        hovertemplate=hovertemplate
-                                    )
-                                ]))
+            #                     frames.append(go.Frame(data=[
+            #                         go.Scatter3d(
+            #                             x=x_segment, y=y_segment, z=z_segment,
+            #                             mode='lines',
+            #                             line=dict(width=8, color=color),
+            #                             opacity=0.5,
+            #                             hovertemplate=hovertemplate
+            #                         ),
+            #                         go.Scatter3d(
+            #                             x=[p1[0]], y=[p1[1]], z=[p1[2]],
+            #                             mode='markers',
+            #                             marker=dict(size=size, symbol=s, color=color),
+            #                             hovertemplate=hovertemplate
+            #                         ),
+            #                         go.Scatter3d(
+            #                             x=[p1[0]], y=[p1[1]], z=[p1[2]],
+            #                             mode='markers',
+            #                             marker=dict(size=5, symbol=s2, color=color),
+            #                             hovertemplate=hovertemplate
+            #                         )
+            #                     ]))
         
-                    # Add frames to the figure
-                    fig.frames = frames
+            #         # Add frames to the figure
+            #         fig.frames = frames
         
-                    fig.update_layout(
-                updatemenus=[{
-                    'buttons': [
-                        {
-                            'args': [None, {'frame': {'duration': 0.1, 'redraw': True}, 'fromcurrent': True, 'mode': 'immediate'}],
-                            'label': 'Play',
-                            'method': 'animate'
-                        },
-                        {
-                            'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'mode': 'immediate'}],
-                            'label': 'Pause',
-                            'method': 'animate'
-                        },
-                        # Add a restart button
-                        # {
-                        #         'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'fromcurrent': False,'mode': 'immediate'}],
-                        #         'label': 'Restart',
-                        #         'method': 'animate'
-                        #     }
-                    ],
-                    'direction': 'left',
-                    'pad': {'r': 10, 't': 87},
-                    'showactive': False,
-                    'type': 'buttons',
-                    'x': 0.1,
-                    'xanchor': 'right',
-                    'y': 0,
-                    'yanchor': 'top'
-                }]
-            )
+            #         fig.update_layout(
+            #     updatemenus=[{
+            #         'buttons': [
+            #             {
+            #                 'args': [None, {'frame': {'duration': 0.1, 'redraw': True}, 'fromcurrent': True, 'mode': 'immediate'}],
+            #                 'label': 'Play',
+            #                 'method': 'animate'
+            #             },
+            #             {
+            #                 'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'mode': 'immediate'}],
+            #                 'label': 'Pause',
+            #                 'method': 'animate'
+            #             },
+            #             # Add a restart button
+            #             # {
+            #             #         'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'fromcurrent': False,'mode': 'immediate'}],
+            #             #         'label': 'Restart',
+            #             #         'method': 'animate'
+            #             #     }
+            #         ],
+            #         'direction': 'left',
+            #         'pad': {'r': 10, 't': 87},
+            #         'showactive': False,
+            #         'type': 'buttons',
+            #         'x': 0.1,
+            #         'xanchor': 'right',
+            #         'y': 0,
+            #         'yanchor': 'top'
+            #     }]
+            # )
         
-                    # # Optionally, ensure that the animation runs in a loop or a specific range, for example:
-                    # fig.update_layout(
-                    #     sliders=[{
-                    #         'currentvalue': {'prefix': 'Frame: '},
-                    #         'steps': [
-                    #             {
-                    #                 'args': [
-                    #                     [f'frame{frame}'],
-                    #                     {
-                    #                         'frame': {'duration': 100, 'redraw': True},
-                    #                         'mode': 'immediate',
-                    #                         'transition': {'duration': 100}
-                    #                     }
-                    #                 ],
-                    #                 'label': f'Frame {frame}',
-                    #                 'method': 'animate'
-                    #             }
-                    #             for frame in range(1, 100 + 1)  # Ensure you have the correct range of frames
-                    #         ]
-                    #     }]
-                    # )
-                elif vids == 1:
+            #         # # Optionally, ensure that the animation runs in a loop or a specific range, for example:
+            #         # fig.update_layout(
+            #         #     sliders=[{
+            #         #         'currentvalue': {'prefix': 'Frame: '},
+            #         #         'steps': [
+            #         #             {
+            #         #                 'args': [
+            #         #                     [f'frame{frame}'],
+            #         #                     {
+            #         #                         'frame': {'duration': 100, 'redraw': True},
+            #         #                         'mode': 'immediate',
+            #         #                         'transition': {'duration': 100}
+            #         #                     }
+            #         #                 ],
+            #         #                 'label': f'Frame {frame}',
+            #         #                 'method': 'animate'
+            #         #             }
+            #         #             for frame in range(1, 100 + 1)  # Ensure you have the correct range of frames
+            #         #         ]
+            #         #     }]
+            #         # )
+                if vids == 1:
                     court = CourtCoordinates(fullrealseason)
                     court_lines_df = court.get_coordinates()
                     fig = px.line_3d(
