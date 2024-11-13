@@ -885,20 +885,20 @@ if selected_seasons:
             fig2.update_layout(
                 title="Shooting Percentage Over Time",
                 title_x=0,  # Center the title
-                title_font=dict(size=20, family='Arial', color='black'),
+                title_font=dict(size=20, family='Arial', color='white'),
                 xaxis=dict(
                     showgrid=True, 
                     tickangle=45,  # Rotate x-axis labels for better readability
                     tickformat='%b %d, %Y',  # Show date in a readable format
-                    title_font=dict(size=14, family='Arial', color='black'),
+                    title_font=dict(size=14, family='Arial', color='white'),
                 ),
                 yaxis=dict(
                     title="Shooting Percentage (%)",
-                    title_font=dict(size=14, family='Arial', color='black'),
+                    title_font=dict(size=14, family='Arial', color='white'),
                 ),
                 showlegend=False,  # Show the legend for the moving average line
                 margin=dict(l=40, r=40, t=50, b=40),  # Adjust margins for better spacing
-                plot_bgcolor='white',  # Set background color to white for a clean look
+                plot_bgcolor='rgba(0, 0, 0, 0)',  # Set background color to white for a clean look
             )
             with c1:
                 st.plotly_chart(fig2)
@@ -939,12 +939,12 @@ if selected_seasons:
             fig3.update_layout(
                 title_text="Shooting Percentage by Distance",
                 title_x=0,  # Center the title
-                title_font=dict(size=20, family='Arial', color='black'),
+                title_font=dict(size=20, family='Arial', color='white'),
                 xaxis_title='Shooting Percentage (%)',
                 yaxis_title='Shot Distance (ft)',
                 yaxis_tickangle=-45,  # Rotate y-axis labels for readability
                 xaxis=dict(showgrid=True, gridcolor='lightgray'),
-                plot_bgcolor='white',  # Set background color to white for clarity
+                plot_bgcolor='rgba(0, 0, 0, 0)', # Set background color to white for clarity
                 margin=dict(l=20, r=20, t=40, b=20),  # Adjust margins to fit content
                 showlegend=False  # Disable legend for this chart
             )
@@ -990,12 +990,12 @@ if selected_seasons:
             fig.update_layout(
                 title_text="Shooting Percentage by Shot Type",
                 title_x=0,  # Center the title
-                title_font=dict(size=20, family='Arial', color='black'),
+                title_font=dict(size=20, family='Arial', color='white'),
                 xaxis_title='Shooting Percentage (%)',
                 yaxis_title='Shot Type',
                 yaxis_tickangle=-45,  # Rotate y-axis labels for better readability
                 xaxis=dict(showgrid=True, gridcolor='lightgray'),
-                plot_bgcolor='white',  # Set background color to white
+                plot_bgcolor='rgba(0, 0, 0, 0)',  # Set background color to white
                 margin=dict(l=20, r=20, t=40, b=40),  # Adjust margins for better fit
                 showlegend=False  # Disable legend for clarity
             )
@@ -1253,7 +1253,7 @@ if selected_seasons:
                 title="Shot Type Distribution",
                 title_x=0,  # Center the title
                 title_y=1,
-                title_font=dict(size=20, family='Arial', color='black'),
+                title_font=dict(size=20, family='Arial', color='white'),
                 showlegend=False,  # Show the legend
                 legend_title='Shot Type',
                 legend=dict(
@@ -1264,7 +1264,7 @@ if selected_seasons:
                     x=0.5
                 ),
                 margin=dict(l=20, r=20, t=40, b=20),  # Adjust margins
-                plot_bgcolor='white',  # Set background color to white for a clean look
+                plot_bgcolor='rgba(0, 0, 0, 0)',  # Set background color to white for a clean look
             )
             
             # Enhance hover info and show percentages on slices
