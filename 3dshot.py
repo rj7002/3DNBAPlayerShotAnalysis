@@ -588,7 +588,7 @@ if selected_seasons:
                     #     }]
                     # )
                 elif vids == 1:
-                    court = CourtCoordinates(selected_season)
+                    court = CourtCoordinates(fullrealseason)
                     court_lines_df = court.get_coordinates()
                     fig = px.line_3d(
                         data_frame=court_lines_df,
