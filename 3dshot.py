@@ -40,7 +40,7 @@ st.markdown(
 )
 st.sidebar.markdown(
     """
-    <h1 style="text-align: center; font-size: 30px; color: red;">🏀 NBA Shot Analysis 🏀</h1>
+    <h1 style="text-align: center; font-size: 28px; color: red;">🏀 NBA Shot Analysis 🏀</h1>
     """,
     unsafe_allow_html=True
 )
