@@ -997,7 +997,9 @@ if selected_seasons:
                 xaxis=dict(showgrid=True, gridcolor='lightgray'),
                 plot_bgcolor='rgba(0, 0, 0, 0)',  # Set background color to white
                 margin=dict(l=20, r=20, t=40, b=40),  # Adjust margins for better fit
-                showlegend=False  # Disable legend for clarity
+                showlegend=False,  # Disable legend for clarity
+                bargap=0.1,  # Set the gap between bars (lower value = wider bars)
+                bargroupgap=0.05,  # Set gap between bar groups (useful for grouped bars)
             )
             
             # Update traces to show percentage inside bars
