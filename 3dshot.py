@@ -905,7 +905,7 @@ if selected_seasons:
             
             # Create distance bins
             distance_bins = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]  # adjusted max distance
-            df_filtered = df[df['SHOT_DISTANCE'].notna()]
+            df_filtered = df.dropna(subset=['SHOT_DISTANCE'])
 
             df_filtered['distance_bin'] = pd.cut(df_filtered['SHOT_DISTANCE'], bins=distance_bins)
             
