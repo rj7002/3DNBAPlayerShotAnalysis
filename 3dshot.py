@@ -1234,7 +1234,7 @@ if selected_seasons:
                 title_x=0.5,  # Center the title
                 title_y=1,
                 title_font=dict(size=20, family='Arial', color='black'),
-                showlegend=True,  # Show the legend
+                showlegend=False,  # Show the legend
                 legend_title='Shot Type',
                 legend=dict(
                     orientation="h",  # Horizontal legend
