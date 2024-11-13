@@ -910,7 +910,7 @@ if selected_seasons:
             shooting_by_distance.columns = ['Distance', 'Made', 'Total']
             
             # Calculate accuracy
-            shooting_by_distance['Percentage'] = shooting_by_distance['Made'] / shooting_by_distance['Total'] * 100
+            shooting_by_distance['Percentage'] = round(shooting_by_distance['Made'] / shooting_by_distance['Total'] * 100,2)
             
             # Plot the figure using Plotly with a new theme
             fig3 = px.bar(
