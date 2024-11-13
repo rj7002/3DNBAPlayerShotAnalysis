@@ -124,7 +124,7 @@ if selected_seasons:
             'hoop': '#e47041',
             'net': '#D3D3D3',
             'backboard': 'gray',
-            'backboard2': 'white',
+            'backboard2': 'gray',
             'free_throw_line': 'black',
             'hoop2':'#D3D3D3',
             'free_throw_line2': 'black',
@@ -1087,6 +1087,7 @@ if selected_seasons:
             court_perimeter_lines = court_lines_df[court_lines_df['line_id'] == 'outside_perimeter']
             three_point_lines = court_lines_df[court_lines_df['line_id'] == 'three_point_line']
             backboard = court_lines_df[court_lines_df['line_id'] == 'backboard']
+            backboard2 = court_lines_df[court_lines_df['line_id'] == 'backboard2']
             freethrow = court_lines_df[court_lines_df['line_id'] == 'free_throw_line']
             freethrow2 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line2']
             freethrow3 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line3']
@@ -1107,7 +1108,7 @@ if selected_seasons:
                 y=court_perimeter_lines['y'],
                 z=np.zeros(len(court_perimeter_lines)),  # Place court lines on the floor
                 mode='lines',
-                line=dict(color='white', width=4),
+                line=dict(color='white', width=6),
                 name="Court Perimeter",
                 hoverinfo='none'
             ))
@@ -1116,7 +1117,7 @@ if selected_seasons:
                 y=hoop['y'],
                 z=hoop['z'],  # Place 3-point line on the floor
                 mode='lines',
-                line=dict(color='#e47041', width=4),
+                line=dict(color='#e47041', width=6),
                 name="Hoop",
                 hoverinfo='none'
             ))
@@ -1125,7 +1126,7 @@ if selected_seasons:
                 y=hoop2['y'],
                 z=hoop2['z'],  # Place 3-point line on the floor
                 mode='lines',
-                line=dict(color='#D3D3D3', width=4),
+                line=dict(color='#D3D3D3', width=6),
                 name="Backboard",
                 hoverinfo='none'
             ))
@@ -1135,7 +1136,16 @@ if selected_seasons:
                 y=backboard['y'],
                 z=backboard['z'],  # Place 3-point line on the floor
                 mode='lines',
-                line=dict(color='grey', width=4),
+                line=dict(color='grey', width=6),
+                name="Backboard",
+                hoverinfo='none'
+            ))
+            fig.add_trace(go.Scatter3d(
+                x=backboard2['x'],
+                y=backboard2['y'],
+                z=backboard2['z'],  # Place 3-point line on the floor
+                mode='lines',
+                line=dict(color='grey', width=6),
                 name="Backboard",
                 hoverinfo='none'
             ))
@@ -1144,7 +1154,7 @@ if selected_seasons:
                 y=three_point_lines['y'],
                 z=np.zeros(len(three_point_lines)),  # Place 3-point line on the floor
                 mode='lines',
-                line=dict(color='white', width=4),
+                line=dict(color='white', width=6),
                 name="3-Point Line",
                 hoverinfo='none'
             ))
@@ -1153,7 +1163,7 @@ if selected_seasons:
                 y=freethrow['y'],
                 z=np.zeros(len(freethrow)),  # Place court lines on the floor
                 mode='lines',
-                line=dict(color='white', width=4),
+                line=dict(color='white', width=6),
                 name="Court Perimeter",
                 hoverinfo='none'
             ))
@@ -1162,7 +1172,7 @@ if selected_seasons:
                 y=freethrow2['y'],
                 z=np.zeros(len(freethrow2)),  # Place court lines on the floor
                 mode='lines',
-                line=dict(color='white', width=4),
+                line=dict(color='white', width=6),
                 name="Court Perimeter",
                 hoverinfo='none'
             ))
@@ -1171,7 +1181,7 @@ if selected_seasons:
                 y=freethrow3['y'],
                 z=np.zeros(len(freethrow3)),  # Place court lines on the floor
                 mode='lines',
-                line=dict(color='white', width=4),
+                line=dict(color='white', width=6),
                 name="Court Perimeter",
                 hoverinfo='none'
             ))
@@ -1180,7 +1190,7 @@ if selected_seasons:
                 y=freethrow4['y'],
                 z=np.zeros(len(freethrow4)),  # Place court lines on the floor
                 mode='lines',
-                line=dict(color='white', width=4),
+                line=dict(color='white', width=6),
                 name="Court Perimeter",
                 hoverinfo='none'
             ))
@@ -1189,7 +1199,7 @@ if selected_seasons:
                 y=freethrow5['y'],
                 z=np.zeros(len(freethrow5)),  # Place court lines on the floor
                 mode='lines',
-                line=dict(color='white', width=4),
+                line=dict(color='white', width=6),
                 name="Court Perimeter",
                 hoverinfo='none'
             ))
