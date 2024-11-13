@@ -1342,8 +1342,12 @@ if selected_seasons:
             # Update layout for better visuals
             if vids:
                 h = 470
+                bgcolor = 'white'
+                showbg = True
             else:
                 h = 600
+                bgcolor = 'white'
+                showbg = False
             fig.update_layout(
                 margin=dict(l=20, r=20, t=20, b=20),
                 scene_aspectmode="data",
@@ -1353,8 +1357,8 @@ if selected_seasons:
                 ),
                 title="",
                 scene=dict(
-                     xaxis=dict(title='', showticklabels=False, showgrid=False),
-                        yaxis=dict(title='', showticklabels=False, showgrid=False),
+                     xaxis=dict(title='', showticklabels=False, showgrid=False,showbackground=showbg,backgroundcolor=bgcolor),
+                        yaxis=dict(title='', showticklabels=False, showgrid=False,showbackground=showbg,backgroundcolor=bgcolor),
                         zaxis=dict(title='',  showticklabels=False, showgrid=False,showbackground=True,backgroundcolor='black'),
                
             ),
