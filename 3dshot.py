@@ -124,6 +124,7 @@ if selected_seasons:
             'hoop': '#e47041',
             'net': '#D3D3D3',
             'backboard': 'gray',
+            'backboard2': 'white',
             'free_throw_line': 'black',
             'hoop2':'#D3D3D3',
             'free_throw_line2': 'black',
