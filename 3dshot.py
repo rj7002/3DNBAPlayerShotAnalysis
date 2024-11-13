@@ -980,7 +980,7 @@ if selected_seasons:
                 color='Percentage',  # Color bars based on shooting percentage
                 color_continuous_scale='Viridis',  # Modern color scale (Viridis)
                 labels={'Percentage': 'Shooting %', 'Shot Type': 'Shot Type'},
-                text='Percentage',  # Show percentage on bars
+                text='Shot Type',  # Show percentage on bars
             )
             fig.update_coloraxes(showscale=False) 
 
@@ -1002,7 +1002,7 @@ if selected_seasons:
             
             # Update traces to show percentage inside bars
             fig.update_traces(
-                texttemplate='%{text:.1f}%',  # Format text to 1 decimal place
+                # texttemplate='%{text:.1f}%',  # Format text to 1 decimal place
                 textposition='inside',  # Position the text inside the bars
                 insidetextanchor='middle'  # Align text in the middle of bars
             )
