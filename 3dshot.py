@@ -1340,10 +1340,14 @@ if selected_seasons:
                 hoverinfo='none'
             ))
             # Update layout for better visuals
+            if vids:
+                h = 400
+            else:
+                h = 600
             fig.update_layout(
                 margin=dict(l=20, r=20, t=20, b=20),
                 scene_aspectmode="data",
-                height=600,
+                height=h,
                 scene_camera=dict(
                     eye=dict(x=1.3, y=0, z=0.7)
                 ),
