@@ -200,8 +200,7 @@ if selected_seasons:
     
         # Section for Vs Conference (optional)
     with col2:
-        vids = st.checkbox('Highlights',help='Click on a shot to view the highlight')
-        fgperc = st.checkbox('FG%',help='View hot zones')
+        vids = st.checkbox('Highlights',help='Click on a shot to view the highlight (Highlights only available starting in 2014-15)')
         vs_conference_options = ["East", "West"]
         vs_conference = st.sidebar.selectbox("Vs Conference (optional)", vs_conference_options, index=None, key="vs_conference")
     
@@ -224,6 +223,7 @@ if selected_seasons:
     
     
     with col3:
+        fgperc = st.checkbox('FG%',help='View hot zones')
         # Section for Game Segment (First Half, Overtime, Second Half)
     
         # Section for Game ID (optional)
@@ -647,8 +647,11 @@ if selected_seasons:
                                 s2 = 'cross'
                                 size = 10
                                 color = 'red'
-                                        
-                            hovertemplate= f"Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
+                            date_str = df['GAME_DATE'].iloc[i]
+                            game_date = datetime.strptime(date_str, "%Y%m%d")
+                            formatted_date = game_date.strftime("%m/%d/%Y")
+                            hovertemplate = f"Date: {formatted_date}<br>Game: {df['HTM'].iloc[i]} vs {df['VTM'].iloc[i]}<br>Result: {df['EVENT_TYPE'].iloc[i]}<br>Shot Type: {df['ACTION_TYPE'].iloc[i]}<br>Distance: {df['SHOT_DISTANCE'].iloc[i]} ft {df['SHOT_TYPE'].iloc[i]}<br>Quarter: {df['PERIOD'].iloc[i]}<br>Time: {df['MINUTES_REMAINING'].iloc[i]}:{df['SECONDS_REMAINING'].iloc[i]}"
+
                     
                             fig.add_trace(go.Scatter3d(
                                 x=[-row['LOC_X']],  # Single point, so wrap in a list
