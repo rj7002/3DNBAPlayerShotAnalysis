@@ -448,11 +448,11 @@ if selected_seasons:
                         return x, y, z
                 
                     # Example lists of x and y coordinates
-                    mx_coords = x_values
-                    my_coords = y_values
+                    mx_coords = mx_values
+                    my_coords = my_values
                     mz_value = 0  # Fixed z value
-                    mx_coords2 = x_values2
-                    my_coords2 = y_values2
+                    mx_coords2 = mx_values2
+                    my_coords2 = my_values2
                     mz_value2 = 100
             with col1:
             #     if st.checkbox('Animated',help='View animated shots'):
