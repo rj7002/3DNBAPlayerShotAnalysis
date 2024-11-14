@@ -339,7 +339,7 @@ if selected_seasons:
         df = df[(df['MINUTES_REMAINING'] >= timemin) & (df['MINUTES_REMAINING'] <= timemax)]
     if Quarter:
         df = df[df['PERIOD'].isin(quart)]
-    if vids != 1:
+     != 1:
         Make = st.sidebar.checkbox('Make Shot Paths',value=True)
         Miss = st.sidebar.checkbox('Miss Shot Paths')
 
@@ -691,7 +691,7 @@ if selected_seasons:
                                 color = 'red'
                             date_str = row['GAME_DATE']
                             game_date = datetime.strptime(date_str, "%Y%m%d")
-                            formatted_date = datetime.strptime(game_date, "%m/%d/%Y")
+                            formatted_date = datetime.strptime(date_str, "%m/%d/%Y")
                             hovertemplate = f"Date: {formatted_date}<br>Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
 
                     
