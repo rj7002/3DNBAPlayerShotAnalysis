@@ -351,12 +351,13 @@ if selected_seasons:
             st.success('Data Found')
             # df = df.head(500)
             if vids != 1:
-                x_values = []
-                y_values = []
-                z_values = []
+               
                 dfmiss = df[df['SHOT_MADE_FLAG'] == 0]
                 dfmake = df[df['SHOT_MADE_FLAG'] == 1]
                 if Make:
+                    x_values = []
+                    y_values = []
+                    z_values = []
                     for index, row in dfmake.iterrows():
                         
                         
@@ -404,6 +405,9 @@ if selected_seasons:
                     y_coords2 = y_values2
                     z_value2 = 100
                 if Miss:
+                    mx_values = []
+                    my_values = []
+                    mz_values = []
                     for index, row in dfmiss.iterrows():
                         
                         
