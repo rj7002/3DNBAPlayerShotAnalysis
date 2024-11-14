@@ -679,7 +679,7 @@ if selected_seasons:
                     
                     # st.write(df)
                     for i, row in df.iterrows():
-                            if df['SHOT_MADE_FLAG'].iloc[i] == 1:
+                            if row['SHOT_MADE_FLAG'] == 1:
                                     s = 'circle-open'
                                     s2 = 'circle'
                                     size = 9
@@ -689,10 +689,10 @@ if selected_seasons:
                                 s2 = 'cross'
                                 size = 10
                                 color = 'red'
-                            date_str = df['GAME_DATE'].iloc[i]
+                            date_str = row['GAME_DATE']
                             game_date = datetime.strptime(date_str, "%Y%m%d")
                             formatted_date = game_date.strftime("%m/%d/%Y")
-                            hovertemplate = f"Date: {formatted_date}<br>Game: {df['HTM'].iloc[i]} vs {df['VTM'].iloc[i]}<br>Result: {df['EVENT_TYPE'].iloc[i]}<br>Shot Type: {df['ACTION_TYPE'].iloc[i]}<br>Distance: {df['SHOT_DISTANCE'].iloc[i]} ft {df['SHOT_TYPE'].iloc[i]}<br>Quarter: {df['PERIOD'].iloc[i]}<br>Time: {df['MINUTES_REMAINING'].iloc[i]}:{df['SECONDS_REMAINING'].iloc[i]}"
+                            hovertemplate = f"Date: {formatted_date}<br>Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
 
                     
                             fig.add_trace(go.Scatter3d(
