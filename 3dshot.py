@@ -339,7 +339,7 @@ if selected_seasons:
         df = df[(df['MINUTES_REMAINING'] >= timemin) & (df['MINUTES_REMAINING'] <= timemax)]
     if Quarter:
         df = df[df['PERIOD'].isin(quart)]
-     != 1:
+    if vids != 1:
         Make = st.sidebar.checkbox('Make Shot Paths',value=True)
         Miss = st.sidebar.checkbox('Miss Shot Paths')
 
