@@ -408,24 +408,24 @@ if selected_seasons:
                         
                         
                     
-                        x_values.append(-row['LOC_X'])
+                        mx_values.append(-row['LOC_X'])
                         # Append the value from column 'x' to the list
-                        y_values.append(row['LOC_Y']+45)
-                        z_values.append(0)
+                        my_values.append(row['LOC_Y']+45)
+                        mz_values.append(0)
                 
                 
                 
-                    x_values2 = []
-                    y_values2 = []
-                    z_values2 = []
+                    mx_values2 = []
+                    my_values2 = []
+                    mz_values2 = []
                     for index, row in dfmiss.iterrows():
                         # Append the value from column 'x' to the list
                     
                 
-                        x_values2.append(court.hoop_loc_x)
+                        mx_values2.append(court.hoop_loc_x)
                 
-                        y_values2.append(court.hoop_loc_y)
-                        z_values2.append(100)
+                        my_values2.append(court.hoop_loc_y)
+                        mz_values2.append(100)
                 
                     import numpy as np
                     import plotly.graph_objects as go
@@ -444,12 +444,12 @@ if selected_seasons:
                         return x, y, z
                 
                     # Example lists of x and y coordinates
-                    x_coords = x_values
-                    y_coords = y_values
-                    z_value = 0  # Fixed z value
-                    x_coords2 = x_values2
-                    y_coords2 = y_values2
-                    z_value2 = 100
+                    mx_coords = x_values
+                    my_coords = y_values
+                    mz_value = 0  # Fixed z value
+                    mx_coords2 = x_values2
+                    my_coords2 = y_values2
+                    mz_value2 = 100
             with col1:
             #     if st.checkbox('Animated',help='View animated shots'):
             #         for index, row in df.iterrows():
@@ -763,16 +763,16 @@ if selected_seasons:
 
                     if Miss:
                         for i in range(len(dfmiss)):
-                            x1 = x_coords[i]
-                            y1 = y_coords[i]
-                            x2 = x_coords2[i]
-                            y2 = y_coords2[i]
+                            mx1 = mx_coords[i]
+                            my1 = my_coords[i]
+                            mx2 = mx_coords2[i]
+                            my2 = my_coords2[i]
                             # Define the start and end points
-                            p2 = np.array([x1, y1, z_value])
-                            p1 = np.array([x2, y2, z_value2])
+                            mp2 = np.array([mx1, my1, mz_value])
+                            mp1 = np.array([mx2, my2, mz_value2])
                             
                             # Apex will be above the line connecting p1 and p2
-                            distance = calculate_distance(x1, y1, x2, y2)
+                            distance = calculate_distance(mx1, my1, mx2, my2)
             
                             if dfmiss['SHOT_MADE_FLAG'].iloc[i] == 1:
                                 s = 'circle-open'
@@ -803,12 +803,12 @@ if selected_seasons:
                                 else:
                                     h = randint(130,160)
                             
-                                apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])  # Adjust apex height as needed
+                                mapex = np.array([0.5 * (mx1 + mx2), 0.5 * (my1 + my2), h])  # Adjust apex height as needed
                                 
                                 # Generate arc points
-                                x, y, z = generate_arc_points(p1, p2, apex)
+                                mx, my, mz = generate_arc_points(mp1, mp2, mapex)
                                 fig.add_trace(go.Scatter3d(
-                                            x=x, y=y, z=z,
+                                            x=mx, y=my, z=mz,
                                             mode='lines',
                                             line=dict(width=8,color = color),
                                             opacity =0.5,
