@@ -143,6 +143,24 @@ if selected_seasons:
     )
     fig.update_traces(hovertemplate=None, hoverinfo='skip', showlegend=False)
     fig.update_traces(line=dict(width=6))
+    court_perimeter_bounds = np.array([[-250, 0, -0.2], [250, 0, -0.2], [250, 450, -0.2], [-250, 450, -0.2], [-250, 0, -0.2]])
+
+    # Extract x, y, and z values for the mesh
+    court_x = court_perimeter_bounds[:, 0]
+    court_y = court_perimeter_bounds[:, 1]
+    court_z = court_perimeter_bounds[:, 2]
+    
+    # Add a square mesh to represent the court floor at z=0
+    fig.add_trace(go.Mesh3d(
+        x=court_x,
+        y=court_y,
+        z=court_z,
+        color='#d2a679',
+        # opacity=0.5,
+        name='Court Floor',
+        hoverinfo='none',
+        showscale=False
+    ))
     fig.update_layout(    
         margin=dict(l=20, r=20, t=20, b=20),
         scene_aspectmode="data",
@@ -153,7 +171,7 @@ if selected_seasons:
         scene=dict(
             xaxis=dict(title='', showticklabels=False, showgrid=False),
             yaxis=dict(title='', showticklabels=False, showgrid=False),
-            zaxis=dict(title='',  showticklabels=False, showgrid=False, showbackground=True, backgroundcolor='#d2a679'),
+            zaxis=dict(title='',  showticklabels=False, showgrid=False, showbackground=False, backgroundcolor='#d2a679'),
         ),
         showlegend=False,
         legend=dict(
@@ -659,6 +677,24 @@ if selected_seasons:
                             'free_throw_line5': 'black',
                         }
                     )
+                    court_perimeter_bounds = np.array([[-250, 0, -0.2], [250, 0, -0.2], [250, 450, -0.2], [-250, 450, -0.2], [-250, 0, -0.2]])
+
+                    # Extract x, y, and z values for the mesh
+                    court_x = court_perimeter_bounds[:, 0]
+                    court_y = court_perimeter_bounds[:, 1]
+                    court_z = court_perimeter_bounds[:, 2]
+                    
+                    # Add a square mesh to represent the court floor at z=0
+                    fig.add_trace(go.Mesh3d(
+                        x=court_x,
+                        y=court_y,
+                        z=court_z,
+                        color='#d2a679',
+                        # opacity=0.5,
+                        name='Court Floor',
+                        hoverinfo='none',
+                        showscale=False
+                    ))
                     
                     # Update hovertemplate to show detailed information when hovering
                     # fig.update_traces(
@@ -674,7 +710,7 @@ if selected_seasons:
                         scene=dict(
                             xaxis=dict(title='', showticklabels=False, showgrid=False),
                             yaxis=dict(title='', showticklabels=False, showgrid=False),
-                            zaxis=dict(title='',  showticklabels=False, showgrid=False, showbackground=True, backgroundcolor='#d2a679'),
+                            zaxis=dict(title='',  showticklabels=False, showgrid=False, showbackground=False, backgroundcolor='#d2a679'),
                         ),
                         showlegend=False,
                     
@@ -1397,6 +1433,24 @@ if selected_seasons:
                 h = 600
                 bgcolor = 'white'
                 showbg = False
+            court_perimeter_bounds = np.array([[-250, 0, -0.2], [250, 0, -0.2], [250, 450, -0.2], [-250, 450, -0.2], [-250, 0, -0.2]])
+
+            # Extract x, y, and z values for the mesh
+            court_x = court_perimeter_bounds[:, 0]
+            court_y = court_perimeter_bounds[:, 1]
+            court_z = court_perimeter_bounds[:, 2]
+            
+            # Add a square mesh to represent the court floor at z=0
+            fig.add_trace(go.Mesh3d(
+                x=court_x,
+                y=court_y,
+                z=court_z,
+                color='black',
+                # opacity=0.5,
+                name='Court Floor',
+                hoverinfo='none',
+                showscale=False
+            ))
             fig.update_layout(
                 margin=dict(l=20, r=20, t=20, b=20),
                 scene_aspectmode="data",
@@ -1408,7 +1462,7 @@ if selected_seasons:
                 scene=dict(
                      xaxis=dict(title='', showticklabels=False, showgrid=False,showbackground=showbg,backgroundcolor=bgcolor),
                         yaxis=dict(title='', showticklabels=False, showgrid=False,showbackground=showbg,backgroundcolor=bgcolor),
-                        zaxis=dict(title='',  showticklabels=False, showgrid=False,showbackground=True,backgroundcolor='black'),
+                        zaxis=dict(title='',  showticklabels=False, showgrid=False,showbackground=False,backgroundcolor='black'),
                
             ),
              showlegend=False
