@@ -685,6 +685,16 @@ if selected_seasons:
                     court_z = court_perimeter_bounds[:, 2]
                     
                     # Add a square mesh to represent the court floor at z=0
+               
+                    
+                    # Update hovertemplate to show detailed information when hovering
+                    # fig.update_traces(
+                    #     hovertemplate="<b>Player:</b> %{customdata[0]}<br>" +  # Player name
+                    #                   "<b>Team:</b> %{customdata[1]}<br>" +    # Team
+                    #                   "<b>Assist Type:</b> %{customdata[2]}<br>" +  # Assist type
+                    #                   "<b>Pass Distance:</b> %{customdata[3]} ft<br>",  # Pass distance
+                    # )
+                    fig.update_traces(line=dict(width=6))
                     fig.add_trace(go.Mesh3d(
                         x=court_x,
                         y=court_y,
@@ -695,15 +705,6 @@ if selected_seasons:
                         hoverinfo='none',
                         showscale=False
                     ))
-                    
-                    # Update hovertemplate to show detailed information when hovering
-                    # fig.update_traces(
-                    #     hovertemplate="<b>Player:</b> %{customdata[0]}<br>" +  # Player name
-                    #                   "<b>Team:</b> %{customdata[1]}<br>" +    # Team
-                    #                   "<b>Assist Type:</b> %{customdata[2]}<br>" +  # Assist type
-                    #                   "<b>Pass Distance:</b> %{customdata[3]} ft<br>",  # Pass distance
-                    # )
-                    fig.update_traces(line=dict(width=6))
                     fig.update_layout(    
                        margin=dict(l=0, r=0, t=0, b=0),
                         scene_aspectmode="data",
