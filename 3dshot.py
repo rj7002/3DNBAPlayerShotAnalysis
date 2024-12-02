@@ -719,7 +719,7 @@ if selected_seasons:
                     
                                 # Split the arc into segments and interpolate frames smoothly
                                 segment_length = int(len(x) * t)
-                                step_size = max(1, segment_length)  # Create sub-segments
+                                step_size = max(1, segment_length // 5)  # Create sub-segments
                                 for i in range(0, segment_length, step_size):
                                     segment_x = x[:i + step_size]
                                     segment_y = y[:i + step_size]
