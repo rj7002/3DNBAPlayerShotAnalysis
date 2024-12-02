@@ -703,16 +703,16 @@ if selected_seasons:
                             frame_data = []
                             
                             for _, row in batch.iterrows():
-                                x1, y1 = int(row['x']), int(row['y'])
+                                x1, y1 = int(-row['LOC_X']), int(row['LOC_Y']+45)
                                 x2, y2 = court.hoop_loc_x, court.hoop_loc_y
                                 p2 = np.array([x1, y1, 0])
                                 p1 = np.array([x2, y2, 100])
                     
                                 # Arc height based on shot distance
-                                h = (150 if row['shotDist'] <= 15 else
-                                     200 if row['shotDist'] <= 25 else
-                                     250 if row['shotDist'] <= 30 else
-                                     300 if row['shotDist'] <= 50 else
+                                h = (150 if row['SHOT_DISTANCE'] <= 15 else
+                                     200 if row['SHOT_DISTANCE'] <= 25 else
+                                     250 if row['SHOT_DISTANCE'] <= 30 else
+                                     300 if row['SHOT_DISTANCE'] <= 50 else
                                      325)
                                 apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])
                                 x, y, z = generate_arc_points(p2, p1, apex, num_points)
