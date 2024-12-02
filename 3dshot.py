@@ -475,7 +475,7 @@ if selected_seasons:
                     mz_value2 = 100
             with col1:
                 if anim == 1:
-                    df = df[f['SHOT_MADE_FLAG'] == 1]
+                    df = df[['SHOT_MADE_FLAG'] == 1]
                     df = df[df['SHOT_DISTANCE'] > 3]
                     if len(df) > 150: 
                         st.error(f'Too many shots. Only showing first 150 shots.')
