@@ -689,7 +689,7 @@ if selected_seasons:
                    
                     
                     frames = []
-                    num_points = 200  # Increase this for more resolution
+                    num_points = 100  # Increase this for more resolution
                     
                     # Function to process shots in batches
                     def process_shots_in_batches(shotdf, batch_size=3):
