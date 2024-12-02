@@ -190,6 +190,7 @@ if selected_seasons:
     # Section for Context Measure
     col1, col2,col3 = st.columns(3)
     with col1:
+        anim = st.checkbox('Animated',help='View animated shots')
         context_measures = [
             "PTS", "FGA", "FG3M", "FG3A", 
              "PTS_FB", "PTS_OFF_TOV", "PTS_2ND_CHANCE"
@@ -357,7 +358,7 @@ if selected_seasons:
         df = df[(df['MINUTES_REMAINING'] >= timemin) & (df['MINUTES_REMAINING'] <= timemax)]
     if Quarter:
         df = df[df['PERIOD'].isin(quart)]
-    if vids != 1:
+    if vids != 1 and anim != 1:
         Make = st.sidebar.checkbox('Make Shot Paths',value=True)
         Miss = st.sidebar.checkbox('Miss Shot Paths')
 
@@ -368,7 +369,7 @@ if selected_seasons:
                 st.warning('There is over 500 shots being plotted so the plot may be slow')
             st.success('Data Found')
             # df = df.head(500)
-            if vids != 1:
+            if vids != 1 and anim != 1:
                
                 dfmiss = df[df['SHOT_MADE_FLAG'] == 0]
                 dfmake = df[df['SHOT_MADE_FLAG'] == 1]
@@ -473,187 +474,305 @@ if selected_seasons:
                     my_coords2 = my_values2
                     mz_value2 = 100
             with col1:
-            #     if st.checkbox('Animated',help='View animated shots'):
-            #         for index, row in df.iterrows():
-            #             x_values.append(-row['LOC_X'])
-            #             # Append the value from column 'x' to the list
-            #             y_values.append(row['LOC_Y']+45)
-            #             z_values.append(0)
-  
-            #         x_values2 = []
-            #         y_values2 = []
-            #         z_values2 = []
-            #         for index, row in df.iterrows():
-            #             # Append the value from column 'x' to the list
- 
-            #             x_values2.append(court.hoop_loc_x)
-                
-            #             y_values2.append(court.hoop_loc_y)
-            #             z_values2.append(100)
-                
-            #         import numpy as np
-            #         import plotly.graph_objects as go
-            #         import streamlit as st
-            #         import math
-            #         def calculate_distance(x1, y1, x2, y2):
-            #             """Calculate the distance between two points (x1, y1) and (x2, y2)."""
-            #             return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-                
-            #         def generate_arc_points(p1, p2, apex, num_points=100):
-            #             """Generate points on a quadratic Bezier curve (arc) between p1 and p2 with an apex."""
-            #             t = np.linspace(0, 1, num_points)
-            #             x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
-            #             y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
-            #             z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
-            #             return x, y, z
-                
-            #         # Example lists of x and y coordinates
-            #         x_coords = x_values
-            #         y_coords = y_values
-            #         z_value = 0  # Fixed z value
-            #         x_coords2 = x_values2
-            #         y_coords2 = y_values2
-            #         z_value2 = 100
-            #             # Number of segments for the arc
-            #         num_segments = 500
-        
-            #         # Create frames
-            #         frames = []
-        
-            #         for i in range(len(df)):
-            #             x1 = x_coords[i]
-            #             y1 = y_coords[i]
-            #             x2 = x_coords2[i]
-            #             y2 = y_coords2[i]
+                if anim == 1:
+                    df = df[f['success'] == True]
+                    df = df[df['shotDist'] > 3]
+                    if len(df) > 150: 
+                        st.error(f'Too many shots. Only showing first 150 shots.')
+                        df = df.head(150)
+                    else:
+                        df = df
+                    if len(df) >= 100:
+                            default = 10
+                    elif len(df) >= 75:
+                        default = 8
+                    elif len(df) >= 50:
+                        default = 5
+                    elif len(df) >= 20:
+                        default = 3
+                    else:
+                        default = 1
+                    shotgroup = st.number_input("Number of Shots Together", min_value=1, max_value=10, step=1, value=default)
+                    court_perimeter_bounds = np.array([[-250, 0, 0], [250, 0, 0], [250, 450, 0], [-250, 450, 0], [-250, 0, 0]])
+                    
+                    # Extract x, y, and z values for the mesh
+                    court_x = court_perimeter_bounds[:, 0]
+                    court_y = court_perimeter_bounds[:, 1]
+                    court_z = court_perimeter_bounds[:, 2]
+                    
+                    # Add a square mesh to represent the court floor at z=0
+                    fig.add_trace(go.Mesh3d(
+                        x=court_x,
+                        y=court_y,
+                        z=court_z-1,
+                        color='#d2a679',
+                        opacity=1,
+                        name='Court Floor',
+                        hoverinfo='none',
+                        showscale=False
+                    ))
+                    # hover_data = df.apply(lambda row: f"""
+                    #     <b>Player:</b> {row['fullName']}<br>
+                    #     <b>Game Date:</b> {row['gameDate']}<br>
+                    #     <b>Game:</b> {row['TeamName']} vs {row['OpponentName']}<br>
+                    #     <b>Half:</b> {row['period'][-1]}<br>
+                    #     <b>Time:</b> {row['clock']}<br>
+                    #     <b>Result:</b> {'Made' if row['success'] else 'Missed'}<br>
+                    #     <b>Shot Distance:</b> {row['shotDist']} ft<br>
+                    #     <b>Shot Type:</b> {row['actionType']} ({row['subType']})<br>
+                    #     <b>Shot Clock:</b> {row['shotClock']}<br>
+                    #     <b>Assisted by:</b> {row['assisterName']}<br>
+                    # """, axis=1)
+                   
+                    court_perimeter_lines = court_lines_df[court_lines_df['line_id'] == 'outside_perimeter']
+                    three_point_lines = court_lines_df[court_lines_df['line_id'] == 'three_point_line']
+                    backboard = court_lines_df[court_lines_df['line_id'] == 'backboard']
+                    backboard2 = court_lines_df[court_lines_df['line_id'] == 'backboard2']
+                    freethrow = court_lines_df[court_lines_df['line_id'] == 'free_throw_line']
+                    freethrow2 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line2']
+                    freethrow3 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line3']
+                    freethrow4 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line4']
+                    freethrow5 = court_lines_df[court_lines_df['line_id'] == 'free_throw_line5']
+                    hoop = court_lines_df[court_lines_df['line_id'] == 'hoop']
+                    hoop2 = court_lines_df[court_lines_df['line_id'] == 'hoop2']
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    # Add court lines to the plot (3D scatter)
+                    fig.add_trace(go.Scatter3d(
+                        x=court_perimeter_lines['x'],
+                        y=court_perimeter_lines['y'],
+                        z=np.zeros(len(court_perimeter_lines)),  # Place court lines on the floor
+                        mode='lines',
+                        line=dict(color='black', width=6),
+                        name="Court Perimeter",
+                        hoverinfo='none'
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=hoop['x'],
+                        y=hoop['y'],
+                        z=hoop['z'],  # Place 3-point line on the floor
+                        mode='lines',
+                        line=dict(color='#e47041', width=6),
+                        name="Hoop",
+                        hoverinfo='none'
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=hoop2['x'],
+                        y=hoop2['y'],
+                        z=hoop2['z'],  # Place 3-point line on the floor
+                        mode='lines',
+                        line=dict(color='#D3D3D3', width=6),
+                        name="Backboard",
+                        hoverinfo='none'
+                    ))
+                    # Add the 3-point line to the plot
+                    fig.add_trace(go.Scatter3d(
+                        x=backboard['x'],
+                        y=backboard['y'],
+                        z=backboard['z'],  # Place 3-point line on the floor
+                        mode='lines',
+                        line=dict(color='grey', width=6),
+                        name="Backboard",
+                        hoverinfo='none'
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=backboard2['x'],
+                        y=backboard2['y'],
+                        z=backboard2['z'],  # Place 3-point line on the floor
+                        mode='lines',
+                        line=dict(color='grey', width=6),
+                        name="Backboard",
+                        hoverinfo='none'
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=three_point_lines['x'],
+                        y=three_point_lines['y'],
+                        z=np.zeros(len(three_point_lines)),  # Place 3-point line on the floor
+                        mode='lines',
+                        line=dict(color='black', width=6),
+                        name="3-Point Line",
+                        hoverinfo='none'
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=freethrow['x'],
+                        y=freethrow['y'],
+                        z=np.zeros(len(freethrow)),  # Place court lines on the floor
+                        mode='lines',
+                        line=dict(color='black', width=6),
+                        name="Court Perimeter",
+                        hoverinfo='none'
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=freethrow2['x'],
+                        y=freethrow2['y'],
+                        z=np.zeros(len(freethrow2)),  # Place court lines on the floor
+                        mode='lines',
+                        line=dict(color='black', width=6),
+                        name="Court Perimeter",
+                        hoverinfo='none'
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=freethrow3['x'],
+                        y=freethrow3['y'],
+                        z=np.zeros(len(freethrow3)),  # Place court lines on the floor
+                        mode='lines',
+                        line=dict(color='black', width=6),
+                        name="Court Perimeter",
+                        hoverinfo='none'
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=freethrow4['x'],
+                        y=freethrow4['y'],
+                        z=np.zeros(len(freethrow4)),  # Place court lines on the floor
+                        mode='lines',
+                        line=dict(color='black', width=6),
+                        name="Court Perimeter",
+                        hoverinfo='none'
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=freethrow5['x'],
+                        y=freethrow5['y'],
+                        z=np.zeros(len(freethrow5)),  # Place court lines on the floor
+                        mode='lines',
+                        line=dict(color='black', width=6),
+                        name="Court Perimeter",
+                        hoverinfo='none'
+                    ))
+                    x_values = []
+                    y_values = []
+                    z_values = []
+                    # dfmiss = df[df['SHOT_MADE_FLAG'] == 0]
+                    # df = df[df['SHOT_MADE_FLAG'] == 1]
+                    
+            
+                    for index, row in df.iterrows():
                         
-            #             # Swap the points: now p1 is the original p2 and p2 is the original p1
-            #             p1 = np.array([x1, y1, z_value])  # Starting point
-            #             p2 = np.array([x2, y2, z_value2])  # Ending point
-        
-            #             distance = calculate_distance(x1, y1, x2, y2)
-        
-            #             if df['SHOT_MADE_FLAG'].iloc[i] == 1:
-            #                 s = 'circle-open'
-            #                 s2 = 'circle'
-            #                 size = 9
-            #                 color = 'green'
-            #             else:
-            #                 s = 'cross'
-            #                 s2 = 'cross'
-            #                 size = 10
-            #                 color = 'red'
-                            
-            #             date_str = df['GAME_DATE'].iloc[i]
-            #             game_date = datetime.strptime(date_str, "%Y%m%d")
-            #             formatted_date = game_date.strftime("%m/%d/%Y")
                         
-            #             if int(df['SECONDS_REMAINING'].iloc[i]) < 10:
-            #                 df['SECONDS_REMAINING'].iloc[i] = '0' + str(df['SECONDS_REMAINING'].iloc[i])
+                    
+                        x_values.append(-row['LOC_X'])
+                        # Append the value from column 'x' to the list
+                        y_values.append(row['LOC_Y']+45)
+                        z_values.append(0)
+                    
+                    
+                    
+                    x_values2 = []
+                    y_values2 = []
+                    z_values2 = []
+                    import math
+                    for index, row in shotdf.iterrows():
+                        # Append the value from column 'x' to the list
+                    
+                    
+                        x_values2.append(court.hoop_loc_x)
+                    
+                        y_values2.append(court.hoop_loc_y)
+                        z_values2.append(100)
+                    
+                    def calculate_distance(x1, y1, x2, y2):
+                        return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+                    
+                    # Function to generate arc points
+                    def generate_arc_points(p1, p2, apex, num_points=100):
+                        t = np.linspace(0, 1, num_points)
+                        x = (1 - t)**2 * p1[0] + 2 * (1 - t) * t * apex[0] + t**2 * p2[0]
+                        y = (1 - t)**2 * p1[1] + 2 * (1 - t) * t * apex[1] + t**2 * p2[1]
+                        z = (1 - t)**2 * p1[2] + 2 * (1 - t) * t * apex[2] + t**2 * p2[2]
+                        return x, y, z
+                    
+                    
+                   
+                    
+                    frames = []
+                    num_points = 200  # Increase this for more resolution
+                    
+                    # Function to process shots in batches
+                    def process_shots_in_batches(shotdf, batch_size=3):
+                        for batch_start in range(0, len(shotdf), batch_size):
+                            batch_end = min(batch_start + batch_size, len(shotdf))
+                            yield shotdf[batch_start:batch_end]
+                    
+                    # Generate frames for each batch
+                    for batch in process_shots_in_batches(df, batch_size=shotgroup):
+                        for t in np.linspace(0, 1, 8):  # Adjust for smoothness
+                            frame_data = []
                             
-            #             hovertemplate = f"Date: {formatted_date}<br>Game: {df['HTM'].iloc[i]} vs {df['VTM'].iloc[i]}<br>Result: {df['EVENT_TYPE'].iloc[i]}<br>Shot Type: {df['ACTION_TYPE'].iloc[i]}<br>Distance: {df['SHOT_DISTANCE'].iloc[i]} ft {df['SHOT_TYPE'].iloc[i]}<br>Quarter: {df['PERIOD'].iloc[i]}<br>Time: {df['MINUTES_REMAINING'].iloc[i]}:{df['SECONDS_REMAINING'].iloc[i]}"
-        
-            #             if df['SHOT_DISTANCE'].iloc[i] > 3:
-            #                 if df['SHOT_DISTANCE'].iloc[i] > 50:
-            #                     h = randint(255, 305)
-            #                 elif df['SHOT_DISTANCE'].iloc[i] > 30:
-            #                     h = randint(230, 280)
-            #                 elif df['SHOT_DISTANCE'].iloc[i] > 25:
-            #                     h = randint(180, 230)
-            #                 elif df['SHOT_DISTANCE'].iloc[i] > 15:
-            #                     h = randint(180, 230)
-            #                 else:
-            #                     h = randint(130, 160)
-        
-            #                 apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])
-                            
-            #                 # Generate arc points using swapped p1 and p2
-            #                 x_arc, y_arc, z_arc = generate_arc_points(p1, p2, apex)
-                            
-            #                 # Split the arc into segments
-            #                 for j in range(num_segments):
-            #                     # Interpolate points along the arc
-            #                     x_segment = x_arc[:j + 1]
-            #                     y_segment = y_arc[:j + 1]
-            #                     z_segment = z_arc[:j + 1]
-                                
-            #                     frames.append(go.Frame(data=[
-            #                         go.Scatter3d(
-            #                             x=x_segment, y=y_segment, z=z_segment,
-            #                             mode='lines',
-            #                             line=dict(width=8, color=color),
-            #                             opacity=0.5,
-            #                             hovertemplate=hovertemplate
-            #                         ),
-            #                         go.Scatter3d(
-            #                             x=[p1[0]], y=[p1[1]], z=[p1[2]],
-            #                             mode='markers',
-            #                             marker=dict(size=size, symbol=s, color=color),
-            #                             hovertemplate=hovertemplate
-            #                         ),
-            #                         go.Scatter3d(
-            #                             x=[p1[0]], y=[p1[1]], z=[p1[2]],
-            #                             mode='markers',
-            #                             marker=dict(size=5, symbol=s2, color=color),
-            #                             hovertemplate=hovertemplate
-            #                         )
-            #                     ]))
-        
-            #         # Add frames to the figure
-            #         fig.frames = frames
-        
-            #         fig.update_layout(
-            #     updatemenus=[{
-            #         'buttons': [
-            #             {
-            #                 'args': [None, {'frame': {'duration': 0.1, 'redraw': True}, 'fromcurrent': True, 'mode': 'immediate'}],
-            #                 'label': 'Play',
-            #                 'method': 'animate'
-            #             },
-            #             {
-            #                 'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'mode': 'immediate'}],
-            #                 'label': 'Pause',
-            #                 'method': 'animate'
-            #             },
-            #             # Add a restart button
-            #             # {
-            #             #         'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'fromcurrent': False,'mode': 'immediate'}],
-            #             #         'label': 'Restart',
-            #             #         'method': 'animate'
-            #             #     }
-            #         ],
-            #         'direction': 'left',
-            #         'pad': {'r': 10, 't': 87},
-            #         'showactive': False,
-            #         'type': 'buttons',
-            #         'x': 0.1,
-            #         'xanchor': 'right',
-            #         'y': 0,
-            #         'yanchor': 'top'
-            #     }]
-            # )
-        
-            #         # # Optionally, ensure that the animation runs in a loop or a specific range, for example:
-            #         # fig.update_layout(
-            #         #     sliders=[{
-            #         #         'currentvalue': {'prefix': 'Frame: '},
-            #         #         'steps': [
-            #         #             {
-            #         #                 'args': [
-            #         #                     [f'frame{frame}'],
-            #         #                     {
-            #         #                         'frame': {'duration': 100, 'redraw': True},
-            #         #                         'mode': 'immediate',
-            #         #                         'transition': {'duration': 100}
-            #         #                     }
-            #         #                 ],
-            #         #                 'label': f'Frame {frame}',
-            #         #                 'method': 'animate'
-            #         #             }
-            #         #             for frame in range(1, 100 + 1)  # Ensure you have the correct range of frames
-            #         #         ]
-            #         #     }]
-            #         # )
-                if vids == 1:
+                            for _, row in batch.iterrows():
+                                x1, y1 = int(row['x']), int(row['y'])
+                                x2, y2 = court.hoop_loc_x, court.hoop_loc_y
+                                p2 = np.array([x1, y1, 0])
+                                p1 = np.array([x2, y2, 100])
+                    
+                                # Arc height based on shot distance
+                                h = (150 if row['shotDist'] <= 15 else
+                                     200 if row['shotDist'] <= 25 else
+                                     250 if row['shotDist'] <= 30 else
+                                     300 if row['shotDist'] <= 50 else
+                                     325)
+                                apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])
+                                x, y, z = generate_arc_points(p2, p1, apex, num_points)
+                    
+                                # Split the arc into segments and interpolate frames smoothly
+                                segment_length = int(len(x) * t)
+                                step_size = max(1, segment_length)  # Create sub-segments
+                                for i in range(0, segment_length, step_size):
+                                    segment_x = x[:i + step_size]
+                                    segment_y = y[:i + step_size]
+                                    segment_z = z[:i + step_size]
+                    
+                                    frame_data.append(go.Scatter3d(
+                                        x=segment_x, y=segment_y, z=segment_z,
+                                        mode='lines', line=dict(width=6, color=row['color']),hoverinfo='text',hovertext=hover_data
+                                    ))
+                                    
+                    
+                            frames.append(go.Frame(data=frame_data))
+                    
+                    # Add an initial empty trace for layout
+                    fig.add_trace(go.Scatter3d(x=[], y=[], z=[]))
+                    
+                    # Empty frame at the end for clearing the court
+                    fig.add_trace(go.Scatter3d(x=[], y=[], z=[]))
+                    empty_frame_data = []
+                    for i in range(0,10):
+                        empty_frame_data.append(go.Scatter3d(
+                        x=[0], y=[0], z=[0],
+                        mode='lines', line=dict(width=6, color='rgba(255, 0, 0, 0)')
+                    ))
+                    
+                    
+                    # Add frames to the figure
+                    fig.frames = frames
+                    
+                    
+                    
+                    # Layout with animation controls
+                    fig.update_layout(
+                        updatemenus=[
+                            dict(type="buttons",
+                                 showactive=False,
+                                 buttons=[
+                                     dict(label="Play",
+                                          method="animate",
+                                          args=[None, {"frame": {"duration": 0.000000000001, "redraw": True}, "fromcurrent": True}]),
+                                     dict(label="Pause",
+                                          method="animate",
+                                          args=[[None], {"frame": {"duration": 0, "redraw": False}, "mode": "immediate"}])
+                                 ])
+                        ],
+                        # # scene=dict(
+                        # #     # xaxis=dict(range=[-25, 25], title="X"),
+                        # #     # yaxis=dict(range=[-50, 50], title="Y"),
+                        #     zaxis=dict(range=[0, 175], title="Z"),
+                        # #     # aspectratio=dict(x=1, y=1, z=0.5),
+                        # # ),
+                    )
+                elif vids == 1:
                     court = CourtCoordinates(fullrealseason)
                     court_lines_df = court.get_coordinates()
                     fig = px.line_3d(
