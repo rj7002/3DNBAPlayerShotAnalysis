@@ -665,7 +665,7 @@ if selected_seasons:
                     y_values2 = []
                     z_values2 = []
                     import math
-                    for index, row in shotdf.iterrows():
+                    for index, row in df.iterrows():
                         # Append the value from column 'x' to the list
                     
                     
