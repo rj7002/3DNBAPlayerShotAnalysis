@@ -699,7 +699,7 @@ if selected_seasons:
                     
                     # Generate frames for each batch
                     for batch in process_shots_in_batches(df, batch_size=shotgroup):
-                        for t in np.linspace(0, 1, 20):  # Adjust for smoothness
+                        for t in np.linspace(0, 1, 10):  # Adjust for smoothness
                             frame_data = []
                             
                             for _, row in batch.iterrows():
@@ -719,7 +719,7 @@ if selected_seasons:
                     
                                 # Split the arc into segments and interpolate frames smoothly
                                 segment_length = int(len(x) * t)
-                                step_size = max(1, segment_length // 5)  # Create sub-segments
+                                step_size = max(1, segment_length)  # Create sub-segments
                                 for i in range(0, segment_length, step_size):
                                     segment_x = x[:i + step_size]
                                     segment_y = y[:i + step_size]
@@ -999,38 +999,38 @@ if selected_seasons:
                         #     hovertemplate=hovertemplate
         
                         # ))
-        
-            for i, row in df.iterrows():
-                if row['SHOT_MADE_FLAG'] == 1:
-                    s = 'circle-open'
-                    s2 = 'circle'
-                    size = 9
-                    color = 'green'
-                else:
-                    s = 'cross'
-                    s2 = 'cross'
-                    size = 10
-                    color = 'red'
-                hovertemplate= f"Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
-        
-                fig.add_trace(go.Scatter3d(
-                    x=[-row['LOC_X']],  # Single point, so wrap in a list
-                    y=[row['LOC_Y']+45],  # Single point, so wrap in a list
-                    z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
-                    marker=dict(size=size, symbol=s, color=color),  # Customize marker size, symbol, and color
-                    name=f'Endpoint {i + 1}',  # Dynamically create a name for each trace
-                    hoverinfo='text',
-                    hovertemplate=hovertemplate
-                ))
-                fig.add_trace(go.Scatter3d(
-                    x=[-row['LOC_X']],  # Single point, so wrap in a list
-                    y=[row['LOC_Y']+45],  # Single point, so wrap in a list
-                    z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
-                    marker=dict(size=size, symbol=s2, color=color),  # Customize marker size, symbol, and color
-                    name=f'Endpoint {i + 1}',  # Dynamically create a name for each trace
-                    hoverinfo='text',
-                    hovertemplate=hovertemplate
-                ))
+            if anim != 1:
+                for i, row in df.iterrows():
+                    if row['SHOT_MADE_FLAG'] == 1:
+                        s = 'circle-open'
+                        s2 = 'circle'
+                        size = 9
+                        color = 'green'
+                    else:
+                        s = 'cross'
+                        s2 = 'cross'
+                        size = 10
+                        color = 'red'
+                    hovertemplate= f"Game: {row['HTM']} vs {row['VTM']}<br>Result: {row['EVENT_TYPE']}<br>Shot Type: {row['ACTION_TYPE']}<br>Distance: {row['SHOT_DISTANCE']} ft {row['SHOT_TYPE']}<br>Quarter: {row['PERIOD']}<br>Time: {row['MINUTES_REMAINING']}:{row['SECONDS_REMAINING']}"
+            
+                    fig.add_trace(go.Scatter3d(
+                        x=[-row['LOC_X']],  # Single point, so wrap in a list
+                        y=[row['LOC_Y']+45],  # Single point, so wrap in a list
+                        z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
+                        marker=dict(size=size, symbol=s, color=color),  # Customize marker size, symbol, and color
+                        name=f'Endpoint {i + 1}',  # Dynamically create a name for each trace
+                        hoverinfo='text',
+                        hovertemplate=hovertemplate
+                    ))
+                    fig.add_trace(go.Scatter3d(
+                        x=[-row['LOC_X']],  # Single point, so wrap in a list
+                        y=[row['LOC_Y']+45],  # Single point, so wrap in a list
+                        z=[0],  # z is set to 0 for each point (flat 2D plot in the XY plane)
+                        marker=dict(size=size, symbol=s2, color=color),  # Customize marker size, symbol, and color
+                        name=f'Endpoint {i + 1}',  # Dynamically create a name for each trace
+                        hoverinfo='text',
+                        hovertemplate=hovertemplate
+                    ))
             playerparts = selected_player.split(' - ')
             player = playerparts[0]
             made = len(df[df['SHOT_MADE_FLAG'] == 1])
