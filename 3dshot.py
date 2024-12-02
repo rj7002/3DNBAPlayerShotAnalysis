@@ -727,7 +727,7 @@ if selected_seasons:
                     
                                     frame_data.append(go.Scatter3d(
                                         x=segment_x, y=segment_y, z=segment_z,
-                                        mode='lines', line=dict(width=6, color=row['color']),hoverinfo='text',hovertext=hover_data
+                                        mode='lines', line=dict(width=6, color='green'),hoverinfo='text',hovertext=hover_data
                                     ))
                                     
                     
