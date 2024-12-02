@@ -699,7 +699,7 @@ if selected_seasons:
                     
                     # Generate frames for each batch
                     for batch in process_shots_in_batches(df, batch_size=shotgroup):
-                        for t in np.linspace(0, 1, 8):  # Adjust for smoothness
+                        for t in np.linspace(0, 1, 12):  # Adjust for smoothness
                             frame_data = []
                             
                             for _, row in batch.iterrows():
