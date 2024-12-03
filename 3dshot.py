@@ -475,20 +475,21 @@ if selected_seasons:
                     mz_value2 = 100
             with col1:
                 if anim == 1:
-                    df = df[df['SHOT_MADE_FLAG'] == 1]
-                    df = df[df['SHOT_DISTANCE'] > 3]
-                    # if len(df) > 150: 
+                    newdf = df.copy()
+                    newdf = newdf[newdf['SHOT_MADE_FLAG'] == 1]
+                    newdf = newdf[newdf['SHOT_DISTANCE'] > 3]
+                    # if len(newdf) > 150: 
                     #     st.error(f'Too many shots. Only showing first 150 shots.')
-                    #     df = df.head(150)
+                    #     newdf = newdf.head(150)
                     # else:
-                    #     df = df
-                    if len(df) >= 100:
+                    #     newdf = newdf
+                    if len(newdf) >= 100:
                             default = 10
-                    elif len(df) >= 75:
+                    elif len(newdf) >= 75:
                         default = 8
-                    elif len(df) >= 50:
+                    elif len(newdf) >= 50:
                         default = 5
-                    elif len(df) >= 20:
+                    elif len(newdf) >= 20:
                         default = 3
                     else:
                         default = 1
@@ -511,7 +512,7 @@ if selected_seasons:
                         hoverinfo='none',
                         showscale=False
                     ))
-                    # hover_data = df.apply(lambda row: f"""
+                    # hover_data = newdf.apply(lambda row: f"""
                     #     <b>Player:</b> {row['fullName']}<br>
                     #     <b>Game Date:</b> {row['gameDate']}<br>
                     #     <b>Game:</b> {row['TeamName']} vs {row['OpponentName']}<br>
@@ -650,7 +651,7 @@ if selected_seasons:
                     # df = df[df['SHOT_MADE_FLAG'] == 1]
                     
             
-                    for index, row in df.iterrows():
+                    for index, row in newdf.iterrows():
                         
                         
                     
@@ -665,7 +666,7 @@ if selected_seasons:
                     y_values2 = []
                     z_values2 = []
                     import math
-                    for index, row in df.iterrows():
+                    for index, row in newdf.iterrows():
                         # Append the value from column 'x' to the list
                     
                     
@@ -698,7 +699,7 @@ if selected_seasons:
                             yield shotdf[batch_start:batch_end]
                     
                     # Generate frames for each batch
-                    for batch in process_shots_in_batches(df, batch_size=10):
+                    for batch in process_shots_in_batches(newdf, batch_size=10):
                         for t in np.linspace(0, 1, 8):  # Adjust for smoothness
                             frame_data = []
                             
