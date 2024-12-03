@@ -698,7 +698,7 @@ if selected_seasons:
                             yield shotdf[batch_start:batch_end]
                     
                     # Generate frames for each batch
-                    for batch in process_shots_in_batches(shotdf, batch_size=10):
+                    for batch in process_shots_in_batches(df, batch_size=10):
                         for t in np.linspace(0, 1, 8):  # Adjust for smoothness
                             frame_data = []
                             
