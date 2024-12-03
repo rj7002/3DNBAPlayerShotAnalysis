@@ -4,4 +4,4 @@ secondaryBackgroundColor="#a4a4a4"
 textColor="#ffffff"
 
 [server]
-maxMessageSize = 2000
+maxMessageSize = 10000
