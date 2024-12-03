@@ -698,12 +698,12 @@ if selected_seasons:
                             yield shotdf[batch_start:batch_end]
                     
                     # Generate frames for each batch
-                    for batch in process_shots_in_batches(df, batch_size=shotgroup):
+                    for batch in process_shots_in_batches(shotdf, batch_size=10):
                         for t in np.linspace(0, 1, 8):  # Adjust for smoothness
                             frame_data = []
                             
                             for _, row in batch.iterrows():
-                                x1, y1 = int(-row['LOC_X']), int(row['LOC_Y']+45)
+                                x1, y1 = int(row['LOC_X']), int(row['LOC_Y'])
                                 x2, y2 = court.hoop_loc_x, court.hoop_loc_y
                                 p2 = np.array([x1, y1, 0])
                                 p1 = np.array([x2, y2, 100])
@@ -717,21 +717,28 @@ if selected_seasons:
                                 apex = np.array([0.5 * (x1 + x2), 0.5 * (y1 + y2), h])
                                 x, y, z = generate_arc_points(p2, p1, apex, num_points)
                     
-                                # Split the arc into segments and interpolate frames smoothly
-                                segment_length = int(len(x) * t)
-                                step_size = max(1, segment_length)  # Create sub-segments
-                                for i in range(0, segment_length, step_size):
-                                    segment_x = x[:i + step_size]
-                                    segment_y = y[:i + step_size]
-                                    segment_z = z[:i + step_size]
+                                # Calculate the start and end of the moving segment
+                                total_points = len(x)
+                                start_index = int(t * (total_points - segment_size))
+                                end_index = start_index + segment_size
                     
-                                    frame_data.append(go.Scatter3d(
-                                        x=segment_x, y=segment_y, z=segment_z,
-                                        mode='lines', line=dict(width=6, color='green'),hoverinfo='text'
-                                    ))
-                                    
+                                # Ensure indices are within bounds
+                                start_index = max(0, start_index)
+                                end_index = min(total_points, end_index)
                     
+                                segment_x = x[start_index:end_index]
+                                segment_y = y[start_index:end_index]
+                                segment_z = z[start_index:end_index]
+                    
+                                frame_data.append(go.Scatter3d(
+                                    x=segment_x, y=segment_y, z=segment_z,
+                                    mode='lines', line=dict(width=6, color=row['color']),
+                                    hoverinfo='text', hovertext=row.get('hover_text', '')
+                                ))
+                              
+                            
                             frames.append(go.Frame(data=frame_data))
+                    
                     
                     # Add an initial empty trace for layout
                     fig.add_trace(go.Scatter3d(x=[], y=[], z=[]))
@@ -745,6 +752,8 @@ if selected_seasons:
                         mode='lines', line=dict(width=6, color='rgba(255, 0, 0, 0)')
                     ))
                     
+                    frames.append(go.Frame(data=empty_frame_data))
+                                        
                     
                     # Add frames to the figure
                     fig.frames = frames
