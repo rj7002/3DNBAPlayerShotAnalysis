@@ -690,7 +690,7 @@ if selected_seasons:
                     
                     frames = []
                     num_points = 100  # Increase this for more resolution
-                    
+                    segment_size = 20
                     # Function to process shots in batches
                     def process_shots_in_batches(shotdf, batch_size=3):
                         for batch_start in range(0, len(shotdf), batch_size):
