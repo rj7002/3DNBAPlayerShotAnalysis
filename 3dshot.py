@@ -477,11 +477,11 @@ if selected_seasons:
                 if anim == 1:
                     df = df[df['SHOT_MADE_FLAG'] == 1]
                     df = df[df['SHOT_DISTANCE'] > 3]
-                    if len(df) > 150: 
-                        st.error(f'Too many shots. Only showing first 150 shots.')
-                        df = df.head(150)
-                    else:
-                        df = df
+                    # if len(df) > 150: 
+                    #     st.error(f'Too many shots. Only showing first 150 shots.')
+                    #     df = df.head(150)
+                    # else:
+                    #     df = df
                     if len(df) >= 100:
                             default = 10
                     elif len(df) >= 75:
